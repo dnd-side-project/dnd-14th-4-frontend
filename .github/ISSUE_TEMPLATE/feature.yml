@@ -1,0 +1,30 @@
+name: ✨ Feature
+description: 새로운 기능이나 명세가 있나요?
+title: "[✨ Feature] "
+labels: ["✨ Feature"]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: 🤷‍♂️ Description
+      description: 구현하고자 하는 기능에 대해 작성해 주세요.
+      placeholder: |
+        예: 로그인 시 사용자 프로필 불러오기 기능 추가
+    validations:
+      required: true
+
+  - type: textarea
+    id: remarks
+    attributes:
+      label: 📒 Remarks
+      description: 추가로 전달하거나 메모해 둘 내용이 있다면 작성해 주세요.
+      placeholder: |
+        예: 디자인 시안은 Figma 링크 참고
+    validations:
+      required: false
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ✅ 이슈 생성 시 오른쪽 옵션들 (Assignee, Label 등)도 함께 확인해 주세요!
