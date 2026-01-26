@@ -16,6 +16,7 @@ module.exports = {
                 "ci", // CI 설정 파일 및 스크립트 변경
                 "chore", // 기타 변경사항
                 "revert", // 이전 커밋 되돌리기
+                "design", // 🎨 디자인 수정
             ],
         ],
         "type-case": [2, "always", "lowerCase"],
