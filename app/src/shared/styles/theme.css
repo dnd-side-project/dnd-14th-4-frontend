@@ -1,4 +1,19 @@
 @theme {
+  --color-common-0: #ffffff;
+  --color-common-100: #000000;
+
+  --color-neutral-10: #111111;
+  --color-neutral-20: #2a2a2a;
+  --color-neutral-30: #474747;
+  --color-neutral-40: #5c5c5c;
+  --color-neutral-50: #737373;
+  --color-neutral-60: #8e8e8e;
+  --color-neutral-70: #a5a5a5;
+  --color-neutral-80: #d0d0d0;
+  --color-neutral-90: #dedede;
+  --color-neutral-95: #f0f0f0;
+  --color-neutral-99: #fbfbfb;
+
   --color-primary-subtler: #ffd1de;
   --color-primary-subtle: #ff92b7;
   --color-primary-normal: #ff62a1;
