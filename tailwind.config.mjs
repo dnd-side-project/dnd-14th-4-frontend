@@ -3,6 +3,9 @@ export default {
   content: ["./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}"],
   theme: {
     extend: {
+      maxWidth: {
+        mobile: "430px",
+      },
       colors: {
         common: {
           0: "var(--color-common-0)",
