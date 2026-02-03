@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "../shared/styles/globals.css";
+import { QueryProvider } from "./providers/QueryProvider";
+import { BottomNav } from "@/widgets/bottom-nav/ui/BottomNav";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,16 +15,14 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "왓츠인마이팩",
-  description: "왓츠인마이팩",
+  title: "What's in my pack",
+  description: "What's in my pack",
   icons: {
     icon: "/favicon.svg",
     apple: "/favicon.svg",
   },
 };
 
-import { QueryProvider } from "./providers/QueryProvider";
-import { BottomNav } from "@/widgets/bottom-nav/ui/BottomNav";
 
 export default function RootLayout({
   children,
