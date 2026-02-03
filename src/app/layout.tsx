@@ -21,6 +21,7 @@ export const metadata: Metadata = {
   },
 };
 
+import { QueryProvider } from "./providers/QueryProvider";
 import { BottomNav } from "@/widgets/bottom-nav/ui/BottomNav";
 
 export default function RootLayout({
@@ -33,10 +34,12 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex justify-center bg-gray-50`}
       >
-        <div className="w-full max-w-mobile min-h-screen bg-white shadow-xl relative pb-20">
-          {children}
-          <BottomNav />
-        </div>
+        <QueryProvider>
+          <div className="w-full max-w-mobile min-h-screen bg-white shadow-xl relative pb-20">
+            {children}
+            <BottomNav />
+          </div>
+        </QueryProvider>
       </body>
     </html>
   );
