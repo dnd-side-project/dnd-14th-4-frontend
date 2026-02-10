@@ -1,8 +1,8 @@
 "use client";
 
 import { Controller, useFormContext } from "react-hook-form";
-import { ChipButton } from "./ChipButton";
 import type { OnboardingFormValues } from "../../model/schema";
+import { BtnSelection } from "@/shared/ui/BtnSelection";
 
 type Name = "ageRange" | "gender";
 
@@ -31,13 +31,14 @@ export function SingleSelectField<N extends Name>({
 
           <div className="flex flex-wrap gap-2">
             {options.map((v) => (
-              <ChipButton
+              <BtnSelection
                 key={v}
+                size="sm"
                 selected={field.value === v}
                 onClick={() => field.onChange(v)}
               >
                 {v}
-              </ChipButton>
+              </BtnSelection>
             ))}
           </div>
         </div>

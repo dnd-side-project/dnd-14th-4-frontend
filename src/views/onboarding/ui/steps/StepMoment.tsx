@@ -3,13 +3,13 @@
 import { useFormContext } from "react-hook-form";
 import { MOMENT_OPTIONS } from "../../model/constants";
 import type { OnboardingFormValues } from "../../model/schema";
-import { ChipButton } from "../components/ChipButton";
+import { BtnSelection } from "@/shared/ui/BtnSelection";
 
 type MomentValue = (typeof MOMENT_OPTIONS)[number];
 
 export function StepMoments() {
   const { watch, setValue } = useFormContext<OnboardingFormValues>();
-  const selected = watch("moments"); 
+  const selected = watch("moments");
 
   const toggle = (v: MomentValue) => {
     const exists = selected.includes(v);
@@ -27,21 +27,22 @@ export function StepMoments() {
 
   return (
     <div>
-
       <div className="grid grid-cols-2 gap-3">
         {MOMENT_OPTIONS.map((v) => {
           const isSelected = selected.includes(v);
           const disabled = !isSelected && selected.length >= 3;
 
           return (
-            <ChipButton
+            <BtnSelection
               key={v}
+              size="lg"
+              fullWidth
               selected={isSelected}
               disabled={disabled}
               onClick={() => toggle(v)}
             >
               {v}
-            </ChipButton>
+            </BtnSelection>
           );
         })}
       </div>
