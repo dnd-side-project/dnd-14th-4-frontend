@@ -18,16 +18,14 @@ export function HomeSearchHeader({ onSearchModeChange }: Props) {
   const { isSearchMode, enter, exit } = useSearchMode();
   const [query, setQuery] = useState("");
 
-  const enterWithNotify = () => {
+  const enterWithNotify = React.useCallback(() => {
     enter();
     onSearchModeChange?.(true);
-  };
-
-  const exitWithNotify = () => {
+  }, [enter, onSearchModeChange]);
+  const exitWithNotify = React.useCallback(() => {
     exit();
     onSearchModeChange?.(false);
-  };
-
+  }, [exit, onSearchModeChange]);
   return (
     <section
       className={`transition-all duration-300 ease-out ${
