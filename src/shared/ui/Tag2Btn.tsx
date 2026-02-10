@@ -23,7 +23,7 @@ export const Tag2Btn = React.forwardRef<HTMLButtonElement, Tag2BtnProps>(
         // 1. 공통 베이스 스타일
         // 둥근 캡슐 모양(rounded-full), 테두리(border), 텍스트(text-label1)
         const base =
-            "inline-flex items-center justify-center type-label1 px-4 py-1.5 rounded-full border border-[2px] transition-colors duration-200 cursor-pointer gap-1.5 " +
+            "inline-flex items-center justify-center type-label1 px-4 py-1.5 rounded-full border border-[1.5px] transition-colors duration-200 cursor-pointer gap-1.5 " +
             "disabled:opacity-50 disabled:cursor-not-allowed";
 
         // 2. 상태(Status)별 색상 스타일
