@@ -23,7 +23,7 @@ export function NicknameField() {
 
   return (
     <div>
-      <p className="text-sm text-label-subtle mb-2">닉네임</p>
+      <p className="text-label-subtle type-label1 mb-3">닉네임</p>
 
       <TextInput
         maxLength={NICKNAME_MAX}

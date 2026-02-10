@@ -29,10 +29,10 @@ export function FlowLayoutFooter({
           disabled={disabled}
           onClick={onClick}
           className={cn(
-            "h-12 w-full rounded-xl font-semibold",
+            "h-12 w-full rounded-xl type-label1",
             disabled
               ? "bg-neutral-95 text-label-subtle"
-              : "bg-black text-white",
+              : "bg-black text-secondary-beige",
           )}
         >
           {label}

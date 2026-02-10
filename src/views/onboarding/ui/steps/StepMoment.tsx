@@ -27,9 +27,6 @@ export function StepMoments() {
 
   return (
     <div>
-      <p className="text-sm text-neutral-500 mb-4">
-        최대 3개까지 골라보세요! 설정은 나중에 언제든 바꿀 수 있어요.
-      </p>
 
       <div className="grid grid-cols-2 gap-3">
         {MOMENT_OPTIONS.map((v) => {

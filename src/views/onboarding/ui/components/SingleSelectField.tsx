@@ -27,7 +27,7 @@ export function SingleSelectField<N extends Name>({
       name={name}
       render={({ field }) => (
         <div>
-          <p className="text-sm text-neutral-400 mb-3">{label}</p>
+          <p className=" text-label-subtle type-label1 mb-3">{label}</p>
 
           <div className="flex flex-wrap gap-2">
             {options.map((v) => (

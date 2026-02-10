@@ -1,6 +1,5 @@
 "use client";
 
-import * as React from "react";
 import { cn } from "@/shared/lib/cn";
 import type { FlowHeaderProps } from "./types";
 
@@ -36,10 +35,16 @@ export function FlowLayoutHeader({
       )}
 
       {showText && (
-        <div className={cn("space-y-2", showTopRow && "mt-6")}>
-          {title && <h1 className="text-xl font-bold leading-snug">{title}</h1>}
+        <div className={cn("space-y-3", showTopRow && "mt-6")}>
+          {title && (
+            <h1 className="type-heading1 text-label-default leading-snug">
+              {title}
+            </h1>
+          )}
           {description && (
-            <p className="text-sm text-neutral-500">{description}</p>
+            <p className="type-label2 text-label-default whitespace-pre-line">
+              {description}
+            </p>
           )}
         </div>
       )}
