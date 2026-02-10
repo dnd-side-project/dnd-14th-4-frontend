@@ -22,7 +22,5 @@ export type FlowFooterProps = {
   disabled?: boolean;
   onClick: () => void;
   className?: string;
-
-  /** 모바일 컨테이너를 쓴다면 켜기 */
-  maxWidthMobile?: boolean;
+  aboveSlot?: React.ReactNode;
 };

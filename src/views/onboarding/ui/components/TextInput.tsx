@@ -20,12 +20,11 @@ export function TextInput({
       <input
         {...props}
         className={cn(
-          "h-12 w-full border-b bg-transparent outline-none text-base",
-          isError ? "border-red-500" : "border-neutral-300",
+          "px-2 h-12 w-full bg-transparent outline-none text-base",
+          "border-b border-black",
           className,
         )}
       />
-
       {(footerLeft || footerRight) && (
         <div className="flex items-center justify-between px-1 text-xs">
           <div className={cn(isError ? "text-red-500" : "text-neutral-400")}>

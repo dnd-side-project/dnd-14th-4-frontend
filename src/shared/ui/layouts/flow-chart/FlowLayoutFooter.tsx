@@ -9,16 +9,21 @@ export function FlowLayoutFooter({
   disabled,
   onClick,
   className,
-  maxWidthMobile = true,
+  aboveSlot,
 }: FlowFooterProps) {
   return (
     <footer className={cn("fixed inset-x-0 bottom-0 bg-white z-50", className)}>
       <div
-        className={cn(
-          maxWidthMobile && "max-w-mobile w-full mx-auto",
-          "px-5 pt-3 pb-[calc(20px+env(safe-area-inset-bottom))]",
-        )}
+        className={`max-w-mobile w-full mx-auto
+          px-5 pt-3 pb-[calc(20px+env(safe-area-inset-bottom))]`}
       >
+        {aboveSlot && (
+          <div className="pt-3">
+            <div className="mb-4 text-center type-caption1 text-label-subtle whitespace-pre-line">
+              {aboveSlot}
+            </div>
+          </div>
+        )}
         <button
           type="button"
           disabled={disabled}

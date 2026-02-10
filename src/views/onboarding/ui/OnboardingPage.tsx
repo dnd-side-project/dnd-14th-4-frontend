@@ -48,7 +48,11 @@ export function OnboardingPage() {
           label={meta.ctaLabel}
           disabled={ctaDisabled}
           onClick={onNext}
-          maxWidthMobile
+          aboveSlot={
+            step === "profile"
+              ? "개인정보 수집 및 이용에 동의하시면\n아래 버튼을 눌러주세요."
+              : undefined
+          }
         />
       </FlowLayout>
     </FormProvider>
