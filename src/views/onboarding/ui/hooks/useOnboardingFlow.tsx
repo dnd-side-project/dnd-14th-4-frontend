@@ -4,12 +4,13 @@ import * as React from "react";
 import type { UseFormReturn } from "react-hook-form";
 import type { OnboardingFormValues } from "../../model/schema";
 import { ONBOARDING_STEPS, type OnboardingStep } from "../../model/types";
+import { useRouter } from "next/navigation";
 
 export function useOnboardingFlow(
   methods: UseFormReturn<OnboardingFormValues>,
 ) {
   const [step, setStep] = React.useState<OnboardingStep>("profile");
-
+  const router = useRouter();
   const {
     watch,
     trigger,
@@ -56,7 +57,7 @@ export function useOnboardingFlow(
       setStep("welcome");
       return;
     }
-
+    router.replace("/");
     const payload = getValues();
     //TODO: 제출 api 연결 필요
     console.log("submit onboarding:", payload);
