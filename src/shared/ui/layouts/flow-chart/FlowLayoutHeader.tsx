@@ -37,7 +37,7 @@ export function FlowLayoutHeader({
       {showText && (
         <div className={cn("space-y-3", showTopRow && "mt-6")}>
           {title && (
-            <h1 className="type-heading1 text-label-default leading-snug">
+            <h1 className="type-heading1 text-label-default leading-snug whitespace-pre-line">
               {title}
             </h1>
           )}

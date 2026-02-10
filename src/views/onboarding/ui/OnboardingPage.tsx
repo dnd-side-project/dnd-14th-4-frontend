@@ -34,7 +34,7 @@ export function OnboardingPage() {
         <FlowLayout.Header
           onBack={step === "welcome" ? undefined : onBack}
           progressSlot={<ProgressBar value={progress} />}
-          title={<span style={{ whiteSpace: "pre-line" }}>{meta.title}</span>}
+          title={meta.title}
           description={meta.description}
         />
 

@@ -32,8 +32,8 @@ export function useOnboardingFlow(
     step === "profile"
       ? !canNextProfile
       : step === "moments"
-        ? !canNextMoments
-        : false;
+      ? !canNextMoments
+      : false;
 
   const canGoBack = step !== "profile";
   const onBack = () => {
@@ -57,10 +57,10 @@ export function useOnboardingFlow(
       setStep("welcome");
       return;
     }
-    router.replace("/");
     const payload = getValues();
     //TODO: 제출 api 연결 필요
     console.log("submit onboarding:", payload);
+    router.replace("/");
   };
 
   return {

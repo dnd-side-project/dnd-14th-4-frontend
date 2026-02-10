@@ -13,10 +13,7 @@ export function FlowLayoutFooter({
 }: FlowFooterProps) {
   return (
     <footer className={cn("fixed inset-x-0 bottom-0 bg-white z-50", className)}>
-      <div
-        className={`max-w-mobile w-full mx-auto
-          px-5 pt-3 pb-[calc(20px+env(safe-area-inset-bottom))]`}
-      >
+      <div className="max-w-mobile w-full mx-auto px-5 pt-3 pb-[calc(20px+env(safe-area-inset-bottom))]">
         {aboveSlot && (
           <div className="pt-3">
             <div className="mb-4 text-center type-caption1 text-label-subtle whitespace-pre-line">
