@@ -24,7 +24,7 @@ export default function RootLayout({
         className={`${pretendard.variable} antialiased flex justify-center bg-gray-50`}
       >
         <QueryProvider>
-          <div className="w-full max-w-mobile min-h-screen bg-white shadow-xl relative pb-20">
+          <div className="w-full max-w-mobile min-h-screen bg-white shadow-xl relative">
             {children}
             <BottomNav />
           </div>
