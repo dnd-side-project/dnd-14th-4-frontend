@@ -7,6 +7,7 @@ interface Props {
 export const ImageUploadBox = ({ count, maxCount, onClick }: Props) => {
     return (
         <button
+            type="button"
             onClick={onClick}
             className="w-25 h-25 bg-black/52 rounded-lg flex flex-col items-center justify-center text-white"
         >

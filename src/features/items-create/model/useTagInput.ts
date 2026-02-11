@@ -4,9 +4,12 @@ export const useTagInput = (maxTags = 5, maxChars = 10) => {
     const [tags, setTags] = useState<string[]>([]);
     const [inputValue, setInputValue] = useState("");
 
+    const effectiveInputValue = inputValue.replace(/^#/, "");
 
-    const isCharLimitExceeded = inputValue.length > maxChars;
+    const isCharLimitExceeded = effectiveInputValue.length > maxChars;
     const isTagLimitExceeded = tags.length >= maxTags;
+
+    const isError = isCharLimitExceeded || (isTagLimitExceeded && inputValue.trim() !== "");
 
     let errorMessage = "";
     if (isCharLimitExceeded) {
@@ -22,10 +25,10 @@ export const useTagInput = (maxTags = 5, maxChars = 10) => {
     const addTag = () => {
         const trimmedValue = inputValue.trim().replace(/^#/, "");
 
-        if (!trimmedValue || isCharLimitExceeded || isTagLimitExceeded) return;
+        if (!trimmedValue || isError) return;
 
         if (tags.includes(trimmedValue)) {
-
+            setInputValue("");
             return;
         }
 
@@ -34,6 +37,8 @@ export const useTagInput = (maxTags = 5, maxChars = 10) => {
     };
 
     const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.nativeEvent.isComposing) return;
+
         if (e.key === 'Enter') {
             e.preventDefault();
             addTag();
@@ -46,7 +51,7 @@ export const useTagInput = (maxTags = 5, maxChars = 10) => {
         tags,
         inputValue,
         errorMessage,
-        isError: isCharLimitExceeded,
+        isError,
         setInputValue,
         onKeyDown,
         removeTag

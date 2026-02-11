@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { cn } from "@/shared/lib/cn";
+import { mergeRefs } from "../lib/mergeRefs";
 
 export interface TextFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
     variant?: "sm" | "lg";
@@ -24,11 +25,10 @@ export const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
             readOnly,
             ...props
         },
-        ref
+        externalRef
     ) => {
         // 1. 내부 ref와 외부 ref 통합
-        const inputRef = React.useRef<HTMLInputElement>(null);
-        React.useImperativeHandle(ref, () => inputRef.current!);
+        const localRef = React.useRef<HTMLInputElement>(null);
 
         // 2. 내용 유무 판단
         const hasContent =
@@ -53,7 +53,7 @@ export const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
         const baseInputStyle = "bg-transparent outline-none text-type-label1 placeholder:text-label-subtle flex-1 min-w-[120px]";
 
         const handleContainerClick = () => {
-            inputRef.current?.focus();
+            localRef.current?.focus();
         };
 
         return (
@@ -63,7 +63,7 @@ export const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
 
                     <input
                         {...props}
-                        ref={inputRef}
+                        ref={mergeRefs(localRef, externalRef)}
                         readOnly={readOnly}
                         value={value}
                         onChange={onChange}

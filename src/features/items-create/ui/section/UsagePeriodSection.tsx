@@ -18,7 +18,6 @@ export function UsagePeriodSection({ selected, onSelect }: UsagePeriodProps) {
             {options.map((opt) => (
                 <BtnSelection
                     key={opt.id}
-                    // 내가 선택된 놈이면 status를 true로 보내서 검정색으로 만듦
                     status={selected === opt.id}
                     onClick={() => onSelect(opt.id)}
                 >

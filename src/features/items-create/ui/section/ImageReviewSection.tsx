@@ -1,12 +1,19 @@
 "use client";
+
 import { TextField } from "@/shared/ui/TextField";
 import { Tag2Btn } from "@/shared/ui/Tag2Btn";
-import { ImageUploadBox } from "../ImageUploadBox";
+import { ImageUploadBox } from "../ImageUploadBox"; // 경로 확인 필요
 import { useImageUpload } from "../../model/useImageUpload";
 import { useTagInput } from "../../model/useTagInput";
 
 export function ImageReviewSection() {
-    const { imageCount, openPicker } = useImageUpload();
+    const {
+        imageCount,
+        openPicker,
+        fileInputRef,
+        handleFileChange
+    } = useImageUpload(5);
+
     const {
         tags,
         inputValue,
@@ -14,14 +21,28 @@ export function ImageReviewSection() {
         isError,
         setInputValue,
         onKeyDown,
-        removeTag
+        removeTag,
     } = useTagInput();
 
     const currentHelperText = isError ? errorMessage : "*태그 당 최대 10자";
 
     return (
         <div className="flex flex-col gap-6">
-            <ImageUploadBox count={imageCount} maxCount={5} onClick={openPicker} />
+
+            <input
+                type="file"
+                className="hidden"
+                ref={fileInputRef}
+                onChange={handleFileChange}
+                accept="image/*"
+                multiple
+            />
+
+            <ImageUploadBox
+                count={imageCount}
+                maxCount={5}
+                onClick={openPicker}
+            />
 
             <TextField
                 variant="lg"
@@ -34,7 +55,7 @@ export function ImageReviewSection() {
             >
                 {tags.map((tag, index) => (
                     <Tag2Btn
-                        key={`${tag}-${index}`}
+                        key={tag}
                         status
                         hasX
                         onClick={(e) => {

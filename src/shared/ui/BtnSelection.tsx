@@ -7,7 +7,7 @@ type SelectionSize = "sm" | "lg";
 
 export type BtnSelectionProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
     size?: SelectionSize;
-    status?: boolean; // 이 값이 true면 활성화 스타일
+    status?: boolean;
     fullWidth?: boolean;
 };
 
@@ -31,7 +31,6 @@ export const BtnSelection = React.forwardRef<HTMLButtonElement, BtnSelectionProp
             lg: "w-full py-[13px] rounded-lg",
         };
 
-        // 활성화(status: true) 시 강조색, 비활성화 시 연한 색
         const statusStyles = status
             ? "bg-neutral-10 text-common-0 font-bold" // Active
             : "bg-neutral-95 text-label-subtle hover:bg-neutral-90"; // Inactive
