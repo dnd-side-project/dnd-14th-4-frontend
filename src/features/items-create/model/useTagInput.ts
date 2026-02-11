@@ -1,59 +1,41 @@
-import { useState } from 'react';
+"use client";
+import { useState } from "react";
 
-export const useTagInput = (maxTags = 5, maxChars = 10) => {
-    const [tags, setTags] = useState<string[]>([]);
+export const useTagInput = (
+    tags: string[],
+    onTagsChange: (tags: string[]) => void
+) => {
     const [inputValue, setInputValue] = useState("");
-
-    const effectiveInputValue = inputValue.replace(/^#/, "");
-
-    const isCharLimitExceeded = effectiveInputValue.length > maxChars;
-    const isTagLimitExceeded = tags.length >= maxTags;
-
-    const isError = isCharLimitExceeded || (isTagLimitExceeded && inputValue.trim() !== "");
-
-    let errorMessage = "";
-    if (isCharLimitExceeded) {
-        errorMessage = `태그는 최대 ${maxChars}자까지 입력 가능해요.`;
-    } else if (isTagLimitExceeded && inputValue.trim() !== "") {
-        errorMessage = `태그는 최대 ${maxTags}개까지만 등록할 수 있어요.`;
-    }
-
-    const removeTag = (indexToRemove: number) => {
-        setTags((prev) => prev.filter((_, index) => index !== indexToRemove));
-    };
-
-    const addTag = () => {
-        const trimmedValue = inputValue.trim().replace(/^#/, "");
-
-        if (!trimmedValue || isError) return;
-
-        if (tags.includes(trimmedValue)) {
-            setInputValue("");
-            return;
-        }
-
-        setTags((prev) => [...prev, trimmedValue]);
-        setInputValue("");
-    };
+    const [errorMessage, setErrorMessage] = useState("");
+    const [isError, setIsError] = useState(false);
 
     const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.nativeEvent.isComposing) return;
-
-        if (e.key === 'Enter') {
+        if (e.key === "Enter" && !e.nativeEvent.isComposing) {
             e.preventDefault();
-            addTag();
-        } else if (e.key === 'Backspace' && inputValue === '' && tags.length > 0) {
-            removeTag(tags.length - 1);
+            const value = inputValue.trim().replace(/^#/, ""); // # 제거 로직 포함
+
+            if (value === "") return;
+            if (tags.includes(value)) {
+                setIsError(true);
+                setErrorMessage("이미 등록된 태그입니다.");
+                return;
+            }
+            if (tags.length >= 5) {
+                setIsError(true);
+                setErrorMessage("태그는 최대 5개까지 등록 가능합니다.");
+                return;
+            }
+
+            onTagsChange([...tags, value]);
+            setInputValue("");
+            setIsError(false);
+            setErrorMessage("");
         }
     };
 
-    return {
-        tags,
-        inputValue,
-        errorMessage,
-        isError,
-        setInputValue,
-        onKeyDown,
-        removeTag
+    const removeTag = (index: number) => {
+        onTagsChange(tags.filter((_, i) => i !== index));
     };
+
+    return { inputValue, errorMessage, isError, setInputValue, onKeyDown, removeTag };
 };

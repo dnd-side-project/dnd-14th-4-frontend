@@ -1,5 +1,4 @@
 "use client";
-
 import { useState } from 'react';
 import { FormSection } from '@/shared/ui/FormSection';
 import { ItemDetailSection } from './section/ItemDetailSection';
@@ -9,15 +8,13 @@ import { UsagePeriodSection } from './section/UsagePeriodSection';
 import { PurchaseSection } from './section/PurchaseSection';
 import { Button } from '@/shared/ui/Button';
 
-
 export const ItemForm = () => {
-    // 서버 전송을 위한 모든 상태 모음
     const [itemDetail, setItemDetail] = useState({ brand: "", product: "" });
     const [rating, setRating] = useState<string | null>(null);
     const [period, setPeriod] = useState<string | null>(null);
     const [purchaseLocation, setPurchaseLocation] = useState("");
-
-
+    const [images, setImages] = useState<File[]>([]);
+    const [tags, setTags] = useState<string[]>([]);
 
     const isDetailFilled = itemDetail.brand.trim() !== "" && itemDetail.product.trim() !== "";
     const isRatingSelected = rating !== null;
@@ -26,16 +23,16 @@ export const ItemForm = () => {
         setItemDetail((prev) => ({ ...prev, [field]: value }));
     };
 
-    // [전송 로직]
     const handleSubmit = () => {
         const payload = {
             ...itemDetail,
             rating,
             period,
             purchaseLocation,
+            images,
+            tags,
         };
         console.log("서버로 보내는 데이터:", payload);
-        // fetch('/api/items', { method: 'POST', body: JSON.stringify(payload) })
     };
 
     return (
@@ -49,9 +46,14 @@ export const ItemForm = () => {
             )}
 
             {isRatingSelected && (
-                <div className="flex flex-col gap-12 ">
+                <div className="flex flex-col gap-12">
                     <FormSection title="리뷰 작성" isOptional>
-                        <ImageReviewSection />
+                        <ImageReviewSection
+                            images={images}
+                            onImagesChange={setImages}
+                            tags={tags}
+                            onTagsChange={setTags}
+                        />
                     </FormSection>
 
                     <FormSection title="사용 기간" isOptional>
@@ -59,13 +61,9 @@ export const ItemForm = () => {
                     </FormSection>
 
                     <FormSection title="구매처" isOptional>
-                        <PurchaseSection
-                            value={purchaseLocation}
-                            onChange={setPurchaseLocation}
-                        />
+                        <PurchaseSection value={purchaseLocation} onChange={setPurchaseLocation} />
                     </FormSection>
 
-                    {/* 최종 제출 버튼 */}
                     <Button onClick={handleSubmit}>저장</Button>
                 </div>
             )}
