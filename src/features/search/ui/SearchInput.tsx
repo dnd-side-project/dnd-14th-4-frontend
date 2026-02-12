@@ -1,36 +1,49 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import * as React from "react";
+import { FiSearch } from "react-icons/fi";
 
 type Props = {
-  isSearchMode: boolean;
+  isSearchMode?: boolean;
   query: string;
   onChange: (v: string) => void;
-  onEnterSearchMode: () => void;
+  onEnterSearchMode?: () => void; // 검색 페이지 이동
 };
 
 export function SearchInput({
-  isSearchMode,
+  isSearchMode = false,
   query,
   onChange,
   onEnterSearchMode,
 }: Props) {
-  const inputRef = useRef<HTMLInputElement>(null);
+  const handleFocus = () => {
+    if (!isSearchMode) {
+      onEnterSearchMode?.();
+    }
+  };
 
-  useEffect(() => {
-    if (!isSearchMode) return;
-    requestAnimationFrame(() => inputRef.current?.focus());
-  }, [isSearchMode]);
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      onEnterSearchMode?.();
+    }
+  };
 
   return (
-    <div className="h-11 rounded-xl border border-neutral-200 bg-white flex items-center transition-all duration-300 ease-out px-3">
+    <div
+      className={`flex h-11 items-center gap-2 rounded-xl px-3 transition-all duration-300 ${
+        isSearchMode ? "bg-neutral-100" : "bg-neutral-100"
+      }`}
+      onClick={handleFocus}
+    >
+      <FiSearch className="h-5 w-5 text-neutral-400" />
+
       <input
-        ref={inputRef}
         value={query}
         onChange={(e) => onChange(e.target.value)}
-        placeholder={isSearchMode ? "검색어를 입력하세요" : "상품 검색"}
-        className="w-full outline-none text-sm"
-        onFocus={onEnterSearchMode}
+        onFocus={handleFocus}
+        onKeyDown={handleKeyDown}
+        placeholder="다양한 팩을 검색해보세요."
+        className="h-full w-full bg-transparent text-sm text-neutral-800 outline-none placeholder:text-neutral-400"
       />
     </div>
   );
