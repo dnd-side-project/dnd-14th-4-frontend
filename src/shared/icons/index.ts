@@ -25,3 +25,4 @@ export { default as IcSvgLogo } from './ic_logo';
 export { default as IcSvgMypage } from './ic_mypage';
 export { default as IcSvgVert } from './ic_vert';
 export { default as IcSvgWish } from './ic_wish';
+export { default as IcSvgWishBtn } from './ic_wishbtn';

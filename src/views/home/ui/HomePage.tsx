@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { HomeSearchHeader } from "@/widgets/home-search-header/ui/HomeSearchHeader";
-import IconButton from "@/shared/ui/IconBtn";
+
 
 export function HomePage() {
   const [hideIntro, setHideIntro] = useState(false);
@@ -17,10 +17,7 @@ export function HomePage() {
       )}
 
       <HomeSearchHeader onSearchModeChange={setHideIntro} />
-      <IconButton onClick={() => { }} variant="close" />
-      <IconButton onClick={() => { }} variant="plus" />
-      <IconButton onClick={() => { }} variant="pack" />
-      <IconButton onClick={() => { }} variant="item" />
+
     </div>
   );
 }

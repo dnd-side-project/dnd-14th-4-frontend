@@ -1,0 +1,46 @@
+'use client';
+
+import type { SVGProps } from "react";
+
+interface IcSvgWishProps extends SVGProps<SVGSVGElement> {
+  isWished: boolean;
+}
+
+const IcSvgWishBtn = ({
+  isWished,
+  ...props
+}: IcSvgWishProps) => {
+
+  const colors = {
+    fill: isWished ? "var(--color-primary-subtler)" : "var(--opacity-5)",
+    stroke: isWished ? "var(--color-primary-subtle)" : "var(--opacity-22)",
+  };
+
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      {...props}
+    >
+      <g clipPath="url(#wish_btn_svg__a)">
+        <path
+          fill={colors.fill}
+          d="M11.345 20.594a1.5 1.5 0 0 1-.57-.361l-1.437-1.306a66 66 0 0 1-4.748-4.765Q2.5 11.822 2.5 9.15q0-2.129 1.436-3.565T7.5 4.15q1.21 0 2.39.558 1.18.557 2.11 1.811.93-1.254 2.11-1.811a5.54 5.54 0 0 1 2.39-.558q2.13 0 3.564 1.435Q21.5 7.022 21.5 9.15q0 2.701-2.125 5.068a64 64 0 0 1-4.738 4.724l-1.422 1.29a1.5 1.5 0 0 1-.575.362q-.329.115-.65.115t-.645-.115"
+        />
+        <path
+          stroke={colors.stroke}
+          strokeWidth={1.5}
+          d="M16.5 4.9c1.154 0 2.1.358 2.88 1.07l.154.146c.81.809 1.216 1.803 1.216 3.034 0 1.584-.616 3.102-1.933 4.567a63 63 0 0 1-4.683 4.668l-.001.002-1.422 1.29-.014.013-.012.013a.76.76 0 0 1-.293.183 1.2 1.2 0 0 1-.402.073q-.183.002-.394-.072a.8.8 0 0 1-.291-.185l-.012-.012-.014-.013-1.436-1.305a65 65 0 0 1-4.695-4.71C3.856 12.216 3.25 10.717 3.25 9.15c0-1.154.358-2.1 1.07-2.88l.146-.154C5.275 5.306 6.269 4.9 7.5 4.9c.687 0 1.375.157 2.07.485.654.31 1.266.825 1.828 1.581l.602.812.602-.812c.562-.756 1.174-1.271 1.829-1.58A4.8 4.8 0 0 1 16.5 4.9Z"
+        />
+      </g>
+      <defs>
+        <clipPath id="wish_btn_svg__a">
+          <path fill="#fff" d="M0 0h24v24H0z" />
+        </clipPath>
+      </defs>
+    </svg>
+  );
+};
+
+export default IcSvgWishBtn;
