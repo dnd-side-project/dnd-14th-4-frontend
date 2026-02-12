@@ -33,7 +33,7 @@ export default function MoreButton({
         >
             <span className="whitespace-nowrap">더보기</span>
 
-            {arrow && <IcSvgArrowRightSmall className="w-6 h-6 shrink-0" />}
+            {arrow && <IcSvgArrowRightSmall className="w-6 h-6 shrink-0 " />}
             {close && <IcSvgCloseSmall className="w-6 h-6 shrink-0" />}
         </button>
     );
