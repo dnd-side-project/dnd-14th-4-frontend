@@ -1,5 +1,6 @@
 "use client";
 
+import { BOTTOM_NAV_HIDE_RULES } from "@/shared/constants/nav.constants";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -12,7 +13,17 @@ const NAV_ITEMS = [
 
 export const BottomNav = () => {
   const pathname = usePathname();
-  if (pathname.startsWith("/onboarding")) return null;
+
+  function shouldHideBottomNav(pathname: string) {
+    return BOTTOM_NAV_HIDE_RULES.some((rule) => {
+      if (rule.endsWith("*")) {
+        return pathname.startsWith(rule.replace("*", ""));
+      }
+      return pathname === rule;
+    });
+  }
+  
+  if (shouldHideBottomNav(pathname)) return null;
 
   return (
     <>
@@ -25,9 +36,7 @@ export const BottomNav = () => {
               key={item.href}
               href={item.href}
               className={`flex flex-col items-center gap-1 transition-colors ${
-                isActive
-                  ? "text-blue-600"
-                  : "text-gray-400 hover:text-gray-600"
+                isActive ? "text-blue-600" : "text-gray-400 hover:text-gray-600"
               }`}
             >
               {/* 아이콘 대신 네모 박스 안에 글자 첫 글자 또는 약어를 표시 */}

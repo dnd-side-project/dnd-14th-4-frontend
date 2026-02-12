@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { FiChevronLeft, FiRefreshCw } from "react-icons/fi";
+import { FiChevronLeft } from "react-icons/fi";
 
 import { BtnSelection } from "@/shared/ui/BtnSelection";
 import { MOMENT_OPTIONS } from "@/views/onboarding/model/constants";
