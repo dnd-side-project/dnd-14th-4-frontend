@@ -18,7 +18,7 @@ export function HomeSearchHeader() {
         isSearchMode={false}
         query={query}
         onChange={setQuery}
-        onEnterSearchMode={goSearchPage} // ✅ 클릭/포커스 시 여기 호출되게
+        onEnterSearchMode={goSearchPage}
       />
     </section>
   );

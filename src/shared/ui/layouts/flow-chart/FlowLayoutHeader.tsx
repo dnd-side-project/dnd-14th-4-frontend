@@ -29,6 +29,7 @@ export function FlowLayoutHeader({
               ←
             </button>
           )}
+          {/* TODO: 뒤로가기 공컴 변경 필요 */}
 
           {progressSlot && <div className="flex-1">{progressSlot}</div>}
         </div>

@@ -29,6 +29,7 @@ export default function FilterSearchPage() {
           aria-label="뒤로가기"
           className="grid h-11 w-11 place-items-center rounded-xl bg-white"
         >
+          {/* TODO: 뒤로가기 공컴 변경 필요 */}
           <FiChevronLeft className="h-5 w-5 text-neutral-700" />
         </button>
 
