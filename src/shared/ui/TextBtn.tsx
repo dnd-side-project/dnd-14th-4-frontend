@@ -1,20 +1,22 @@
 import { IcSvgArrowRightSmall, IcSvgCloseSmall } from "../icons";
 
-interface MoreButtonProps {
-    status: 'black' | 'pink' | 'gray';
+interface TextBtnProps {
+    status?: 'black' | 'pink' | 'gray';
     arrow?: boolean;
     close?: boolean;
     onClick?: () => void;
     className?: string;
+    children: React.ReactNode;
 }
 
-export default function MoreButton({
+export default function TextBtn({
     status = 'black',
     arrow = false,
     close = false,
     onClick,
-    className = ''
-}: MoreButtonProps) {
+    className = '',
+    children
+}: TextBtnProps) {
 
 
     const base = "flex items-center type-label1";
@@ -31,7 +33,7 @@ export default function MoreButton({
             onClick={onClick}
             className={`${base} ${statusStyles[status]} ${className}`}
         >
-            <span className="whitespace-nowrap">더보기</span>
+            {children}
 
             {arrow && <IcSvgArrowRightSmall className={`w-6 h-6 shrink-0 ${statusStyles[status]}`} />}
             {close && <IcSvgCloseSmall className={`w-6 h-6 shrink-0 ${statusStyles[status]}`} />}

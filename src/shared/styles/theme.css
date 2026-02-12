@@ -40,17 +40,17 @@
   --color-beige-99: #FFFCF9;
 
 
-  --opacity-0: #00000000;
-  --opacity-5: #0000000D;
-  --opacity-12: #0000001F;
-  --opacity-22: #00000038;
-  --opacity-28: #00000047;
-  --opacity-43: #0000006E;
-  --opacity-52: #00000085;
-  --opacity-61: #0000009C;
-  --opacity-74: #000000BD;
-  --opacity-88: #000000E0;
-  --opacity-100: #000000;
+  --alpha-0: #0000;
+  --alpha-5: #0000000D;
+  --alpha-12: #0000001F;
+  --alpha-22: #00000038;
+  --alpha-28: #00000047;
+  --alpha-43: #0000006E;
+  --alpha-52: #00000085;
+  --alpha-61: #0000009C;
+  --alpha-74: #000000BD;
+  --alpha-88: #000000E0;
+  --alpha-100: #000;
 
   --color-primary-subtler: #ffd1de;
   --color-primary-subtle: #ff92b7;
@@ -113,9 +113,9 @@
 
 
   /* shadow */
-  --shadow-normal: 0px 0px 1px 0px rgba(0, 0, 0, 0.06), 0px 1px 4px 0px rgba(0, 0, 0, 0.08);
-  --shadow-emphasize: 0px 0px 1px 0px rgba(0, 0, 0, 0.08), 0px 1px 4px 0px rgba(0, 0, 0, 0.08);
-  --shadow-strong: 0px 0px 4px 0px rgba(0, 0, 0, 0.08), 0px 4px 8px 0px rgba(0, 0, 0, 0.08);
+  --shadow-normal: 0px 0px 1px 0px rgb(0 0 0 / 6%), 0px 1px 4px 0px rgb(0 0 0 / 8%);
+  --shadow-emphasize: 0px 0px 1px 0px rgb(0 0 0 / 8%), 0px 1px 4px 0px rgb(0 0 0 / 8%);
+  --shadow-strong: 0px 0px 4px 0px rgb(0 0 0 / 8%), 0px 4px 8px 0px rgb(0 0 0 / 8%);
 }
 
 @layer components {

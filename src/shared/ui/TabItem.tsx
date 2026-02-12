@@ -11,7 +11,10 @@ interface TabItemProps {
 
 export default function TabItem({ isActive, onClick, children }: TabItemProps) {
     return (
-        <div
+        <button
+            type="button"
+            role="tab"
+            aria-selected={isActive}
             onClick={onClick}
             className={`
         flex-1 flex items-center justify-center 
@@ -20,19 +23,15 @@ export default function TabItem({ isActive, onClick, children }: TabItemProps) {
                     ? 'text-common-100 font-bold'
                     : 'text-label-subtle font-medium'
                 }
-        border-b-[1.5px]
         ${isActive
-                    ? 'border-common-100'
-                    : 'border-line-normal'
+                    ? 'border-b-[1.5px] border-common-100'
+                    : 'border-b border-line-normal'
                 }
       `}
-            style={{
-                borderBottomWidth: isActive ? '1.5px' : '1px'
-            }}
         >
             <span className="type-headline2">
                 {children}
             </span>
-        </div>
+        </button>
     );
 }

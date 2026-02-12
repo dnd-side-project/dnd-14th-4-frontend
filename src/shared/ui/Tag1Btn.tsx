@@ -3,21 +3,21 @@ import React from 'react';
 type TagVariant = 'primary' | 'secondary' | 'pressed' | 'disabled' | 'unpressed';
 type TagMode = 'btn' | 'chip';
 
-interface TagProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface Tag1BtnProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     children: React.ReactNode;
     variant?: TagVariant;
     mode?: TagMode; // 'btn' 또는 'chip' (기본값: 'chip')
     className?: string;
 }
 
-export default function Tag({
+export default function Tag1Btn({
     children,
     variant = 'unpressed',
     mode = 'chip',
     className = '',
     disabled,
     ...props
-}: TagProps) {
+}: Tag1BtnProps) {
 
     const baseStyle = "inline-flex items-center justify-center type-label1 rounded-full transition-colors duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed";
 

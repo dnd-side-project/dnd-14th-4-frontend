@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { HomeSearchHeader } from "@/widgets/home-search-header/ui/HomeSearchHeader";
-
+import TextBtn from "@/shared/ui/TextBtn";
 
 export function HomePage() {
   const [hideIntro, setHideIntro] = useState(false);

@@ -2,14 +2,14 @@
 
 import type { SVGProps } from "react";
 
-interface IcSvgWishProps extends SVGProps<SVGSVGElement> {
+interface IcSvgWishBtnProps extends SVGProps<SVGSVGElement> {
   isWished: boolean;
 }
 
 const IcSvgWishBtn = ({
   isWished,
   ...props
-}: IcSvgWishProps) => {
+}: IcSvgWishBtnProps) => {
 
   const colors = {
     fill: isWished ? "var(--color-primary-subtler)" : "var(--opacity-5)",
