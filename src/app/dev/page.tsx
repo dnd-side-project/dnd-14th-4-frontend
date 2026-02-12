@@ -30,7 +30,7 @@ export default function DevUiPageClient() {
         </div>
         <BtnSelection size="lg" selected>
           공부/시험
-        </BtnSelection>{" "}
+        </BtnSelection>
       </section>
 
       {/* -----------------Button--------------- */}
