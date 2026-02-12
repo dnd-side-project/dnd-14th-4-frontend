@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { HomeSearchHeader } from "@/widgets/home-search-header/ui/HomeSearchHeader";
 
 export function HomePage() {
-  const [hideIntro, setHideIntro] = useState(false);
+  const [hideIntro] = useState(false);
 
   return (
     <div className="p-6">
@@ -15,7 +15,7 @@ export function HomePage() {
         </>
       )}
 
-      <HomeSearchHeader onSearchModeChange={setHideIntro} />
+      <HomeSearchHeader />
     </div>
   );
 }
