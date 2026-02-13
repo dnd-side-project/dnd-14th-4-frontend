@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -10,7 +10,8 @@ import {
 } from '@/shared/icons';
 
 export const BottomNav = () => {
-    const pathname = usePathname();
+  const pathname = usePathname();
+  if (pathname.startsWith("/onboarding")) return null;
 
 
     const navItems = [
