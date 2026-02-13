@@ -39,7 +39,6 @@ export default function DevUiPageClient() {
       <main className="min-h-dvh bg-white p-8 space-y-12 pb-40">
         <h1 className="text-2xl font-bold">🧩 Shared UI Playground</h1>
 
-{/* PackCard - 목 데이터 연결 (추후 API로 교체) */}
         <div className="space-y-4 max-w-[352px]">
           {MOCK_PACK_CARDS.map((card) => (
             <PackCard key={card.id} {...card} />

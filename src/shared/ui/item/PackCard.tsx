@@ -42,7 +42,7 @@ export function PackCard({
     <div className="relative w-full">
       <PackFolderBg className="absolute inset-0 h-full w-full" />
 
-      <div className="relative z-10 flex h-full flex-col px-5 pb-5 pt-3 sm:px-7 sm:pb-6 sm:pt-4">
+      <div className="relative z-10 flex h-full flex-col px-6 pt-4 pb-6 sm:px-7 sm:pb-6 sm:pt-4">
      
         <div className="flex items-center gap-2">
           <span
@@ -65,7 +65,7 @@ export function PackCard({
             </p>
           </div>
 
-          <div className="flex shrink-0 items-center gap-3 pr-3">
+          <div className="flex shrink-0 items-center gap-2">
             <button
               type="button"
               aria-label={isLiked ? "좋아요 취소" : "좋아요"}
