@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { HomeSearchHeader } from "@/widgets/home-search-header/ui/HomeSearchHeader";
 
 export function HomePage() {
