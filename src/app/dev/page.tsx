@@ -16,6 +16,8 @@ import Tag1Btn from "@/shared/ui/Tag1Btn";
 import TextBtn from "@/shared/ui/TextBtn";
 import IconButton from "@/shared/ui/IconBtn";
 import { BackHeader } from "@/shared/ui/BackHeader";
+import { PackCard, MOCK_PACK_CARDS } from "@/shared/ui/item/PackCard";
+import { ItemCard } from "@/shared/ui/item/ItemCard";
 
 export default function DevUiPageClient() {
   const router = useRouter();
@@ -37,6 +39,18 @@ export default function DevUiPageClient() {
       <main className="min-h-dvh bg-white p-8 space-y-12 pb-40">
         <h1 className="text-2xl font-bold">🧩 Shared UI Playground</h1>
 
+{/* PackCard - 목 데이터 연결 (추후 API로 교체) */}
+        <div className="space-y-4 max-w-[352px]">
+          {MOCK_PACK_CARDS.map((card) => (
+            <PackCard key={card.id} {...card} />
+          ))}
+        </div>
+        <div className="space-y-4 max-w-[352px]">
+          {MOCK_PACK_CARDS.map((card) => (
+                 <ItemCard key={card.id} {...card} />
+          ))}
+        </div>
+  
       {/*-------------- BtnSelection--------------------- */}
       <section className="space-y-4">
         <h2 className="text-lg font-semibold">BtnSelection</h2>
