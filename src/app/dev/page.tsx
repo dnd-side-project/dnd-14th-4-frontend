@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+
 import { BtnSelection } from "@/shared/ui/BtnSelection";
 import { Button } from "@/shared/ui/Button";
 import { FlowFooter } from "@/shared/ui/FlowFooter";
@@ -8,10 +9,23 @@ import { FormSection } from "@/shared/ui/FormSection";
 import { Tag2Btn } from "@/shared/ui/Tag2Btn";
 import { TextField } from "@/shared/ui/TextField";
 
+import Pagination from "@/shared/ui/Pagination";
+import TabItem from "@/shared/ui/TabItem";
+import Tag1Btn from "@/shared/ui/Tag1Btn";
+import TextBtn from "@/shared/ui/TextBtn";
+import IconButton from "@/shared/ui/IconBtn";
+
 export default function DevUiPageClient() {
   const [selected, setSelected] = React.useState(false);
   const [tagSelected, setTagSelected] = React.useState(true);
   const [text, setText] = React.useState("");
+
+  // ✅ Pagination / Tabs / Tag1 / TextBtn 데모용 상태
+  const [page, setPage] = React.useState(0);
+  const [tab, setTab] = React.useState<"A" | "B" | "C">("A");
+  const [tag1Variant, setTag1Variant] = React.useState<
+    "unpressed" | "pressed" | "primary" | "secondary" | "disabled"
+  >("unpressed");
 
   return (
     <main className="min-h-dvh bg-white p-8 space-y-12 pb-40">
@@ -37,13 +51,12 @@ export default function DevUiPageClient() {
       <section className="space-y-4">
         <h2 className="text-lg font-semibold">Button</h2>
 
-        <Button>Filled Button</Button>
-
-        <Button variant="outlined">Outlined</Button>
-
-        <Button variant="text">Text Button</Button>
-
-        <Button isLoading>Loading Button</Button>
+        <div className="flex flex-wrap gap-3">
+          <Button>Filled Button</Button>
+          <Button variant="outlined">Outlined</Button>
+          <Button variant="text">Text Button</Button>
+          <Button isLoading>Loading Button</Button>
+        </div>
       </section>
 
       {/* ----------------Tag2Btn-------------- */}
@@ -99,6 +112,120 @@ export default function DevUiPageClient() {
           disabled={false}
           onClick={() => alert("다음 클릭")}
         />
+      </section>
+
+      {/* ==================  추가된 공통 컴포넌트 데모 ================== */}
+
+      {/* ----------------IconButton-------------- */}
+      <section className="space-y-4">
+        <h2 className="text-lg font-semibold">IconButton</h2>
+
+        <div className="flex flex-wrap items-center gap-4">
+          <IconButton variant="plus" onClick={() => alert("plus")} />
+          <IconButton variant="close" onClick={() => alert("close")} />
+          <IconButton variant="pack" onClick={() => alert("pack")} />
+          <IconButton variant="item" onClick={() => alert("item")} />
+
+          {/* iconSize override 예시 */}
+          <IconButton variant="plus" iconSize="w-8 h-8" />
+        </div>
+      </section>
+
+      {/* ----------------Pagination-------------- */}
+      <section className="space-y-4">
+        <h2 className="text-lg font-semibold">Pagination</h2>
+
+        <div className="rounded-xl border border-line-normal p-4">
+          <div className="type-label1 text-label-subtle">current: {page}</div>
+          <Pagination total={6} current={page} onChange={setPage} />
+        </div>
+      </section>
+
+      {/* ----------------TabItem-------------- */}
+      <section className="space-y-4">
+        <h2 className="text-lg font-semibold">TabItem</h2>
+
+        <div className="w-full max-w-md">
+          <div role="tablist" className="flex">
+            <TabItem isActive={tab === "A"} onClick={() => setTab("A")}>
+              탭 A
+            </TabItem>
+            <TabItem isActive={tab === "B"} onClick={() => setTab("B")}>
+              탭 B
+            </TabItem>
+            <TabItem isActive={tab === "C"} onClick={() => setTab("C")}>
+              탭 C
+            </TabItem>
+          </div>
+
+          <div className="mt-4 rounded-xl bg-neutral-99 p-4">
+            <div className="type-label1 text-label-subtle">Active Tab</div>
+            <div className="mt-2 type-headline2 text-label-default">{tab}</div>
+          </div>
+        </div>
+      </section>
+
+      {/* ----------------Tag1Btn-------------- */}
+      <section className="space-y-4">
+        <h2 className="text-lg font-semibold">Tag1Btn</h2>
+
+        <div className="flex flex-wrap gap-2">
+          <Tag1Btn
+            variant="unpressed"
+            onClick={() => setTag1Variant("unpressed")}
+          >
+            unpressed
+          </Tag1Btn>
+          <Tag1Btn variant="pressed" onClick={() => setTag1Variant("pressed")}>
+            pressed
+          </Tag1Btn>
+          <Tag1Btn variant="primary" onClick={() => setTag1Variant("primary")}>
+            primary
+          </Tag1Btn>
+          <Tag1Btn
+            variant="secondary"
+            onClick={() => setTag1Variant("secondary")}
+          >
+            secondary
+          </Tag1Btn>
+          <Tag1Btn variant="disabled">disabled</Tag1Btn>
+        </div>
+
+        <div className="rounded-xl border border-line-normal p-4 space-y-3">
+          <div className="type-label1 text-label-subtle">Selected variant</div>
+
+          <div className="flex flex-wrap items-center gap-2">
+            <Tag1Btn variant={tag1Variant} mode="chip">
+              chip / {tag1Variant}
+            </Tag1Btn>
+            <Tag1Btn variant={tag1Variant} mode="btn">
+              btn / {tag1Variant}
+            </Tag1Btn>
+          </div>
+        </div>
+      </section>
+
+      {/* ----------------TextBtn-------------- */}
+      <section className="space-y-4">
+        <h2 className="text-lg font-semibold">TextBtn</h2>
+
+        <div className="flex flex-col gap-3">
+          <TextBtn status="black" onClick={() => alert("black")}>
+            기본 텍스트
+          </TextBtn>
+
+          <TextBtn status="pink" arrow onClick={() => alert("pink arrow")}>
+            자세히 보기
+          </TextBtn>
+
+          <TextBtn status="gray" close onClick={() => alert("gray close")}>
+            닫기
+          </TextBtn>
+
+          <TextBtn status="pink" arrow close onClick={() => alert("both")}>
+            복합(arrow+close)
+          </TextBtn>
+        </div>
       </section>
     </main>
   );
