@@ -6,7 +6,7 @@ type TagMode = 'btn' | 'chip';
 interface Tag1BtnProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     children: React.ReactNode;
     variant?: TagVariant;
-    mode?: TagMode; // 'btn' 또는 'chip' (기본값: 'chip')
+    mode?: TagMode;
     className?: string;
 }
 
@@ -23,36 +23,21 @@ export default function Tag1Btn({
 
     const paddingStyle = mode === 'btn' ? 'px-5 py-[7px]' : 'px-4 py-0.5';
 
-    const getVariantStyle = () => {
-        if (variant === 'secondary' && mode === 'btn') {
-            return "border border-beige-30 bg-secondary-lightbeige text-beige-10";
-        }
-
-        switch (variant) {
-            case 'primary':
-                return "bg-neutral-10 text-white border border-transparent";
-            case 'secondary':
-                return "bg-beige-60 text-white border border-transparent";
-            case 'pressed':
-                return "bg-primary-normal text-white border border-transparent";
-            case 'disabled':
-                return "bg-neutral-95 text-neutral-80 border border-transparent cursor-not-allowed";
-            case 'unpressed':
-            default:
-                return "bg-white border border-label-subtler text-label-subtle";
-        }
+    const variantStyles = {
+        primary: "bg-neutral-10 text-white border border-transparent",
+        pressed: "bg-primary-normal text-white border border-transparent",
+        disabled: "bg-neutral-95 text-neutral-80 border border-transparent cursor-not-allowed",
+        unpressed: "bg-white border border-label-subtler text-label-subtle",
+        secondary: mode === 'btn'
+            ? "border border-beige-30 bg-secondary-lightbeige text-beige-10"
+            : "bg-beige-60 text-white border border-transparent",
     };
 
     return (
         <button
             type="button"
             disabled={disabled || variant === 'disabled'}
-            className={`
-        ${baseStyle} 
-        ${paddingStyle} 
-        ${getVariantStyle()} 
-        ${className}
-      `}
+            className={`${baseStyle} ${paddingStyle} ${variantStyles[variant]} ${className}`}
             {...props}
         >
             {children}
