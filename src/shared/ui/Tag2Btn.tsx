@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { cn } from "../lib/cn";
+import { IcSvgCloseSmall } from "../icons";
 
 export type Tag2BtnProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
     status?: boolean;
@@ -21,12 +22,12 @@ export const Tag2Btn = React.forwardRef<HTMLButtonElement, Tag2BtnProps>(
         ref,
     ) => {
         const base =
-            "inline-flex items-center justify-center type-label1 px-4 py-1.5 rounded-full border border-[1.5px] transition-colors duration-200 cursor-pointer gap-1.5 " +
+            "inline-flex items-center justify-center type-label1 px-4 rounded-full  transition-colors duration-200 cursor-pointer " +
             "disabled:opacity-50 disabled:cursor-not-allowed";
 
         const statusStyles = status
-            ? "bg-pink-50 border-primary-subtle text-primary-strong " // Active 
-            : "bg-neutral-99 border-gray-300 text-label-default ";   // Inactive 
+            ? "bg-pink-95 text-primary-normal " // Active 
+            : "bg-neutral-99 border border-[1.5px] border-gray-300 text-label-default ";   // Inactive 
 
         return (
             <button
@@ -39,8 +40,8 @@ export const Tag2Btn = React.forwardRef<HTMLButtonElement, Tag2BtnProps>(
                 <span>#{children}</span>
 
                 {hasX && (
-                    // 임시
-                    <p>x</p>
+
+                    <IcSvgCloseSmall className="w-6 h-6 shrink-0" />
                 )}
             </button>
         );
