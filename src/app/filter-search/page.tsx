@@ -2,11 +2,11 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { FiChevronLeft } from "react-icons/fi";
 
 import { BtnSelection } from "@/shared/ui/BtnSelection";
 import { MOMENT_OPTIONS } from "@/views/onboarding/model/constants";
 import { FlowFooter } from "@/shared/ui/FlowFooter";
+import { BackHeader } from "@/shared/ui/BackHeader";
 
 export default function FilterSearchPage() {
   const router = useRouter();
@@ -22,22 +22,13 @@ export default function FilterSearchPage() {
 
   return (
     <main className="min-h-dvh bg-white pb-28">
-      <header className="px-6 pt-4">
-        <button
-          type="button"
-          onClick={() => router.back()}
-          aria-label="뒤로가기"
-          className="grid h-11 w-11 place-items-center rounded-xl bg-white"
-        >
-          {/* TODO: 뒤로가기 공컴 변경 필요 */}
-          <FiChevronLeft className="h-5 w-5 text-neutral-700" />
-        </button>
+    
+        < BackHeader onBack={() => router.back()} />
 
-        <h1 className="mt-6 whitespace-pre-line text-xl font-semibold text-neutral-900 leading-snug">
+        <h1 className="mt-6  px-4 whitespace-pre-line text-xl font-semibold text-neutral-900 leading-snug">
           나와 비슷한 취향을 가진{"\n"}
           사람들의 팩을 검색해보세요.
         </h1>
-      </header>
 
       <section className="px-6 pt-8">
         <div className="grid grid-cols-2 gap-3">
