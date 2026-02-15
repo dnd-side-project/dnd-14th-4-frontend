@@ -1,12 +1,17 @@
+'use client';
+
+import { useState } from 'react';
 import Tag1Btn from '@/shared/ui/Tag1Btn';
 import { MenuCard } from './components/MenuCard';
 import { IcSvgInstagram, IcSvgKakaoTalk } from '@/shared/icons';
 import Link from 'next/link';
-
+import { LogoutModal } from './components/LogoutModal';
 
 export const MyPage = () => {
+    const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+
     return (
-        <div className="max-w-md mx-auto min-h-screen bg-white p-5">
+        <div className="max-w-md mx-auto min-h-screen bg-white p-5 relative pb-40">
             <header className="flex flex-col gap-2 items-center mb-4">
                 <div className="w-[115px] h-[115px] bg-pink-40 rounded-full flex items-center justify-center text-white text-xl font-bold">
                     닉
@@ -41,7 +46,12 @@ export const MyPage = () => {
                 </MenuCard>
 
                 <MenuCard>
-                    <button className='text-left w-full'>로그아웃</button>
+                    <button
+                        className='text-left w-full'
+                        onClick={() => setIsLogoutModalOpen(true)}
+                    >
+                        로그아웃
+                    </button>
                 </MenuCard>
             </main>
 
@@ -65,6 +75,11 @@ export const MyPage = () => {
                     <IcSvgKakaoTalk width={24} height={24} />
                 </div>
             </footer>
+
+            <LogoutModal
+                isOpen={isLogoutModalOpen}
+                onClose={() => setIsLogoutModalOpen(false)}
+            />
         </div>
     );
 };

@@ -30,16 +30,15 @@ export const BottomNav = () => {
     "flex items-center justify-center p-3 transition-colors duration-200";
 
   return (
-    <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-mobile bg-white border-t border-gray-100 h-[84px] flex justify-between px-5 z-50 pt-2 pb-[46px]">
+    <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-mobile bg-white border-t border-gray-100 h-[84px] flex justify-between px-5 z-10 pt-2 pb-[46px]">
       {navItems.map(({ href, label, icon: Icon }) => {
         const isActive = pathname === href;
 
         return (
           <Link key={href} href={href} aria-label={label} className={linkBase}>
             <Icon
-              className={`w-[30px] h-[30px] shrink-0 transition-colors ${
-                isActive ? "text-neutral-10" : "text-neutral-70" // label-subtler 대신 아까 만든 토큰 사용 권장
-              }`}
+              className={`w-[30px] h-[30px] shrink-0 transition-colors ${isActive ? "text-neutral-10" : "text-neutral-70"
+                }`}
             />
           </Link>
         );
