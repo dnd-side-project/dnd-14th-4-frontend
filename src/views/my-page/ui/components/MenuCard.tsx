@@ -14,7 +14,7 @@ export const MenuCard = ({ title, children }: MenuCardProps) => {
                 </h3>
             )}
 
-            <div className="flex flex-col items-start gap-5 text-label-default">
+            <div className="flex flex-col gap-5 text-label-default">
                 {children}
             </div>
         </section>

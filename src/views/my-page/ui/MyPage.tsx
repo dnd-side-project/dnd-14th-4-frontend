@@ -6,7 +6,7 @@ import Link from 'next/link';
 
 export const MyPage = () => {
     return (
-        <div className="max-w-md mx-auto min-h-screen bg-white p-6">
+        <div className="max-w-md mx-auto min-h-screen bg-white p-5">
             <header className="flex flex-col gap-2 items-center mb-4">
                 <div className="w-[115px] h-[115px] bg-pink-40 rounded-full flex items-center justify-center text-white text-xl font-bold">
                     닉
@@ -28,7 +28,7 @@ export const MyPage = () => {
             <main>
                 <MenuCard title="내 정보 수정">
                     <Link href="/my-page/profile-edit">프로필 설정</Link>
-                    <Link href="/my-page/interests">관심 상황 수정</Link>
+                    <Link href="/my-page/interest-edit">관심 상황 수정</Link>
                 </MenuCard>
 
                 <MenuCard title="서비스 정보">
@@ -41,7 +41,7 @@ export const MyPage = () => {
                 </MenuCard>
 
                 <MenuCard>
-                    <button>로그아웃</button>
+                    <button className='text-left w-full'>로그아웃</button>
                 </MenuCard>
             </main>
 

@@ -46,6 +46,8 @@ export const ProfileImageUploader = ({
                     {previewUrl ? (
                         <Image
                             src={previewUrl}
+                            width={115}
+                            height={115}
                             alt="프로필 미리보기"
                             className="w-full h-full object-cover"
                         />

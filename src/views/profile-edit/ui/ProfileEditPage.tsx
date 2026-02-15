@@ -67,14 +67,17 @@ export const ProfileEditPage = () => {
                 </EditSection>
             </div>
 
-            <div className="mt-12">
-                <BtnSelection
-                    size="lg"
-                    onClick={handleSubmit}
-                >
-                    완료
-                </BtnSelection>
-            </div>
+
+
+
+            {/* 메인 버튼 컴포넌트 구현 시 교체예정 */}
+            <BtnSelection
+                className="mt-12"
+                size="lg"
+                onClick={handleSubmit}
+            >
+                완료
+            </BtnSelection>
         </div>
     );
 };
