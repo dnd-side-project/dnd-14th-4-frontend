@@ -33,7 +33,7 @@ export const MyPage = () => {
 
                 <MenuCard title="서비스 정보">
                     <Link href="/my-page/notice">공지사항</Link>
-                    <Link href="/my-page/policy">이용약관 및 정책</Link>
+                    <Link href="/my-page/policies">이용약관 및 정책</Link>
                     <div className="flex justify-between items-center w-full">
                         <span>버전 정보</span>
                         <span className="type-caption1 text-label-subtle">2.31.22</span>
