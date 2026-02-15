@@ -18,13 +18,13 @@ export const MyPage = () => {
                 </div>
                 <h2 className="type-heading2 p-[10px]">닉네임4조짱최고</h2>
                 <div className="flex gap-2 p-[10px] flex-wrap justify-center">
-                    <Tag2Btn mode="chip" >
+                    <Tag2Btn mode="chip" status={true} >
                         취미/생활
                     </Tag2Btn>
-                    <Tag2Btn mode="chip" >
+                    <Tag2Btn mode="chip" status={true}>
                         취미/생활
                     </Tag2Btn>
-                    <Tag2Btn mode="chip" >
+                    <Tag2Btn mode="chip" status={true}>
                         취미/생활
                     </Tag2Btn>
                 </div>
@@ -67,7 +67,7 @@ export const MyPage = () => {
                 <div className="flex type-label2 text-label-subtle gap-4">
                     <button>사업자 정보 조회</button>
                     <button>이용약관</button>
-                    <button>서비스 탈퇴</button>
+                    <Link href="/my-page/withdrawal">서비스 탈퇴</Link>
                 </div>
 
                 <div className="flex gap-4 mt-6 text-gray-400">
