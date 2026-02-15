@@ -3,12 +3,12 @@
 import * as React from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import {
-  FiChevronLeft,
-  FiClock,
-  FiSearch,
-  FiSliders,
-  FiX,
-} from "react-icons/fi"
+  IcSvgArrowLeftBig,
+  IcSvgCloseBig,
+  IcSvgFilter,
+  IcSvgHistory,
+  IcSvgSearch,
+} from "@/shared/icons"
 
 import {
   parseCategoriesParam,
@@ -73,12 +73,12 @@ function SearchPageContent() {
             onClick={handleBack}
             className="grid h-11 w-11 place-items-center rounded-xl"
           >
-            <FiChevronLeft className="h-5 w-5 text-neutral-800" />
+            <IcSvgArrowLeftBig className="h-5 w-5 text-neutral-800" />
           </button>
 
           <div className="flex-1">
             <div className="flex h-11 items-center gap-2 rounded-xl bg-neutral-100 px-3">
-              <FiSearch className="h-5 w-5 shrink-0 text-neutral-400" />
+              <IcSvgSearch className="h-5 w-5 shrink-0 text-neutral-400" />
               <input
                 ref={searchInputRef as React.RefObject<HTMLInputElement>}
                 value={query}
@@ -100,7 +100,7 @@ function SearchPageContent() {
             }}
             className="grid h-11 w-11 place-items-center rounded-xl"
           >
-            <FiSliders className="h-5 w-5 text-neutral-800" />
+            <IcSvgFilter className="h-5 w-5 text-neutral-800" />
           </button>
         </div>
       </header>
@@ -168,7 +168,7 @@ function SearchPageContent() {
               <ul className="mt-3 divide-y divide-neutral-200">
                 {recents.map((item) => (
                   <li key={item.id} className="flex items-center gap-3 py-4">
-                    <FiClock className="h-5 w-5 shrink-0 text-neutral-400" />
+                    <IcSvgHistory className="h-5 w-5 shrink-0 text-neutral-400" />
                     <span className="flex-1 text-sm text-neutral-800">
                       {item.keyword}
                     </span>
@@ -178,7 +178,7 @@ function SearchPageContent() {
                       onClick={() => removeOne(item.id)}
                       className="grid h-8 w-8 place-items-center text-neutral-400"
                     >
-                      <FiX className="h-5 w-5" />
+                      <IcSvgCloseBig className="h-5 w-5" />
                     </button>
                   </li>
                 ))}
