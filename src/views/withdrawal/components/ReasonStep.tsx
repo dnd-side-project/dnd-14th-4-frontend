@@ -1,7 +1,7 @@
 'use client';
 
 import { WITHDRAWAL_REASONS } from '@/features/search/model/mock';
-import { IcSvgCheckCircle } from '@/shared/icons';
+import { IcSvgDoneRound } from '@/shared/icons';
 import { TextArea } from '@/shared/ui/TextArea';
 
 
@@ -31,7 +31,7 @@ export const ReasonStep = ({
                             onClick={() => onToggle(reason)}
                             className="flex items-center gap-3 w-full text-left"
                         >
-                            <IcSvgCheckCircle
+                            <IcSvgDoneRound
                                 className={`w-6 h-6 transition-colors ${isSelected ? 'text-neutral-10' : 'text-neutral-95'
                                     }`}
                             />

@@ -10,6 +10,7 @@ export { default as IcSvgArrowRightBig } from './ic_arrowrightbig';
 export { default as IcSvgArrowRightSmall } from './ic_arrowrightsmall';
 export { default as IcSvgArrowUp } from './ic_arrowup';
 export { default as IcSvgCancelCircle } from './ic_cancelcircle';
+export { default as IcSvgCheck } from './ic_check';
 export { default as IcSvgCheckCircle } from './ic_checkcircle';
 export { default as IcSvgCloseBig } from './ic_closebig';
 export { default as IcSvgCloseSmall } from './ic_closesmall';
