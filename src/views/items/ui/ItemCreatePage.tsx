@@ -1,4 +1,4 @@
-import { ItemForm } from "@/features/items-create/ui/ItemForm";
+import { ItemForm } from "@/features/items/ui/ItemForm";
 
 export default function ItemCreatePage() {
     // 임시 추후 zustand로 전역 관리

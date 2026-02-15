@@ -53,7 +53,7 @@ export default function FilterSearchPage() {
                 selected={isSelected}
                 disabled={disabled}
                 onClick={() => toggle(v)}
-                className="h-12 rounded-xl" 
+                className="h-12 rounded-xl"
               >
                 {v}
               </BtnSelection>
