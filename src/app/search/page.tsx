@@ -1,32 +1,67 @@
-"use client";
+"use client"
 
-import * as React from "react";
-import { useRouter } from "next/navigation";
+import * as React from "react"
+import { useRouter, useSearchParams } from "next/navigation"
 import {
   FiChevronLeft,
+  FiClock,
   FiSearch,
   FiSliders,
-  FiClock,
   FiX,
-} from "react-icons/fi";
+} from "react-icons/fi"
 
-import { BtnSelection } from "@/shared/ui/BtnSelection";
+import {
+  parseCategoriesParam,
+  categoriesToQuery,
+  slugToLabel,
+} from "@/features/search/model/categories"
 import {
   POPULAR_KEYWORDS,
   RECENT_SEARCHES,
   type RecentSearch,
-} from "@/features/search/model/mock";
-import { FlowLayoutFooter } from "@/shared/ui/layouts/flow-chart/FlowLayoutFooter";
+} from "@/features/search/model/mock"
+import { PackCard, MOCK_PACK_CARDS } from "@/shared/ui/item/PackCard"
+import { CategoryChip } from "@/shared/ui/CategoryChip"
+import { BtnSelection } from "@/shared/ui/BtnSelection"
+import { useSearchPageTransition } from "@/features/search/transition"
 
-export default function SearchPage() {
-  const router = useRouter();
-  const [query, setQuery] = React.useState("");
-  const [recents, setRecents] = React.useState<RecentSearch[]>(RECENT_SEARCHES);
-  const [selectedPopularId, setSelectedPopularId] = React.useState("p2");
+function SearchPageContent() {
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const [query, setQuery] = React.useState("")
+  const [recents, setRecents] = React.useState<RecentSearch[]>(RECENT_SEARCHES)
+  const [selectedPopularId, setSelectedPopularId] = React.useState<string | null>("p2")
 
-  const clearAll = () => setRecents([]);
+  const { handleBack, inputRef: searchInputRef } = useSearchPageTransition(router)
+
+  const categorySlugs = React.useMemo(
+    () => parseCategoriesParam(searchParams.get("categories")),
+    [searchParams]
+  )
+  const selectedLabels = React.useMemo(
+    () =>
+      categorySlugs
+        .map((slug) => slugToLabel(slug))
+        .filter((label): label is string => Boolean(label)),
+    [categorySlugs]
+  )
+
+  const filteredPacks = React.useMemo(() => {
+    if (selectedLabels.length === 0) return MOCK_PACK_CARDS
+    return MOCK_PACK_CARDS.filter((pack) => selectedLabels.includes(pack.tag))
+  }, [selectedLabels])
+
+  const removeCategory = (slugToRemove: string) => {
+    const next = categorySlugs.filter((s) => s !== slugToRemove)
+    const queryString = next.length > 0 ? `?categories=${categoriesToQuery(next)}` : ""
+    router.replace(`/search${queryString}`)
+  }
+
+  const clearAll = () => setRecents([])
   const removeOne = (id: string) =>
-    setRecents((prev) => prev.filter((x) => x.id !== id));
+    setRecents((prev) => prev.filter((x) => x.id !== id))
+
+  const hasCategoryFilter = categorySlugs.length > 0
 
   return (
     <main className="min-h-dvh bg-white pb-24">
@@ -35,18 +70,17 @@ export default function SearchPage() {
           <button
             type="button"
             aria-label="뒤로가기"
-            onClick={() => router.back()}
+            onClick={handleBack}
             className="grid h-11 w-11 place-items-center rounded-xl"
           >
-            {/* TODO: 뒤로가기 공컴 변경 필요 */}
-
             <FiChevronLeft className="h-5 w-5 text-neutral-800" />
           </button>
 
           <div className="flex-1">
             <div className="flex h-11 items-center gap-2 rounded-xl bg-neutral-100 px-3">
-              <FiSearch className="h-5 w-5 text-neutral-400" />
+              <FiSearch className="h-5 w-5 shrink-0 text-neutral-400" />
               <input
+                ref={searchInputRef as React.RefObject<HTMLInputElement>}
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="다양한 팩을 검색해보세요."
@@ -58,7 +92,12 @@ export default function SearchPage() {
           <button
             type="button"
             aria-label="필터"
-            onClick={() => router.push("/filter-search")}
+            onClick={() => {
+              const query = categorySlugs.length > 0
+                ? `?categories=${categoriesToQuery(categorySlugs)}`
+                : ""
+              router.push(`/filter-search${query}`)
+            }}
             className="grid h-11 w-11 place-items-center rounded-xl"
           >
             <FiSliders className="h-5 w-5 text-neutral-800" />
@@ -66,72 +105,114 @@ export default function SearchPage() {
         </div>
       </header>
 
-      <section className="px-4 pt-6">
-        <div className="flex items-center justify-between">
-          <h2 className="text-xs font-semibold text-neutral-400">
-            최근 검색어
-          </h2>
-          <button
-            type="button"
-            onClick={clearAll}
-            className="text-xs font-semibold text-neutral-400"
-          >
-            전체 삭제
-          </button>
-        </div>
-
-        {recents.length === 0 ? (
-          <div className="mt-6 flex h-37 items-center justify-center rounded-xl bg-transparent">
-            <p className="type-label1 text-neutral-400">
-              최근 검색어가 없습니다.
-            </p>
-          </div>
-        ) : (
-          <ul className="mt-3 divide-y divide-neutral-200">
-            {recents.map((item) => (
-              <li key={item.id} className="flex items-center gap-3 py-4">
-                <FiClock className="h-5 w-5 text-neutral-400" />
-                <span className="flex-1 text-sm text-neutral-800">
-                  {item.keyword}
+      {hasCategoryFilter && (
+        <section className="px-6 pt-3">
+          <div className="flex gap-2 overflow-x-auto overflow-y-hidden [scrollbar-width:none] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none]">
+            {categorySlugs.map((slug) => {
+              const label = slugToLabel(slug)
+              if (!label) return null
+              return (
+                <span key={slug} className="shrink-0">
+                  <CategoryChip
+                    label={label}
+                    onRemove={() => removeCategory(slug)}
+                  />
                 </span>
-                <button
-                  type="button"
-                  aria-label="삭제"
-                  onClick={() => removeOne(item.id)}
-                  className="grid h-8 w-8 place-items-center text-neutral-400"
-                >
-                  <FiX className="h-5 w-5" />
-                </button>
-              </li>
-            ))}
-          </ul>
-        )}
-
-        <div className="mt-10">
-          <h3 className="text-xs font-semibold text-neutral-400">
-            인기 키워드
-          </h3>
-          <div className="mt-4 flex flex-wrap gap-2">
-            {POPULAR_KEYWORDS.map((kw) => (
-              <BtnSelection
-                key={kw.id}
-                selected={selectedPopularId === kw.id}
-                onClick={() => setSelectedPopularId(kw.id)}
-              >
-                {kw.label}
-              </BtnSelection>
-            ))}
+              )
+            })}
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
-      <FlowLayoutFooter
-        label="다음"
-        disabled={!query && !selectedPopularId}
-        onClick={() => {
-          console.log("다음 클릭");
-        }}
-      />
+      {hasCategoryFilter ? (
+        <section className="px-4 pt-6">
+          <div className="space-y-4">
+            {filteredPacks.length === 0 ? (
+              <p className="py-8 text-center type-body2 text-neutral-400">
+                선택한 카테고리에 맞는 팩이 없습니다.
+              </p>
+            ) : (
+              <ul className="flex flex-col gap-4">
+                {filteredPacks.map((card) => (
+                  <li key={card.id} className="max-w-[352px]">
+                    <PackCard {...card} />
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </section>
+      ) : (
+        <>
+          <section className="px-4 pt-6">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xs font-semibold text-neutral-400">
+                최근 검색어
+              </h2>
+              <button
+                type="button"
+                onClick={clearAll}
+                className="text-xs font-semibold text-neutral-400"
+              >
+                전체 삭제
+              </button>
+            </div>
+
+            {recents.length === 0 ? (
+              <div className="mt-6 flex h-37 items-center justify-center rounded-xl bg-transparent">
+                <p className="type-label1 text-neutral-400">
+                  최근 검색어가 없습니다.
+                </p>
+              </div>
+            ) : (
+              <ul className="mt-3 divide-y divide-neutral-200">
+                {recents.map((item) => (
+                  <li key={item.id} className="flex items-center gap-3 py-4">
+                    <FiClock className="h-5 w-5 shrink-0 text-neutral-400" />
+                    <span className="flex-1 text-sm text-neutral-800">
+                      {item.keyword}
+                    </span>
+                    <button
+                      type="button"
+                      aria-label="삭제"
+                      onClick={() => removeOne(item.id)}
+                      className="grid h-8 w-8 place-items-center text-neutral-400"
+                    >
+                      <FiX className="h-5 w-5" />
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+
+            <div className="mt-10">
+              <h3 className="text-xs font-semibold text-neutral-400">
+                인기 키워드
+              </h3>
+              <div className="mt-4 flex flex-wrap gap-2">
+                {POPULAR_KEYWORDS.map((kw) => (
+                  <BtnSelection
+                    key={kw.id}
+                    selected={selectedPopularId === kw.id}
+                    onClick={() => setSelectedPopularId(kw.id)}
+                  >
+                    {kw.label}
+                  </BtnSelection>
+                ))}
+              </div>
+            </div>
+          </section>
+
+        </>
+      )}
     </main>
-  );
+  )
+}
+
+export default function SearchPage() {
+  return (
+    <React.Suspense fallback={<div className="min-h-dvh bg-white" />}>
+      <SearchPageContent />
+    </React.Suspense>
+  )
 }

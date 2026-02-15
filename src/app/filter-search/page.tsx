@@ -1,23 +1,47 @@
 "use client";
 
 import * as React from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
+import {
+  labelToSlug,
+  parseCategoriesParam,
+  slugToLabel,
+} from "@/features/search/model/categories";
 import { BtnSelection } from "@/shared/ui/BtnSelection";
-import { MOMENT_OPTIONS } from "@/views/onboarding/model/constants";
-import { FlowFooter } from "@/shared/ui/FlowFooter";
 import { BackHeader } from "@/shared/ui/BackHeader";
+import { FlowFooter } from "@/shared/ui/FlowFooter";
+import { MOMENT_OPTIONS } from "@/views/onboarding/model/constants";
 
-export default function FilterSearchPage() {
+function FilterSearchContent() {
   const router = useRouter();
-  const [selected, setSelected] = React.useState<string[]>([]);
+  const searchParams = useSearchParams();
+
+  const initialSelected = React.useMemo(() => {
+    const slugs = parseCategoriesParam(searchParams.get("categories"));
+    return slugs
+      .map((slug) => slugToLabel(slug))
+      .filter((label): label is string => Boolean(label));
+  }, [searchParams]);
+
+  const [selected, setSelected] = React.useState<string[]>(initialSelected);
+
+  React.useEffect(() => {
+    setSelected(initialSelected);
+  }, [initialSelected]);
 
   const toggle = (v: string) => {
-    setSelected((prev) => {
-      if (prev.includes(v)) return prev.filter((x) => x !== v);
-      if (prev.length >= 3) return prev; // 최대 3개
-      return [...prev, v];
-    });
+    setSelected((prev) =>
+      prev.includes(v) ? prev.filter((x) => x !== v) : [...prev, v]
+    );
+  };
+
+  const handleApply = () => {
+    const slugs = selected
+      .map((label) => labelToSlug(label))
+      .filter((s): s is string => Boolean(s));
+    const query = slugs.length > 0 ? `?categories=${slugs.join(",")}` : "";
+    router.push(`/search${query}`);
   };
 
   return (
@@ -32,34 +56,36 @@ export default function FilterSearchPage() {
 
       <section className="px-6 pt-8">
         <div className="grid grid-cols-2 gap-3">
-          {MOMENT_OPTIONS.map((v) => {
-            const isSelected = selected.includes(v);
-            const disabled = !isSelected && selected.length >= 3;
-
-            return (
-              <BtnSelection
-                key={v}
-                size="lg"
-                fullWidth
-                selected={isSelected}
-                disabled={disabled}
-                onClick={() => toggle(v)}
-                className="h-12 rounded-xl" 
-              >
-                {v}
-              </BtnSelection>
-            );
-          })}
+          {MOMENT_OPTIONS.map((v) => (
+            <BtnSelection
+              key={v}
+              size="lg"
+              fullWidth
+              selected={selected.includes(v)}
+              onClick={() => toggle(v)}
+              className="h-12 rounded-xl"
+            >
+              {v}
+            </BtnSelection>
+          ))}
         </div>
       </section>
 
       <FlowFooter
         label="적용하기"
         disabled={selected.length === 0}
-        onClick={() => console.log("apply")}
+        onClick={handleApply}
         onReset={() => setSelected([])}
         resetDisabled={selected.length === 0}
       />
     </main>
+  );
+}
+
+export default function FilterSearchPage() {
+  return (
+    <React.Suspense fallback={<div className="min-h-dvh bg-white" />}>
+      <FilterSearchContent />
+    </React.Suspense>
   );
 }
