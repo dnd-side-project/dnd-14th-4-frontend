@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import Tag1Btn from '@/shared/ui/Tag1Btn';
+import { Tag2Btn } from '@/shared/ui/Tag2Btn';
 import { MenuCard } from './components/MenuCard';
 import { IcSvgInstagram, IcSvgKakaoTalk } from '@/shared/icons';
 import Link from 'next/link';
@@ -18,15 +18,15 @@ export const MyPage = () => {
                 </div>
                 <h2 className="type-heading2 p-[10px]">닉네임4조짱최고</h2>
                 <div className="flex gap-2 p-[10px] flex-wrap justify-center">
-                    <Tag1Btn mode="chip" variant="secondary">
+                    <Tag2Btn mode="chip" >
                         취미/생활
-                    </Tag1Btn>
-                    <Tag1Btn mode="chip" variant="secondary">
+                    </Tag2Btn>
+                    <Tag2Btn mode="chip" >
                         취미/생활
-                    </Tag1Btn>
-                    <Tag1Btn mode="chip" variant="secondary">
+                    </Tag2Btn>
+                    <Tag2Btn mode="chip" >
                         취미/생활
-                    </Tag1Btn>
+                    </Tag2Btn>
                 </div>
             </header>
 
