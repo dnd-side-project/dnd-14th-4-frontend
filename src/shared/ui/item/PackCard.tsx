@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { IcSvgMore, IcSvgWish, IcSvgWishBtn } from "@/shared/icons"
+import { Tag2Btn } from "@/shared/ui/Tag2Btn"
 import { PackFolderBg } from "./packfolder-bg"
 
 export interface PackCardData {
@@ -45,11 +46,7 @@ export function PackCard({
       <div className="relative z-10 flex h-full flex-col px-6 pt-4 pb-6 sm:px-7 sm:pb-6 sm:pt-4">
      
         <div className="flex items-center gap-2">
-          <span
-            className={`inline-flex shrink-0 items-center rounded-full px-2.5 py-0.5 type-label2 sm:px-3 sm:py-1 sm:text-sm bg-pink-95 text-primary-normal`}
-          >
-            {tag}
-          </span>
+          <Tag2Btn status>{tag}</Tag2Btn>
           <span className="shrink-0 type-caption1 text-neutral-400 sm:text-sm">
             {itemCount} items
           </span>
