@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { HomeSearchHeader } from "@/widgets/home-search-header/ui/HomeSearchHeader";
-import { MOCK_ITEMS } from "@/features/search/model/mock";
 
 export function HomePage() {
   const [hideIntro] = useState(false);
