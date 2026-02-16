@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { HomeSearchHeader } from "@/widgets/home-search-header/ui/HomeSearchHeader";
-import { ItemBox } from "@/shared/ui/item/ItemBox";
 import { MOCK_ITEMS } from "@/features/search/model/mock";
 
 export function HomePage() {
@@ -18,7 +17,6 @@ export function HomePage() {
       )}
 
       <HomeSearchHeader />
-      <ItemBox item={MOCK_ITEMS[0]} />
     </div>
   );
 }
