@@ -8,6 +8,8 @@ interface Tag1BtnProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     variant?: TagVariant;
     mode?: TagMode;
     className?: string;
+    /** 칩 안에 X 버튼 등 추가 요소를 넣을 때 사용. 지정하면 button 대신 span으로 렌더링해 중첩 버튼을 피함 */
+    trailing?: React.ReactNode;
 }
 
 export default function Tag1Btn({
@@ -16,6 +18,7 @@ export default function Tag1Btn({
     mode = 'chip',
     className = '',
     disabled,
+    trailing,
     ...props
 }: Tag1BtnProps) {
 
@@ -33,11 +36,24 @@ export default function Tag1Btn({
             : "bg-beige-60 text-white border border-transparent",
     };
 
+    const combinedClassName = `${baseStyle} ${paddingStyle} ${variantStyles[variant]} ${className}`.trim();
+
+    if (trailing != null) {
+        return (
+            <span
+                className={`${combinedClassName} cursor-default gap-1 ${disabled || variant === 'disabled' ? 'opacity-50' : ''}`}
+            >
+                {children}
+                {trailing}
+            </span>
+        );
+    }
+
     return (
         <button
             type="button"
             disabled={disabled || variant === 'disabled'}
-            className={`${baseStyle} ${paddingStyle} ${variantStyles[variant]} ${className}`}
+            className={combinedClassName}
             {...props}
         >
             {children}
