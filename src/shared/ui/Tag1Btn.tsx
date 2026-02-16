@@ -24,7 +24,7 @@ export default function Tag1Btn({
 
     const baseStyle = "inline-flex items-center justify-center type-label1 rounded-full transition-colors duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed";
 
-    const paddingStyle = mode === 'btn' ? 'px-5 py-[7px]' : 'px-4 py-0.5';
+    const paddingStyle = mode === 'btn' ? 'px-5 py-[7px]' : 'px-4';
 
     const variantStyles = {
         primary: "bg-neutral-10 text-white border border-transparent",
