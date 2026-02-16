@@ -21,12 +21,10 @@ export const ProfileEditPage = () => {
     return (
         <div className="max-w-md mx-auto min-h-screen bg-white flex flex-col px-6 pt-10 pb-6">
 
-            <div className="flex justify-center mb-12">
-                <ProfileImageUploader
-                    profileImage={profileImage}
-                    setProfileImage={setProfileImage}
-                />
-            </div>
+            <ProfileImageUploader
+                profileImage={profileImage}
+                setProfileImage={setProfileImage}
+            />
 
             <div className="flex flex-col flex-grow gap-10">
 

@@ -15,8 +15,8 @@ export const POPULAR_KEYWORDS: PopularKeyword[] = [
 ];
 
 export const NOTICES = [
-  { id: 1, title: '왓츠인마이팩 3.11.0 업데이트 안내', date: '2026.02.14', href: '/notice/1' },
-  { id: 2, title: '개인정보 처리방침 개정 안내', date: '2026.01.20', href: '/notice/2' },
+  { id: 1, title: '왓츠인마이팩 3.11.0 업데이트 안내', date: '2026.02.14' },
+  { id: 2, title: '개인정보 처리방침 개정 안내', date: '2026.01.20' },
 ];
 
 export const WITHDRAWAL_REASONS = [

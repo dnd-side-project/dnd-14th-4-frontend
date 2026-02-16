@@ -29,16 +29,27 @@ export const Placeholder = ({
         }
     };
 
+
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { value } = e.target;
+
+        const filtered = value
+            .replace(/[^a-zㄱ-ㅎ가-힣0-9]/g, '')
+            .slice(0, maxLength);
+
+        setValue(filtered);
+    };
+
     return (
         <div className="flex flex-col">
             <div className="border-b border-neutral-90 p-[6px] focus-within:border-label-default focus-within:border-b-2">
                 <input
                     className="type-body2 w-full outline-none bg-transparent placeholder-neutral-70"
                     placeholder="닉네임을 입력해주세요"
+                    maxLength={maxLength}
                     value={value}
-                    onChange={(e) => {
-                        setValue(e.target.value);
-                    }}
+                    onChange={handleChange}
                 />
             </div>
             <div className="flex justify-between mt-2 type-label2">

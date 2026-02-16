@@ -35,7 +35,7 @@ export const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
         const containerStyle = cn(
             "w-full rounded-[8px] px-4 py-4 transition-colors duration-200 flex flex-col border cursor-text",
             isError
-                ? "bg-common-0 border-red-500"
+                ? "bg-common-0 border-status-destructive"
                 : hasContent
                     ? "bg-common-0 border-primary-normal"
                     : "bg-secondary-lightbeige border-transparent focus-within:bg-common-0 focus-within:border-primary-normal",
@@ -45,6 +45,19 @@ export const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
         );
 
         const baseInputStyle = "bg-transparent outline-none text-[15px] leading-relaxed placeholder:text-neutral-400 flex-1 min-w-full resize-none";
+
+        const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+            let { value } = e.target;
+
+            if (maxLength && value.length > maxLength) {
+                value = value.slice(0, maxLength);
+            }
+
+            if (onChange) {
+                e.target.value = value;
+                onChange(e);
+            }
+        };
 
         const handleContainerClick = () => {
             localRef.current?.focus();
@@ -58,24 +71,24 @@ export const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
                         ref={mergeRefs(localRef, externalRef)}
                         readOnly={readOnly}
                         value={value}
-                        onChange={onChange}
+                        onChange={handleChange}
                         maxLength={maxLength}
                         className={baseInputStyle}
                         placeholder={placeholder}
                     />
-
                 </div>
 
                 {helperText && (
                     <p className={cn(
                         "text-[13px] px-1 mt-2 font-medium",
-                        isError ? "text-red-500" : "text-neutral-400"
+                        isError ? "text-status-destructive" : "text-neutral-400"
                     )}>
                         {helperText}
                     </p>
                 )}
+
                 {showCount && maxLength && (
-                    <div className="type-label2 text-label-subtle mt-2  self-end">
+                    <div className="type-label2 text-label-subtle mt-2 self-end">
                         <span className="text-label-subtler">{String(value || "").length}</span>/{maxLength}자
                     </div>
                 )}

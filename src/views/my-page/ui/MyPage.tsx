@@ -57,7 +57,7 @@ export const MyPage = () => {
 
             <footer className="mt-4">
                 <div className="type-caption1 text-neutral-70 flex flex-col gap-[6px]">
-                    <p>©What &apos;s in my pack all rights reseved.</p>
+                    <p>©What &apos;s in my pack all rights reserved.</p>
                     <p>대표이사 DND 4조</p>
                     <p>문의전화 010-1234-5678</p>
                     <p>이메일 dnddndnd@gmail.com</p>

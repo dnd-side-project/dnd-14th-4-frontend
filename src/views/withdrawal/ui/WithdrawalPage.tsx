@@ -20,6 +20,9 @@ export const WithdrawalPage = () => {
 
     const handleNext = () => {
         if (step === 1) setStep(2);
+        else {
+            // 탈퇴 처리
+        }
     };
 
     return (
@@ -43,7 +46,7 @@ export const WithdrawalPage = () => {
             <footer className="mt-6 pb-4">
                 <button
                     onClick={handleNext}
-                    disabled={step === 1 && selectedReasons.length === 0}
+                    disabled={(step === 1 && selectedReasons.length === 0) || (step === 2 && !isAgreed)}
                     className="w-full py-4 rounded-xl bg-neutral-900 text-white font-medium disabled:bg-neutral-200 disabled:text-neutral-400 transition-colors"
                 >
                     {step === 1 ? "다음" : "탈퇴하기"}

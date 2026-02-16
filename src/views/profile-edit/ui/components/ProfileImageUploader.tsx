@@ -11,9 +11,8 @@ export const ProfileImageUploader = ({
     profileImage: File | string | null;
     setProfileImage: (file: File | null) => void;
 }) => {
-    const [previewUrl, setPreviewUrl] = useState<string | null>(
-        typeof profileImage === 'string' ? profileImage : null
-    );
+    const [localPreview, setLocalPreview] = useState<string | null>(null);
+    const currentPreviewUrl = localPreview ?? (typeof profileImage === 'string' ? profileImage : null);
 
     const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -24,32 +23,32 @@ export const ProfileImageUploader = ({
     const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (file) {
-            const imageUrl = URL.createObjectURL(file);
-            setPreviewUrl(imageUrl);
+            if (localPreview) URL.revokeObjectURL(localPreview);
 
+            const imageUrl = URL.createObjectURL(file);
+            setLocalPreview(imageUrl);
             setProfileImage(file);
         }
     };
 
     useEffect(() => {
         return () => {
-            if (previewUrl && previewUrl.startsWith('blob:')) {
-                URL.revokeObjectURL(previewUrl);
-            }
+            if (localPreview) URL.revokeObjectURL(localPreview);
         };
-    }, [previewUrl]);
+    }, [localPreview]);
 
     return (
         <div className="flex justify-center mb-12">
             <div className="relative">
                 <div className="w-[115px] h-[115px] bg-pink-40 rounded-full flex items-center justify-center text-white text-3xl font-bold overflow-hidden">
-                    {previewUrl ? (
+                    {currentPreviewUrl ? (
                         <Image
-                            src={previewUrl}
+                            src={currentPreviewUrl}
                             width={115}
                             height={115}
                             alt="프로필 미리보기"
                             className="w-full h-full object-cover"
+                            unoptimized={currentPreviewUrl.startsWith('blob:')} // blob URL일 경우 최적화 제외
                         />
                     ) : (
                         "닉"
