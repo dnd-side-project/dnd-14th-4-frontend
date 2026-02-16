@@ -51,7 +51,7 @@ export function ItemBox({ item }: { item: ItemData }) {
                 <div className="flex gap-[10px] w-max">
                     {item.images.map((src, idx) => (
                         <div
-                            key={idx}
+                            key={`${src}-${idx}`}
                             className="w-[100px] h-[100px] flex-shrink-0 overflow-hidden rounded-[8px] bg-neutral-95 relative"
                         >
                             <Image
