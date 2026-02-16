@@ -34,3 +34,20 @@ export const WITHDRAWAL_GUIDELINES = [
   "작성하신 팩과 리뷰는 서비스 운영을 위해 남겨지며, 닉네임은 '알 수 없음'으로 익명 처리돼요.",
   "게시물 삭제를 원하시면 탈퇴 진행 전 미리 직접 삭제해 주세요."
 ];
+
+export const MOCK_ITEMS = [
+  {
+    id: 1,
+    title: "원통형 2홀 연필깎이",
+    brand: "나이키",
+    category: "문구",
+    purchaseAt: "쿠팡",
+    isWished: true,
+    images: ["/img1.jpg", "/img2.jpg", "/img3.jpg", "/img4.jpg"],
+    mainTags: {
+      satisfaction: "👍좋아요",
+      period: "1년 이상"
+    },
+    subTags: ["가벼움", "가성비", "내어깨를지켜준아이템", "휴대성이좋은", "이거제발사세요"]
+  }
+];
