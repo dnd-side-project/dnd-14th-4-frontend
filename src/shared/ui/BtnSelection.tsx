@@ -29,11 +29,11 @@ export const BtnSelection = React.forwardRef<
     ref,
   ) => {
     const base =
-      "inline-flex items-center justify-center transition-all duration-200 disabled:pointer-events-none disabled:opacity-50";
+      "type-label1 inline-flex items-center justify-center transition-all duration-200 disabled:pointer-events-none disabled:opacity-50";
 
     const sizeStyles: Record<SelectionSize, string> = {
-      sm: "px-5 h-10 rounded-full text-sm font-medium",
-      lg: "h-12 rounded-xl px-4 text-base font-semibold",
+      sm: "px-5 h-10 rounded-full ",
+      lg: "h-12 rounded-xl px-4 ",
     };
 
     const stateStyles = selected
