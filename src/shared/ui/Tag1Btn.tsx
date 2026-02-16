@@ -19,7 +19,7 @@ export default function Tag1Btn({
     ...props
 }: Tag1BtnProps) {
 
-    const baseStyle = "inline-flex items-center justify-center type-label1 rounded-full transition-colors duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed";
+    const baseStyle = "inline-flex items-center justify-center type-label1 rounded-full transition-colors duration-200  disabled:opacity-50 disabled:cursor-not-allowed";
 
     const paddingStyle = mode === 'btn' ? 'px-5 py-[7px]' : 'px-4';
 
@@ -33,10 +33,15 @@ export default function Tag1Btn({
             : "bg-beige-60 text-white border border-transparent",
     };
 
+
+    const isDisabled = mode === 'btn'
+        ? (disabled || variant === 'disabled')
+        : disabled;
+
     return (
         <button
             type="button"
-            disabled={disabled || variant === 'disabled'}
+            disabled={isDisabled}
             className={`${baseStyle} ${paddingStyle} ${variantStyles[variant]} ${className}`}
             {...props}
         >
