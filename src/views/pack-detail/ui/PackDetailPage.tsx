@@ -9,7 +9,6 @@ import { TextArea } from '@/shared/ui/TextArea';
 
 export default function PackDetailPage() {
     const router = useRouter();
-
     const params = useParams();
     const id = params?.id;
 
