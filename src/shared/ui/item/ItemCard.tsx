@@ -97,7 +97,10 @@ export function ItemCard({
       role="button"
       tabIndex={0}
       onKeyDown={(e) => {
-        if (e.target !== e.currentTarget) return;
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          handleCardClick();
+        }
       }}
     >
       <ItemFolderBg className="absolute inset-0 h-full w-full text-beige-80" />
