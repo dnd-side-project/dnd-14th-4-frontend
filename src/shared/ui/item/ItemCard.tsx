@@ -93,7 +93,14 @@ export function ItemCard({
   return (
     <div
       className="relative w-full cursor-pointer transition-transform active:scale-[0.98]"
-      onClick={handleCardClick}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          handleCardClick();
+        }
+      }}
     >
       <ItemFolderBg className="absolute inset-0 h-full w-full text-beige-80" />
 

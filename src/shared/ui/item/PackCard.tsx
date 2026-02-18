@@ -68,6 +68,7 @@ export function PackCard({
           <div className="flex shrink-0 items-center gap-2">
             <button
               type="button"
+              aria-label={isLiked ? "Unlike" : "Like"}
               className="text-neutral-300 transition-colors hover:text-red-400"
               onClick={(e) => {
                 e.stopPropagation()
@@ -82,6 +83,7 @@ export function PackCard({
             </button>
             <button
               type="button"
+              aria-label="More options"
               className="rounded-full p-0.5 text-neutral-400 transition-colors hover:bg-black/5"
               onClick={(e) => {
                 e.stopPropagation()
