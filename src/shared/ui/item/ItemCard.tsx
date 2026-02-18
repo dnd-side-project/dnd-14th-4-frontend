@@ -93,6 +93,7 @@ export function ItemCard({
   return (
     <div
       className="relative w-full cursor-pointer transition-transform active:scale-[0.98]"
+      onClick={handleCardClick}
       role="button"
       tabIndex={0}
       onKeyDown={(e) => {
@@ -107,7 +108,7 @@ export function ItemCard({
       <div className="relative z-10 flex h-full flex-col px-6 pt-4 pb-6 sm:px-7 sm:pb-6 sm:pt-4">
         <div className="flex items-center gap-2 flex-wrap">
           {displayTags.map((t) => (
-            <Tag1Btn key={t.label} className={tagVariantClass[t.variant]}>
+            <Tag1Btn trailing key={t.label} className={tagVariantClass[t.variant]}>
               {t.label}
             </Tag1Btn>
           ))}
