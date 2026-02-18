@@ -51,3 +51,14 @@ export const MOCK_ITEMS = [
     subTags: ["가벼움", "가성비", "내어깨를지켜준아이템", "휴대성이좋은", "이거제발사세요"]
   }
 ];
+
+
+
+export const MOCK_ITEM_EDIT_DATA = {
+  brand: "나이키",
+  product: "러닝화",
+  rating: "GOOD",
+  period: "1MONTH",
+  purchaseLocation: "강남 플래그십 스토어",
+  tags: ["가벼움", "편함"]
+};

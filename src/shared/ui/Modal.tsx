@@ -28,7 +28,7 @@ export const Modal = ({
             onClick={onClose}
         >
             <div
-                className="w-full max-w-[335px] bg-white rounded-[24px] px-4 py-6 flex flex-col items-center shadow-lg"
+                className="w-full max-w-[335px] bg-white rounded-[16px] px-4 py-6 flex flex-col items-center shadow-lg"
                 onClick={(e) => e.stopPropagation()}
             >
                 <h3 className="type-headline2 text-label-default text-neutral-900  text-center">
