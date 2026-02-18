@@ -24,10 +24,19 @@ export const MOCK_PACK_CARDS: PackCardData[] = [
     author: "닉네임은열자가최대야",
     liked: false,
   },
+  {
+    id: "2",
+    tag: "운동/산책",
+    itemCount: 8,
+    title: "팩 이름은 최대 길이 20자입니다다다",
+    author: "닉네임은열자가최대야",
+    liked: false,
+  },
 ]
 
 interface PackCardProps extends Omit<PackCardData, "id"> {
   id?: string
+  onMoreClick?: () => void
 }
 
 export function PackCard({
@@ -36,6 +45,7 @@ export function PackCard({
   title,
   author,
   liked = false,
+  onMoreClick,
 }: PackCardProps) {
   const [isLiked, setIsLiked] = useState(liked)
 
@@ -44,7 +54,7 @@ export function PackCard({
       <PackFolderBg className="absolute inset-0 h-full w-full" />
 
       <div className="relative z-10 flex h-full flex-col px-6 pt-4 pb-6 sm:px-7 sm:pb-6 sm:pt-4">
-     
+
         <div className="flex items-center gap-2">
           <Tag2Btn status>{tag}</Tag2Btn>
           <span className="shrink-0 type-caption1 text-neutral-400 sm:text-sm">
@@ -79,6 +89,7 @@ export function PackCard({
               type="button"
               aria-label="더보기"
               className="rounded-full p-0.5 text-neutral-400 transition-colors "
+              onClick={onMoreClick}
             >
               <IcSvgMore className="h-5 w-5 sm:h-6 sm:w-6" />
             </button>

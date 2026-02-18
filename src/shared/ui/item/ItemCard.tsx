@@ -39,6 +39,7 @@ export const MOCK_ITEM_CARDS: ItemCardData[] = [
 
 interface ItemCardProps extends Omit<ItemCardData, "id"> {
   id?: string
+  onMoreClick?: () => void
 }
 
 const tagVariantClass = {
@@ -65,6 +66,7 @@ export function ItemCard({
   title,
   author,
   liked = false,
+  onMoreClick,
 }: ItemCardProps) {
   const [isLiked, setIsLiked] = useState(liked)
   const displayTags = buildDisplayTags(satisfaction, usagePeriod)
@@ -74,7 +76,7 @@ export function ItemCard({
       <ItemFolderBg className="absolute inset-0 h-full w-full" />
 
       <div className="relative z-10 flex h-full flex-col px-6 pt-4 pb-6 sm:px-7 sm:pb-6 sm:pt-4">
-     
+
         <div className="flex items-center gap-2 flex-wrap">
           {displayTags.map((t) => (
             <Tag2Btn key={t.label} className={tagVariantClass[t.variant]}>
@@ -110,6 +112,7 @@ export function ItemCard({
               type="button"
               aria-label="더보기"
               className="rounded-full p-0.5 text-neutral-400 transition-colors"
+              onClick={onMoreClick}
             >
               <IcSvgMore className="h-5 w-5 sm:h-6 sm:w-6" />
             </button>
