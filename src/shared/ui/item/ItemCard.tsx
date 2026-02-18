@@ -72,33 +72,29 @@ export function ItemCard({
   author,
   liked = false,
   onMoreClick,
+  onDetailClick,
   showLike,
   isSelectMode = false,
   isChecked = false,
   onSelect,
-}: ItemCardProps) {
+}: ItemCardProps & { onDetailClick?: () => void }) {
   const [isLiked, setIsLiked] = useState(liked)
   const displayTags = buildDisplayTags(satisfaction, usagePeriod)
-
 
   const handleCardClick = () => {
     if (isSelectMode) {
       onSelect?.(id)
     } else {
-      onMoreClick?.()
+      onDetailClick?.()
     }
   }
-
 
   return (
     <div
       className="relative w-full cursor-pointer transition-transform active:scale-[0.98]"
       onClick={handleCardClick}
     >
-      <ItemFolderBg
-        className={`absolute inset-0 h-full w-full transition-colors "
-          }`}
-      />
+      <ItemFolderBg className="absolute inset-0 h-full w-full text-beige-80" />
 
       <div className="relative z-10 flex h-full flex-col px-6 pt-4 pb-6 sm:px-7 sm:pb-6 sm:pt-4">
         <div className="flex items-center gap-2 flex-wrap">
@@ -111,10 +107,10 @@ export function ItemCard({
 
         <div className="mt-4 flex items-start justify-between gap-2 sm:mt-5">
           <div className="min-w-0 flex-1">
-            <h3 className={`truncate type-headline2 sm:text-lg text-neutral-900`}>
+            <h3 className="truncate type-headline2 sm:text-lg text-neutral-900">
               {title}
             </h3>
-            <p className={`mt-0.5 truncate type-caption1 sm:mt-1 sm:text-sm text-neutral-400`}>
+            <p className="mt-0.5 truncate type-caption1 sm:mt-1 sm:text-sm text-neutral-400">
               {author}
             </p>
           </div>
@@ -139,7 +135,7 @@ export function ItemCard({
 
             <button
               type="button"
-              className={`rounded-full p-0.5 transition-colors ${isChecked ? "text-white" : "text-neutral-400"}`}
+              className="rounded-full p-0.5 transition-colors"
               onClick={(e) => {
                 e.stopPropagation()
                 if (isSelectMode) {
@@ -150,9 +146,11 @@ export function ItemCard({
               }}
             >
               {isSelectMode ? (
-                <IcSvgCheckCircle className={`h-5 w-5 sm:h-6 sm:w-6 ${isChecked ? "text-primary-normal" : "text-beige-80"}`} />
+                <IcSvgCheckCircle
+                  className={`h-7 w-7 ${isChecked ? "text-primary-normal" : "text-neutral-200"}`}
+                />
               ) : (
-                <IcSvgMore className="h-5 w-5 sm:h-6 sm:w-6" />
+                <IcSvgMore className="h-5 w-5 text-neutral-400" />
               )}
             </button>
           </div>

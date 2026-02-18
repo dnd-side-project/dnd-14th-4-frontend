@@ -10,6 +10,8 @@ import { BottomSheet } from "@/shared/ui/BottomSheet";
 import { appToast } from "@/shared/utils/toast";
 import { Modal } from "@/shared/ui/Modal";
 import { FixedBottomButton } from "@/shared/ui/FixedBottomButton";
+import { ItemBox, ItemData } from "@/shared/ui/item/ItemBox";
+import { MOCK_ITEMS } from "@/features/search/model/mock";
 
 export const MyPackPage = () => {
     const router = useRouter();
@@ -20,6 +22,16 @@ export const MyPackPage = () => {
 
     const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+    const [isAddOpen, setIsAddOpen] = useState(false);
+
+    const [selectedItem, setSelectedItem] = useState<ItemData | null>(null);
+
+    const handleDetailClick = (item: ItemData) => {
+        setSelectedItem(item);
+        setIsAddOpen(true);
+    };
+
 
     const toggleSelectMode = () => {
         setIsSelectMode((prev) => !prev);
@@ -60,7 +72,7 @@ export const MyPackPage = () => {
                     </TabItem>
                 </div>
                 <div className="flex items-center gap-3">
-                    {!isSelectMode && <IcSvgFilter width={24} height={24} className="text-label-subtle" />}
+                    <IcSvgFilter width={24} height={24} className="text-label-subtle" />
                     <button
                         onClick={toggleSelectMode}
                         className={`type-label1 transition-colors ${isSelectMode ? "text-primary-normal font-bold" : "text-label-subtle"}`}
@@ -79,6 +91,7 @@ export const MyPackPage = () => {
                             isSelectMode={isSelectMode}
                             isChecked={selectedIds.includes(card.id)}
                             onSelect={handleSelect}
+                            onDetailClick={() => handleDetailClick(MOCK_ITEMS[0])}
                             onMoreClick={() => setIsBottomSheetOpen(true)}
                         />
                     ))
@@ -99,12 +112,16 @@ export const MyPackPage = () => {
             )}
 
 
-            <BottomSheet
-                isOpen={isBottomSheetOpen}
-                onClose={() => setIsBottomSheetOpen(false)}
-                onEdit={handleEditRedirect}
-                onDelete={onClickDeleteMenu}
-            />
+            <BottomSheet isOpen={isBottomSheetOpen} onClose={() => setIsBottomSheetOpen(false)} >
+                <div className="flex flex-col gap-3">
+                    <button onClick={handleEditRedirect} className="w-full h-[52px] rounded-[12px] border border-gray-200 text-gray-900 font-medium">
+                        수정하기
+                    </button>
+                    <button onClick={onClickDeleteMenu} className="w-full h-[52px] rounded-[12px] bg-gray-900 text-white font-medium">
+                        삭제하기
+                    </button>
+                </div>
+            </BottomSheet>
 
             <Modal
                 isOpen={isDeleteModalOpen}
@@ -113,6 +130,27 @@ export const MyPackPage = () => {
                 confirmText="삭제하기"
                 onConfirm={handleFinalDelete}
             />
+
+            <BottomSheet
+                isOpen={isAddOpen}
+                onClose={() => setIsAddOpen(false)}
+
+            >
+                <div className="mb-6">
+                    {/* 데이터 형식 안맞아서 목업 데이터 넣어놓았음 */}
+                    {selectedItem && <ItemBox item={MOCK_ITEMS[0]} />}
+                </div>
+
+                {/* btnarea */}
+                <div className="flex gap-3">
+                    <button className="flex-1 h-[52px] rounded-[12px] bg-beige-100 text-gray-900 font-medium active:bg-beige-200">
+                        팩 추가하기
+                    </button>
+                    <button className="flex-1 h-[52px] rounded-[12px] bg-primary-normal text-white font-medium active:opacity-90">
+                        팩 만들기
+                    </button>
+                </div>
+            </BottomSheet>
         </div>
     );
 };
