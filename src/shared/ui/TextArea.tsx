@@ -33,14 +33,15 @@ export const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
         const hasContent = value !== undefined && String(value).length > 0;
 
         const containerStyle = cn(
-            "w-full rounded-[8px] px-4 py-4 transition-colors duration-200 flex flex-col border cursor-text",
+            "w-full rounded-[8px] px-4 py-4 transition-colors duration-200 flex flex-col border",
             isError
                 ? "bg-common-0 border-status-destructive"
-                : hasContent
-                    ? "bg-common-0 border-primary-normal"
-                    : "bg-secondary-lightbeige border-transparent focus-within:bg-common-0 focus-within:border-primary-normal",
+                : readOnly
+                    ? "bg-secondary-lightbeige border-transparent opacity-80 cursor-default"
+                    : hasContent
+                        ? "bg-common-0 border-primary-normal cursor-text"
+                        : "bg-secondary-lightbeige border-transparent focus-within:bg-common-0 focus-within:border-primary-normal cursor-text",
             variant === "lg" ? "min-h-[120px]" : "min-h-[80px]",
-            readOnly && "opacity-80 cursor-not-allowed",
             className
         );
 

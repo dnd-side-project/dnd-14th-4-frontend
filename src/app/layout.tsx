@@ -4,6 +4,7 @@ import { QueryProvider } from "./providers/QueryProvider";
 import { SearchTransitionProvider } from "@/features/search/transition/SearchTransitionContext";
 import { BottomNav } from "@/widgets/bottom-nav/ui/BottomNav";
 import { pretendard } from "@/shared/fonts/pretendard";
+import { ToastProvider } from "./providers/ToastProvider";
 
 export const metadata: Metadata = {
   title: "What's in my pack",
@@ -29,6 +30,7 @@ export default function RootLayout({
             <div className="w-full max-w-mobile min-h-screen bg-white shadow-xl relative">
               {children}
               <BottomNav />
+              <ToastProvider />
             </div>
           </SearchTransitionProvider>
         </QueryProvider>

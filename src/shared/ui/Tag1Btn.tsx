@@ -46,9 +46,8 @@ export default function Tag1Btn({
   if (trailing != null) {
     return (
       <span
-        className={`${combinedClassName} cursor-default gap-1 ${
-          isDisabled ? "opacity-50" : ""
-        }`}
+        className={`${combinedClassName} cursor-default gap-1 ${isDisabled ? "opacity-50" : ""
+          }`}
         aria-disabled={isDisabled ? true : undefined}
       >
         {children}

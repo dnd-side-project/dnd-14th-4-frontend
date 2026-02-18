@@ -15,7 +15,7 @@ export function BackHeader({ onBack, children, className }: BackHeaderProps) {
   return (
     <header
       className={cn(
-        "flex items-center min-h-[32px] w-full px-3 pt-4",
+        "flex items-center min-h-[32px] w-full p-5",
         className
       )}
     >

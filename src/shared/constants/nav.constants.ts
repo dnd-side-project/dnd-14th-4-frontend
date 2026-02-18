@@ -4,5 +4,7 @@ export const BOTTOM_NAV_HIDE_RULES = [
   "/filter-search",
   "/onboarding*",
   "/my-page/*",
+  "/items-create",
+  "/items-edit",
   "/dev*",
 ];

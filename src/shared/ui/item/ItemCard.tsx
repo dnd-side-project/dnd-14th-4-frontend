@@ -1,9 +1,9 @@
 "use client"
 
 import { useState } from "react"
-import { IcSvgMore, IcSvgWish, IcSvgWishBtn } from "@/shared/icons"
-import { Tag2Btn } from "@/shared/ui/Tag2Btn"
+import { IcSvgCheckCircle, IcSvgMore, IcSvgWish, IcSvgWishBtn } from "@/shared/icons"
 import { ItemFolderBg } from "./itemfolder-bg"
+import Tag1Btn from "../Tag1Btn"
 
 /** API 만족도 값 → 검정 배경 */
 export type ItemCardSatisfaction = "좋아요" | "매우좋아요" | "인생템"
@@ -38,7 +38,13 @@ export const MOCK_ITEM_CARDS: ItemCardData[] = [
 ]
 
 interface ItemCardProps extends Omit<ItemCardData, "id"> {
-  id?: string
+  id: string
+  onMoreClick?: () => void
+  onDetailClick?: () => void
+  showLike?: boolean
+  isSelectMode?: boolean
+  isChecked?: boolean
+  onSelect?: (id: string) => void
 }
 
 const tagVariantClass = {
@@ -60,58 +66,105 @@ function buildDisplayTags(
 }
 
 export function ItemCard({
+  id,
   satisfaction,
   usagePeriod,
   title,
   author,
   liked = false,
+  onMoreClick,
+  onDetailClick,
+  showLike,
+  isSelectMode = false,
+  isChecked = false,
+  onSelect,
 }: ItemCardProps) {
   const [isLiked, setIsLiked] = useState(liked)
   const displayTags = buildDisplayTags(satisfaction, usagePeriod)
 
+  const handleCardClick = () => {
+    if (isSelectMode) {
+      onSelect?.(id)
+    } else {
+      onDetailClick?.()
+    }
+  }
+
   return (
-    <div className="relative w-full">
-      <ItemFolderBg className="absolute inset-0 h-full w-full" />
+    <div
+      className="relative w-full cursor-pointer transition-transform active:scale-[0.98]"
+      onClick={handleCardClick}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          handleCardClick();
+        }
+      }}
+    >
+      <ItemFolderBg className="absolute inset-0 h-full w-full text-beige-80" />
 
       <div className="relative z-10 flex h-full flex-col px-6 pt-4 pb-6 sm:px-7 sm:pb-6 sm:pt-4">
-     
         <div className="flex items-center gap-2 flex-wrap">
           {displayTags.map((t) => (
-            <Tag2Btn key={t.label} className={tagVariantClass[t.variant]}>
+            <Tag1Btn trailing key={t.label} className={tagVariantClass[t.variant]}>
               {t.label}
-            </Tag2Btn>
+            </Tag1Btn>
           ))}
         </div>
 
         <div className="mt-4 flex items-start justify-between gap-2 sm:mt-5">
           <div className="min-w-0 flex-1">
-            <h3 className="truncate type-headline2 text-neutral-900 sm:text-lg">
+            <h3 className="truncate type-headline2 sm:text-lg text-neutral-900">
               {title}
             </h3>
-            <p className="mt-0.5 truncate type-caption1 text-neutral-400 sm:mt-1 sm:text-sm">
+            <p className="mt-0.5 truncate type-caption1 sm:mt-1 sm:text-sm text-neutral-400">
               {author}
             </p>
           </div>
 
           <div className="flex shrink-0 items-center gap-2">
+            {showLike && !isSelectMode && (
+              <button
+                type="button"
+                className="text-neutral-300 transition-colors"
+                aria-label={isLiked ? "좋아요 취소" : "좋아요"}
+                aria-pressed={isLiked}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  setIsLiked((prev) => !prev)
+                }}
+              >
+                {isLiked ? (
+                  <IcSvgWish className="h-5 w-5 sm:h-6 sm:w-6 text-red-500" />
+                ) : (
+                  <IcSvgWishBtn className="h-5 w-5 sm:h-6 sm:w-6" />
+                )}
+              </button>
+            )}
+
             <button
               type="button"
-              aria-label={isLiked ? "좋아요 취소" : "좋아요"}
-              className="text-neutral-300 transition-colors"
-              onClick={() => setIsLiked((prev) => !prev)}
+              className="rounded-full p-0.5 transition-colors"
+              aria-label={isSelectMode ? (isChecked ? "선택 해제" : "선택") : "더보기"}
+              aria-pressed={isSelectMode ? isChecked : undefined}
+              onClick={(e) => {
+                e.stopPropagation()
+                if (isSelectMode) {
+                  onSelect?.(id)
+                } else {
+                  onMoreClick?.()
+                }
+              }}
             >
-              {isLiked ? (
-                <IcSvgWish className="h-5 w-5 sm:h-6 sm:w-6" />
+              {isSelectMode ? (
+                <IcSvgCheckCircle
+                  className={`h-7 w-7 ${isChecked ? "text-primary-normal" : "text-neutral-200"}`}
+                />
               ) : (
-                <IcSvgWishBtn className="h-5 w-5 sm:h-6 sm:w-6" />
+                <IcSvgMore className="h-5 w-5 text-neutral-400" />
               )}
-            </button>
-            <button
-              type="button"
-              aria-label="더보기"
-              className="rounded-full p-0.5 text-neutral-400 transition-colors"
-            >
-              <IcSvgMore className="h-5 w-5 sm:h-6 sm:w-6" />
             </button>
           </div>
         </div>
