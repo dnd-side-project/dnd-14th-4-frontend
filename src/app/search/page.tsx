@@ -16,11 +16,12 @@ import {
   slugToLabel,
 } from "@/features/search/model/categories"
 import {
+  MOCK_PACK_CARDS,
   POPULAR_KEYWORDS,
   RECENT_SEARCHES,
   type RecentSearch,
 } from "@/features/search/model/mock"
-import { PackCard, MOCK_PACK_CARDS } from "@/shared/ui/item/PackCard"
+import { PackCard } from "@/shared/ui/item/PackCard"
 import { CategoryChip } from "@/shared/ui/CategoryChip"
 import { BtnSelection } from "@/shared/ui/BtnSelection"
 import { useSearchPageTransition } from "@/features/search/transition"

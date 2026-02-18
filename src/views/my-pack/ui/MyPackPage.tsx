@@ -4,14 +4,14 @@ import { IcSvgFilter } from "@/shared/icons";
 import TabItem from "@/shared/ui/TabItem";
 import { useState } from "react";
 import { useRouter } from "next/navigation"; // ✅ 1. useRouter 불러오기
-import { MOCK_PACK_CARDS, PackCard } from "@/shared/ui/item/PackCard";
+import { PackCard } from "@/shared/ui/item/PackCard";
 import { ItemCard, MOCK_ITEM_CARDS } from "@/shared/ui/item/ItemCard";
 import { BottomSheet } from "@/shared/ui/BottomSheet";
 import { appToast } from "@/shared/utils/toast";
 import { Modal } from "@/shared/ui/Modal";
 import { FixedBottomButton } from "@/shared/ui/FixedBottomButton";
 import { ItemBox, ItemData } from "@/shared/ui/item/ItemBox";
-import { MOCK_ITEMS } from "@/features/search/model/mock";
+import { MOCK_ITEMS, MOCK_PACK_CARDS } from "@/features/search/model/mock";
 
 export const MyPackPage = () => {
     const router = useRouter();
@@ -60,8 +60,8 @@ export const MyPackPage = () => {
     };
 
     return (
-        <div className="px-6">
-            <header className="flex items-center justify-between mt-16 mb-10">
+        <div className="px-6 ">
+            <header className="flex items-center justify-between mt-16 mb-10 ">
                 <div className="w-12 h-12 bg-common-100 rounded-full" />
                 <div className="flex gap-7 w-37">
                     <TabItem isActive={activeTab === "item"} onClick={() => { setActiveTab("item"); setIsSelectMode(false); }}>

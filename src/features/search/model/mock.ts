@@ -1,3 +1,5 @@
+import { PackCardData } from "@/shared/ui/item/PackCard";
+
 export type RecentSearch = { id: string; keyword: string; createdAt: string };
 export type PopularKeyword = { id: string; label: string };
 
@@ -49,6 +51,20 @@ export const MOCK_ITEMS = [
       period: "1년 이상"
     },
     subTags: ["가벼움", "가성비", "내어깨를지켜준아이템", "휴대성이좋은", "이거제발사세요"]
+  },
+  {
+    id: 2,
+    title: "원통형 3홀 연필깎이",
+    brand: "나이키",
+    category: "문구",
+    purchaseAt: "쿠팡",
+    isWished: true,
+    images: ["/img1.jpg", "/img2.jpg"],
+    mainTags: {
+      satisfaction: "👍좋아요",
+      period: "1년 이상"
+    },
+    subTags: ["가벼움", "가성비", "내어깨를지켜준아이템", "휴대성이좋은", "이거제발사세요"]
   }
 ];
 
@@ -62,3 +78,27 @@ export const MOCK_ITEM_EDIT_DATA = {
   purchaseLocation: "강남 플래그십 스토어",
   tags: ["가벼움", "편함"]
 };
+
+
+export const MOCK_PACK_CARDS: PackCardData[] = [
+  {
+    id: "1",
+    tag: "운동/산책",
+    itemCount: 8,
+    title: "팩 이름은 최대 길이 20자입니다다다",
+    author: "닉네임은열자가최대야",
+    description: "가벼운 조깅이나 동네 산책할 때 챙기면 딱 좋은 필수템 모음집입니다.",
+    liked: false,
+    date: "2일 전"
+  },
+  {
+    id: "2",
+    tag: "운동/산책",
+    itemCount: 8,
+    title: "팩 이름은 최대 길이 20자입니다다다",
+    author: "닉네임은열자가최대야",
+    description: "가벼운 조깅이나 동네 산책할 때 챙기면 딱 좋은 필수템 모음집입니다.",
+    liked: false,
+    date: "2일 전"
+  },
+]

@@ -13,27 +13,11 @@ export interface PackCardData {
   itemCount: number
   title: string
   author: string
+  description?: string;
   liked?: boolean
+  date?: string
 }
 
-export const MOCK_PACK_CARDS: PackCardData[] = [
-  {
-    id: "1",
-    tag: "운동/산책",
-    itemCount: 8,
-    title: "팩 이름은 최대 길이 20자입니다다다",
-    author: "닉네임은열자가최대야",
-    liked: false,
-  },
-  {
-    id: "2",
-    tag: "운동/산책",
-    itemCount: 8,
-    title: "팩 이름은 최대 길이 20자입니다다다",
-    author: "닉네임은열자가최대야",
-    liked: false,
-  },
-]
 
 interface PackCardProps extends Omit<PackCardData, "id"> {
   id?: string
