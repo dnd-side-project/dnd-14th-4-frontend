@@ -17,6 +17,8 @@ export const useMyPack = () => {
     const [isItemDetailOpen, setIsItemDetailOpen] = useState(false); // 아이템 상세 띄우는 바텀시트
     const [selectedItem, setSelectedItem] = useState<ItemData | null>(null);
 
+    const [activeMoreId, setActiveMoreId] = useState<string | null>(null);
+
     // --- Handlers ---
     const handleTabChange = (tab: "item" | "pack") => {
         setActiveTab(tab);
@@ -40,8 +42,10 @@ export const useMyPack = () => {
         setIsItemDetailOpen(true);
     };
 
-    const handleMoreClick = () => setIsMoreMenuOpen(true);
-
+    const handleMoreClick = (id: string) => {
+        setActiveMoreId(id);
+        setIsMoreMenuOpen(true);
+    };
     const onClickDeleteMenu = () => {
         setIsMoreMenuOpen(false);
         setIsDeleteModalOpen(true);
@@ -54,15 +58,18 @@ export const useMyPack = () => {
 
     const handleEditRedirect = () => {
         setIsMoreMenuOpen(false);
-        router.push("/items-edit");
+        if (activeMoreId) {
+            router.push(`/items-edit/${activeMoreId}`);
+        }
     };
 
     const handleCreatePack = () => {
+        if (selectedIds.length === 0) return;
         router.push(`/pack-create?ids=${selectedIds.join(",")}`);
     };
 
     return {
-        state: { activeTab, isSelectMode, selectedIds, isMoreMenuOpen, isDeleteModalOpen, isItemDetailOpen, selectedItem },
+        state: { activeTab, isSelectMode, selectedIds, isMoreMenuOpen, isDeleteModalOpen, isItemDetailOpen, selectedItem, activeMoreId },
         actions: {
             handleTabChange, toggleSelectMode, handleSelect, handleDetailClick,
             handleMoreClick, onClickDeleteMenu, handleFinalDelete, handleEditRedirect, handleCreatePack,

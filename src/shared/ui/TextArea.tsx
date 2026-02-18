@@ -37,7 +37,7 @@ export const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
             isError
                 ? "bg-common-0 border-status-destructive"
                 : readOnly
-                    ? "bg-secondary-lightbeige border-transparent opacity-80 cursor-default" // 🌟 readOnly일 때 무조건 이 배경 적용!
+                    ? "bg-secondary-lightbeige border-transparent opacity-80 cursor-default"
                     : hasContent
                         ? "bg-common-0 border-primary-normal cursor-text"
                         : "bg-secondary-lightbeige border-transparent focus-within:bg-common-0 focus-within:border-primary-normal cursor-text",

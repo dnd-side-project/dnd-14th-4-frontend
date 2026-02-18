@@ -4,7 +4,7 @@ import { BackHeader } from '@/shared/ui/BackHeader';
 import { useParams, useRouter } from 'next/navigation';
 import { MOCK_ITEMS, MOCK_PACK_CARDS } from '@/features/search/model/mock';
 import { ItemBox } from '@/shared/ui/item/ItemBox';
-import Tag2Btn from '@/shared/ui/Tag1Btn';
+import { Tag2Btn } from '@/shared/ui/Tag2Btn';
 import { TextArea } from '@/shared/ui/TextArea';
 
 export default function PackDetailPage() {
@@ -33,7 +33,7 @@ export default function PackDetailPage() {
             <BackHeader onBack={() => router.back()} />
             <div className="px-6 pb-[90px] py-5">
                 <h1 className="type-heading1 text-label-default mb-[10px]">{title}</h1>
-                <Tag2Btn variant="pressed">{tag}</Tag2Btn>
+                <Tag2Btn status>{tag}</Tag2Btn>
                 <div className='flex mt-6 items-center gap-2 mb-6'>
                     <div className="w-12 h-12 bg-common-100 rounded-full" />
 
@@ -48,7 +48,7 @@ export default function PackDetailPage() {
                     variant="lg"
                 />
 
-                <div className="type-heading2 mt-[50px] flex gap-1">아이템 <p className="text-primary-normal">{MOCK_ITEMS.length}</p></div>
+                <div className="type-heading2 mt-[50px] flex gap-1">아이템 <span className="text-primary-normal">{MOCK_ITEMS.length}</span></div>
                 <div className="flex flex-col gap-4 mt-4">
                     {MOCK_ITEMS.map((card) => (
                         <ItemBox key={card.id} item={card} />

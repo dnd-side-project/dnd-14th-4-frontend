@@ -50,18 +50,18 @@ export const BottomSheet = ({ isOpen, onClose, title, children }: BottomSheetPro
                         <div className="w-full h-8 flex items-center justify-center pt-3 pb-5">
                             <div className="w-[36px] h-[4px] bg-gray-200 rounded-full" />
                         </div>
+                        {title && (
+                            <div className="flex items-center justify-between px-6 mb-6">
+                                <h2 className="text-gray-900 font-bold text-[18px]">
+                                    {title}
+                                </h2>
 
-                        <div className="flex items-center justify-between px-6 mb-6">
-                            <h2 className="text-gray-900 font-bold text-[18px]">
-                                {title}
-                            </h2>
-                            {title && (
                                 <button onClick={onClose} className="p-1">
                                     <IcSvgCloseBig width={24} height={24} className="text-gray-900" />
                                 </button>
-                            )}
-                        </div>
+                            </div>
 
+                        )}
                         <div className="px-6">
                             {children}
                         </div>

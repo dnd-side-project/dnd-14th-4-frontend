@@ -18,7 +18,7 @@ export const MyPackPage = () => {
         <div className="px-6 pb-24">
             <header className="flex items-center justify-between mt-16 mb-10">
                 <div className="w-12 h-12 bg-common-100 rounded-full" />
-                <div className="flex gap-7 w-37">
+                <div role="tablist" className="flex gap-7 w-37">
                     <TabItem isActive={state.activeTab === "item"} onClick={() => actions.handleTabChange("item")}>
                         아이템
                     </TabItem>
@@ -47,12 +47,12 @@ export const MyPackPage = () => {
                             isChecked={state.selectedIds.includes(card.id)}
                             onSelect={actions.handleSelect}
                             onDetailClick={() => actions.handleDetailClick(MOCK_ITEMS[0])}
-                            onMoreClick={actions.handleMoreClick}
+                            onMoreClick={() => actions.handleMoreClick(card.id)}
                         />
                     ))}
                 {state.activeTab === "pack" &&
                     MOCK_PACK_CARDS.map((card) => (
-                        <PackCard key={card.id} {...card} onMoreClick={actions.handleMoreClick} />
+                        <PackCard key={card.id} {...card} onMoreClick={() => actions.handleMoreClick(card.id)} />
                     ))}
             </div>
 
@@ -62,6 +62,7 @@ export const MyPackPage = () => {
                 </FixedBottomButton>
             )}
 
+            {/* mainbutton 수정 예정 */}
             <BottomSheet isOpen={state.isMoreMenuOpen} onClose={() => actions.setIsMoreMenuOpen(false)}>
                 <div className="flex flex-col gap-3">
                     <button onClick={actions.handleEditRedirect} className="w-full h-[52px] rounded-[12px] border border-gray-200 text-gray-900 font-medium">
@@ -85,6 +86,7 @@ export const MyPackPage = () => {
                 <div className="mb-6">
                     {state.selectedItem && <ItemBox item={MOCK_ITEMS[0]} />}
                 </div>
+                {/* mainbutton 수정 예정 */}
                 <div className="flex gap-3">
                     <button className="flex-1 h-[52px] rounded-[12px] bg-beige-100 text-gray-900 font-medium active:bg-beige-200">
                         팩 추가하기

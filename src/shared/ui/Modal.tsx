@@ -28,10 +28,13 @@ export const Modal = ({
             onClick={onClose}
         >
             <div
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="modal-title"
                 className="w-full max-w-[335px] bg-white rounded-[16px] px-4 py-6 flex flex-col items-center shadow-lg"
                 onClick={(e) => e.stopPropagation()}
             >
-                <h3 className="type-headline2 text-label-default text-neutral-900  text-center">
+                <h3 id="modal-title" className="type-headline2 text-label-default text-neutral-900  text-center">
                     {title}
                 </h3>
 

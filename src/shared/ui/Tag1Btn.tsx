@@ -28,7 +28,7 @@ export default function Tag1Btn({
 
   const variantStyles: Record<TagVariant, string> = {
     primary: "bg-neutral-10 text-white border border-transparent",
-    pressed: "bg-pink-95 text-primary-normal border border-transparent",
+    pressed: "bg-primary-normal text-white border border-transparent",
     disabled: "bg-neutral-95 text-neutral-80 border border-transparent cursor-not-allowed",
     unpressed: "bg-white border border-label-subtler text-label-subtle",
     secondary:

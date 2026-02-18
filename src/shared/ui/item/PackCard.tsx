@@ -20,7 +20,7 @@ export interface PackCardData {
 
 
 interface PackCardProps extends Omit<PackCardData, "id"> {
-  id?: string
+  id: string
   onMoreClick?: () => void
 }
 

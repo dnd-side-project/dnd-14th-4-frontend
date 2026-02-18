@@ -34,7 +34,7 @@ export const ItemForm = ({ initialData, isEdit = false }: ItemFormProps) => {
     const [rating, setRating] = useState<string | null>(initialData?.rating || null);
     const [period, setPeriod] = useState<string | null>(initialData?.period || null);
     const [purchaseLocation, setPurchaseLocation] = useState(initialData?.purchaseLocation || "");
-    const [images, setImages] = useState<File[]>([]); // 이미지 처리는 보통 별도 로직 필요
+    const [images, setImages] = useState<File[]>(initialData?.images ?? []);
     const [tags, setTags] = useState<string[]>(initialData?.tags || []);
 
     // 수정 모드일 때는 모든 섹션이 바로 보여야 하므로 조건문을 조정하거나 합칩니다.
@@ -91,7 +91,7 @@ export const ItemForm = ({ initialData, isEdit = false }: ItemFormProps) => {
 
                     <FixedBottomButton
                         onClick={handleSubmit}
-                        disabled={isEdit ? false : !isRatingSelected} // 예시: 생성 모드일 때만 필수값 체크
+                        disabled={!isDetailFilled || !isRatingSelected}
                     >
                         {isEdit ? "수정 완료" : "저장"}
                     </FixedBottomButton>

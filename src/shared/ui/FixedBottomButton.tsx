@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/shared/ui/Button"; // 기존에 만드신 Button 컴포넌트
+import { Button } from "@/shared/ui/Button";
 import { ReactNode } from "react";
 
 interface FixedBottomButtonProps {

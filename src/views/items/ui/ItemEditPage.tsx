@@ -6,9 +6,12 @@ import { MOCK_ITEM_EDIT_DATA } from "@/features/search/model/mock";
 import { BackHeader } from "@/shared/ui/BackHeader";
 import { useRouter } from "next/navigation";
 import { Modal } from "@/shared/ui/Modal";
+import { useParams } from "next/navigation";
 
 export default function ItemEditPage() {
     const router = useRouter();
+    const params = useParams();
+    const id = params?.id;
     const [isExitModalOpen, setIsExitModalOpen] = useState(false);
 
     const handleBackClick = () => {
@@ -20,6 +23,7 @@ export default function ItemEditPage() {
         router.back();
     };
 
+    console.log(id); // api 연결 시 삭제 예정
     return (
         <>
             <BackHeader onBack={handleBackClick} />

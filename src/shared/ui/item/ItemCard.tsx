@@ -40,6 +40,7 @@ export const MOCK_ITEM_CARDS: ItemCardData[] = [
 interface ItemCardProps extends Omit<ItemCardData, "id"> {
   id: string
   onMoreClick?: () => void
+  onDetailClick?: () => void
   showLike?: boolean
   isSelectMode?: boolean
   isChecked?: boolean
@@ -77,7 +78,7 @@ export function ItemCard({
   isSelectMode = false,
   isChecked = false,
   onSelect,
-}: ItemCardProps & { onDetailClick?: () => void }) {
+}: ItemCardProps) {
   const [isLiked, setIsLiked] = useState(liked)
   const displayTags = buildDisplayTags(satisfaction, usagePeriod)
 
