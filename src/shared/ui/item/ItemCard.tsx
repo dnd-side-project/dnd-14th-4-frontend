@@ -97,10 +97,7 @@ export function ItemCard({
       role="button"
       tabIndex={0}
       onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          handleCardClick();
-        }
+        if (e.target !== e.currentTarget) return;
       }}
     >
       <ItemFolderBg className="absolute inset-0 h-full w-full text-beige-80" />
@@ -129,6 +126,8 @@ export function ItemCard({
               <button
                 type="button"
                 className="text-neutral-300 transition-colors"
+                aria-label={isLiked ? "좋아요 취소" : "좋아요"}
+                aria-pressed={isLiked}
                 onClick={(e) => {
                   e.stopPropagation()
                   setIsLiked((prev) => !prev)
@@ -145,6 +144,8 @@ export function ItemCard({
             <button
               type="button"
               className="rounded-full p-0.5 transition-colors"
+              aria-label={isSelectMode ? (isChecked ? "선택 해제" : "선택") : "더보기"}
+              aria-pressed={isSelectMode ? isChecked : undefined}
               onClick={(e) => {
                 e.stopPropagation()
                 if (isSelectMode) {
