@@ -4,6 +4,7 @@ import { useState } from "react"
 import { IcSvgMore, IcSvgWish, IcSvgWishBtn } from "@/shared/icons"
 import { Tag2Btn } from "@/shared/ui/Tag2Btn"
 import { PackFolderBg } from "./packfolder-bg"
+import { useRouter } from "next/navigation"
 
 export interface PackCardData {
   id: string
@@ -40,6 +41,7 @@ interface PackCardProps extends Omit<PackCardData, "id"> {
 }
 
 export function PackCard({
+  id,
   tag,
   itemCount,
   title,
@@ -48,13 +50,20 @@ export function PackCard({
   onMoreClick,
 }: PackCardProps) {
   const [isLiked, setIsLiked] = useState(liked)
+  const router = useRouter()
+
+  const handleCardClick = () => {
+    router.push(`/pack/${id}`)
+  }
 
   return (
-    <div className="relative w-full">
+    <div
+      className="relative w-full cursor-pointer transition-transform active:scale-[0.99]"
+      onClick={handleCardClick}
+    >
       <PackFolderBg className="absolute inset-0 h-full w-full" />
 
       <div className="relative z-10 flex h-full flex-col px-6 pt-4 pb-6 sm:px-7 sm:pb-6 sm:pt-4">
-
         <div className="flex items-center gap-2">
           <Tag2Btn status>{tag}</Tag2Btn>
           <span className="shrink-0 type-caption1 text-neutral-400 sm:text-sm">
@@ -75,21 +84,25 @@ export function PackCard({
           <div className="flex shrink-0 items-center gap-2">
             <button
               type="button"
-              aria-label={isLiked ? "좋아요 취소" : "좋아요"}
-              className="text-neutral-300 transition-colors "
-              onClick={() => setIsLiked((prev) => !prev)}
+              className="text-neutral-300 transition-colors hover:text-red-400"
+              onClick={(e) => {
+                e.stopPropagation()
+                setIsLiked((prev) => !prev)
+              }}
             >
               {isLiked ? (
-                <IcSvgWish className="h-5 w-5 sm:h-6 sm:w-6" />
+                <IcSvgWish className="h-5 w-5 sm:h-6 sm:w-6 text-red-500" />
               ) : (
                 <IcSvgWishBtn className="h-5 w-5 sm:h-6 sm:w-6" />
               )}
             </button>
             <button
               type="button"
-              aria-label="더보기"
-              className="rounded-full p-0.5 text-neutral-400 transition-colors "
-              onClick={onMoreClick}
+              className="rounded-full p-0.5 text-neutral-400 transition-colors hover:bg-black/5"
+              onClick={(e) => {
+                e.stopPropagation()
+                onMoreClick?.()
+              }}
             >
               <IcSvgMore className="h-5 w-5 sm:h-6 sm:w-6" />
             </button>
