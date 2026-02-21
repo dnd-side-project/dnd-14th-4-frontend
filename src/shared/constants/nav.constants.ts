@@ -8,5 +8,6 @@ export const BOTTOM_NAV_HIDE_RULES = [
   "/my-page/*",
   "/items-create",
   "/items-edit",
+  "/splash",
   "/dev*",
 ];
