@@ -8,30 +8,23 @@ interface TabItemProps {
     onClick?: () => void;
     children: React.ReactNode;
 }
-
-export default function TabItem({ isActive, onClick, children }: TabItemProps) {
+export default function TabItem({
+    children,
+    isActive,
+    onClick,
+  }: TabItemProps) {
     return (
-        <button
-            type="button"
-            role="tab"
-            aria-selected={isActive}
-            onClick={onClick}
-            className={`
-        flex-1 flex items-center justify-center 
-        py-1 cursor-pointer transition-all duration-200
-        ${isActive
-                    ? 'text-common-100 font-bold'
-                    : 'text-label-subtle font-medium'
-                }
-        ${isActive
-                    ? 'border-b-[1.5px] border-common-100'
-                    : 'border-b border-line-normal'
-                }
-      `}
-        >
-            <span className="type-headline2">
-                {children}
-            </span>
-        </button>
+      <button
+        type="button"
+        role="tab"
+        aria-selected={isActive}
+        onClick={onClick}
+        className={[
+          "w-full flex items-center justify-center type-headline2 pb-3 border-b-2 transition-colors",
+          isActive ? "text-label-default border-black font-bold" : "text-label-subtle border-gray-200",
+        ].join(" ")}
+      >
+        {children}
+      </button>
     );
-}
+  }
