@@ -19,6 +19,7 @@ export function SplashPage() {
   return (
     <div
       className="fixed inset-0 z-[100] flex items-center justify-center bg-cover bg-center bg-no-repeat"
+      style={{ backgroundImage: "url('/splash-bg.png')" }} 
     >
       <IcSvgLogo className="w-30 h-30" />
     </div>
