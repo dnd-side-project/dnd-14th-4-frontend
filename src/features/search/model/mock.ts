@@ -15,6 +15,15 @@ export const POPULAR_KEYWORDS: PopularKeyword[] = [
   { id: "p2", label: "여행/캠핑" ,value: "travel"},
   { id: "p3", label: "공부/시험" ,value: "study"},
 ];
+export const TAGS = ["공부/시험", "면접/취준", "업무/취준", "약속/데이트", "운동/산책"] as const;
+export type Tag = (typeof TAGS)[number];
+
+export type PackItem = {
+    id: string;
+  title: string;
+  nickname: string;
+};
+
 
 export const NOTICES = [
   { id: 1, title: '왓츠인마이팩 3.11.0 업데이트 안내', date: '2026.02.14' },
@@ -102,3 +111,31 @@ export const MOCK_PACK_CARDS: PackCardData[] = [
     date: "2일 전"
   },
 ]
+
+export const PACKS_BY_TAG: Record<Tag, PackItem[]> = {
+  "공부/시험": [
+    { id: "study-1", title: "공부 필수템 20...", nickname: "닉네임은열자가최대야" },
+    { id: "study-2", title: "시험 전날 챙김 20...", nickname: "닉네임은열자가최대야" },
+    { id: "study-3", title: "독서실 가방 20...", nickname: "닉네임은열자가최대야" },
+  ],
+  "면접/취준": [
+    { id: "job-1", title: "면접 당일 필수 20...", nickname: "닉네임은열자가최대야" },
+    { id: "job-2", title: "자소서/포트 20...", nickname: "닉네임은열자가최대야" },
+    { id: "job-3", title: "정장 주머니 20...", nickname: "닉네임은열자가최대야" },
+  ],
+  "업무/취준": [
+    { id: "work-1", title: "출근 가방 루틴 20...", nickname: "닉네임은열자가최대야" },
+    { id: "work-2", title: "회의용 파우치 20...", nickname: "닉네임은열자가최대야" },
+    { id: "work-3", title: "노트북 수납 20...", nickname: "닉네임은열자가최대야" },
+  ],
+  "약속/데이트": [
+    { id: "date-1", title: "약속 전 필수 20...", nickname: "닉네임은열자가최대야" },
+    { id: "date-2", title: "미니백 구성 20...", nickname: "닉네임은열자가최대야" },
+    { id: "date-3", title: "향/메이크업 20...", nickname: "닉네임은열자가최대야" },
+  ],
+  "운동/산책": [
+    { id: "walk-1", title: "오운완 필수팩 20...", nickname: "닉네임은열자가최대야" },
+    { id: "walk-2", title: "러닝 장비팩 20...", nickname: "닉네임은열자가최대야" },
+    { id: "walk-3", title: "산책 루틴팩 20...", nickname: "닉네임은열자가최대야" },
+  ],
+};

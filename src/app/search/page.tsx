@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { Suspense } from "react";
 import { useRouter } from "next/navigation";
 import { useSearchPageTransition } from "@/features/search/transition";
 import { POPULAR_KEYWORDS, RECENT_SEARCHES } from "@/features/search/model/mock";
@@ -9,7 +10,7 @@ import { SearchHeader } from "@/widgets/search/ui/SearchHeader";
 import { SearchResultSection } from "@/widgets/search/ui/SearchResultSection";
 import { SearchLandingSection } from "@/widgets/search/ui/SearchLandingSection";
 
-export default function SearchPage() {
+function SearchPageContent() {
   const router = useRouter();
   const { handleBack, inputRef } = useSearchPageTransition(router);
 
@@ -39,7 +40,6 @@ export default function SearchPage() {
         inputRef={inputRef as React.RefObject<HTMLInputElement>}
       />
 
-      {/* 🔹 Body */}
       {hasIntent ? (
         <SearchResultSection
           packs={filteredPacks}
@@ -61,5 +61,21 @@ export default function SearchPage() {
         />
       )}
     </main>
+  );
+}
+
+function SearchPageFallback() {
+  return (
+    <main className="min-h-dvh bg-white pb-24 flex items-center justify-center">
+      <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-neutral-80 border-r-transparent" />
+    </main>
+  );
+}
+
+export default function SearchPage() {
+  return (
+    <Suspense fallback={<SearchPageFallback />}>
+      <SearchPageContent />
+    </Suspense>
   );
 }
