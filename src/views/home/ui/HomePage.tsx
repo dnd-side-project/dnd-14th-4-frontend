@@ -7,9 +7,11 @@ import {
   useSearchBarTransition,
 } from "@/features/search/transition";
 import { HomeSearchHeader } from "@/widgets/home-search-header/ui/HomeSearchHeader";
+import { useUserStore } from "@/entities/user/model";
 
 export function HomePage() {
   const router = useRouter();
+  const user = useUserStore((s) => s.user);
   const {
     searchBarRef,
     titleVisible,
@@ -31,8 +33,12 @@ export function HomePage() {
         transition={titleTransition}
         className="mb-2"
       >
-        <h1 className="text-2xl font-bold text-neutral-900">홈</h1>
-        <p className="text-gray-600">추천 상품들을 확인해보세요.</p>
+        <h1 className="text-2xl font-bold text-neutral-900">
+          {user ? `${user.nickname}님, 안녕하세요` : "홈"}
+        </h1>
+        <p className="text-gray-600">
+          {user ? "추천 상품들을 확인해보세요." : "로그인하면 맞춤 추천을 받을 수 있어요."}
+        </p>
       </motion.div>
 
       <div ref={searchBarRef} className="mt-10">

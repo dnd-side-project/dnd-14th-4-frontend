@@ -15,16 +15,12 @@ export const LoginSuccessPage = () => {
 
     if (accessToken) {
       didHandle.current = true;
-
-      // ✅ side effect만 수행
       setAccessToken(accessToken);
 
-      // ✅ 전체 이동
       window.location.replace("/");
     }
   }, [accessToken]);
 
-  // ✅ 렌더는 accessToken 유무로만 결정 (setState 필요 없음)
   if (!accessToken) {
     return (
       <div className="flex min-h-[50vh] flex-col items-center justify-center px-6">

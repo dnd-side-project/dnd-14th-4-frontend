@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "../shared/styles/globals.css";
 import { QueryProvider } from "./providers/QueryProvider";
+import { AuthHydrate } from "./providers/AuthHydrate";
 import { SearchTransitionProvider } from "@/features/search/transition/SearchTransitionContext";
 import { BottomNav } from "@/widgets/bottom-nav/ui/BottomNav";
 import { pretendard } from "@/shared/fonts/pretendard";
@@ -26,6 +27,7 @@ export default function RootLayout({
         className={`${pretendard.variable} antialiased flex justify-center bg-gray-50`}
       >
         <QueryProvider>
+          <AuthHydrate>
           <SearchTransitionProvider>
             <div className="w-full max-w-mobile min-h-screen bg-white shadow-xl relative">
               {children}
@@ -33,6 +35,7 @@ export default function RootLayout({
               <ToastProvider />
             </div>
           </SearchTransitionProvider>
+          </AuthHydrate>
         </QueryProvider>
       </body>
     </html>
