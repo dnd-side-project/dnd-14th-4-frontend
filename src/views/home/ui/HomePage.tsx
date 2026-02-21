@@ -11,6 +11,8 @@ import { HomeSearchHeader } from "@/widgets/home-search-header/ui/HomeSearchHead
 import Tag1Btn from "@/shared/ui/Tag1Btn";
 import IcSvgArrowRightSmall from "@/shared/icons/ic_arrowrightsmall";
 import { PACKS_BY_TAG, Tag, TAGS } from "@/features/search/model/mock";
+import { pickRandomGreeting } from "../model/greeting";
+
 
 export function HomePage() {
   const router = useRouter();
@@ -30,6 +32,8 @@ export function HomePage() {
   const [selectedTag, setSelectedTag] = React.useState<Tag>(TAGS[0]);
   const packs = PACKS_BY_TAG[selectedTag] ?? [];
 
+  const [greeting,] = React.useState(() => pickRandomGreeting());
+
   return (
     <div className="min-h-dvh bg-background-alternative2 pt-12 px-5">
       <motion.div
@@ -43,9 +47,9 @@ export function HomePage() {
       >
         <div>
           <h1 className="type-heading1 text-label-default">
-            <span className="text-primary-normal">{nickname}님</span>의
+            <span className="text-primary-normal">{nickname}</span>{greeting.suffix}
             <br />
-            애착템을 소개해주세요!
+            {greeting.line2}
           </h1>
         </div>
 
