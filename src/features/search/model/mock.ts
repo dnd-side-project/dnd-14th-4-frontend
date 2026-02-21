@@ -1,7 +1,7 @@
 import { PackCardData } from "@/shared/ui/item/PackCard";
 
 export type RecentSearch = { id: string; keyword: string; createdAt: string };
-export type PopularKeyword = { id: string; label: string };
+export type PopularKeyword = { id: string; label: string; value: string };
 
 export const RECENT_SEARCHES: RecentSearch[] = [
   { id: "r1", keyword: "검색어 1", createdAt: "2026-02-10T10:00:00Z" },
@@ -11,9 +11,9 @@ export const RECENT_SEARCHES: RecentSearch[] = [
 ];
 
 export const POPULAR_KEYWORDS: PopularKeyword[] = [
-  { id: "p1", label: "업무/출근" },
-  { id: "p2", label: "여행/캠핑" },
-  { id: "p3", label: "공부/시험" },
+  { id: "p1", label: "업무/출근" ,value: "work"},
+  { id: "p2", label: "여행/캠핑" ,value: "travel"},
+  { id: "p3", label: "공부/시험" ,value: "study"},
 ];
 
 export const NOTICES = [

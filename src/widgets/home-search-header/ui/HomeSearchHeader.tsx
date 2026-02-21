@@ -47,7 +47,7 @@ export function HomeSearchHeader({ onSearchBarClick, onFilterClick }: Props) {
         <button
           type="button"
           onClick={goFilterSearchPage}
-          className="h-8 w-8 shrink-0 flex items-center justify-center"
+          className="h-6 w-6 shrink-0 rounded-xl flex items-center justify-center"
           aria-label="필터 검색"
         >
           <IcFilter />
