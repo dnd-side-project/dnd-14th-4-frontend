@@ -14,6 +14,44 @@
   --color-neutral-95: #f0f0f0;
   --color-neutral-99: #fbfbfb;
 
+
+  --color-pink-10: #81244B;
+  --color-pink-20: #B13468;
+  --color-pink-30: #CC447C;
+  --color-pink-40: #E7528F;
+  --color-pink-50: #FF62A1;
+  --color-pink-60: #FF7BAC;
+  --color-pink-70: #FF92B7;
+  --color-pink-80: #FFB2C9;
+  --color-pink-90: #FFD1DE;
+  --color-pink-95: #FFEAEF;
+  --color-pink-99: #FFF9FC;
+
+  --color-beige-10: #211F1B;
+  --color-beige-20: #413F3B;
+  --color-beige-30: #605D59;
+  --color-beige-40: #74716C;
+  --color-beige-50: #9D9A95;
+  --color-beige-60: #BBB8B2;
+  --color-beige-70: #DFDCD6;
+  --color-beige-80: #EDEAE4;
+  --color-beige-90: #F3EFEA;
+  --color-beige-95: #F8F5F0;
+  --color-beige-99: #FFFCF9;
+
+
+  --alpha-0: #0000;
+  --alpha-5: #0000000D;
+  --alpha-12: #0000001F;
+  --alpha-22: #00000038;
+  --alpha-28: #00000047;
+  --alpha-43: #0000006E;
+  --alpha-52: #00000085;
+  --alpha-61: #0000009C;
+  --alpha-74: #000000BD;
+  --alpha-88: #000000E0;
+  --alpha-100: #000;
+
   --color-primary-subtler: #ffd1de;
   --color-primary-subtle: #ff92b7;
   --color-primary-normal: #ff62a1;
@@ -72,6 +110,12 @@
 
   --typo-caption2-size: 11px;
   --typo-caption2-line: 14px;
+
+
+  /* shadow */
+  --shadow-normal: 0px 0px 1px 0px rgb(0 0 0 / 6%), 0px 1px 4px 0px rgb(0 0 0 / 8%);
+  --shadow-emphasize: 0px 0px 1px 0px rgb(0 0 0 / 8%), 0px 1px 4px 0px rgb(0 0 0 / 8%);
+  --shadow-strong: 0px 0px 4px 0px rgb(0 0 0 / 8%), 0px 4px 8px 0px rgb(0 0 0 / 8%);
 }
 
 @layer components {
@@ -81,55 +125,65 @@
     font-weight: 700;
     letter-spacing: -0.02em;
   }
+
   .type-heading1 {
     font-size: var(--typo-heading1-size);
     line-height: var(--typo-heading1-line);
     font-weight: 700;
     letter-spacing: -0.02em;
   }
+
   .type-heading2 {
     font-size: var(--typo-heading2-size);
     line-height: var(--typo-heading2-line);
     font-weight: 700;
     letter-spacing: -0.02em;
   }
+
   .type-headline1 {
     font-size: var(--typo-headline1-size);
     line-height: var(--typo-headline1-line);
     font-weight: 600;
     letter-spacing: -0.01em;
   }
+
   .type-headline2 {
     font-size: var(--typo-headline2-size);
     line-height: var(--typo-headline2-line);
     font-weight: 600;
     letter-spacing: -0.01em;
   }
+
   .type-body1 {
     font-size: var(--typo-body1-size);
     line-height: var(--typo-body1-line);
     font-weight: 500;
   }
+
   .type-body2 {
     font-size: var(--typo-body2-size);
     line-height: var(--typo-body2-line);
     font-weight: 500;
   }
+
   .type-label1 {
     font-size: var(--typo-label1-size);
     line-height: var(--typo-label1-line);
     font-weight: 600;
   }
+
   .type-label2 {
     font-size: var(--typo-label2-size);
     line-height: var(--typo-label2-line);
     font-weight: 600;
   }
+
   .type-caption1 {
     font-size: var(--typo-caption1-size);
     line-height: var(--typo-caption1-line);
     font-weight: 500;
   }
+
   .type-caption2 {
     font-size: var(--typo-caption2-size);
     line-height: var(--typo-caption2-line);
