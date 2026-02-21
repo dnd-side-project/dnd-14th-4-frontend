@@ -10,9 +10,13 @@ import { FixedBottomButton } from "@/shared/ui/FixedBottomButton";
 import { ItemBox } from "@/shared/ui/item/ItemBox";
 import { MOCK_ITEMS, MOCK_PACK_CARDS } from "@/features/search/model/mock";
 import { useMyPack } from "@/views/my-pack/model/useMyPack";
+import { useMyPackItems } from "@/views/my-pack/model/useMyPackItems";
 
 export const MyPackPage = () => {
     const { state, actions } = useMyPack();
+    const { items: apiItems, isLoading, isError, hasToken } = useMyPackItems();
+
+    const itemCards = apiItems.length > 0 ? apiItems : MOCK_ITEM_CARDS;
 
     return (
         <div className="px-6 pb-24">
@@ -37,9 +41,21 @@ export const MyPackPage = () => {
                 </div>
             </header>
 
+            {state.activeTab === "item" && !hasToken && (
+                <p className="text-label-subtle type-caption mb-2">
+                    테스트: 개발자도구 → Application → Local Storage에서 accessToken = &quot;user_1&quot; 저장 후 새로고침하면 API 데이터 5개가 표시됩니다.
+                </p>
+            )}
+
             <div className="flex flex-col gap-3">
-                {state.activeTab === "item" &&
-                    MOCK_ITEM_CARDS.map((card) => (
+                {state.activeTab === "item" && isLoading && (
+                    <p className="text-label-subtle type-body2">로딩 중...</p>
+                )}
+                {state.activeTab === "item" && !isLoading && isError && (
+                    <p className="text-label-subtle type-body2">아이템을 불러오지 못했어요. (테스트 시 시드 API 호출 후 accessToken을 user_1로 설정해 주세요.)</p>
+                )}
+                {state.activeTab === "item" && !isLoading &&
+                    itemCards.map((card) => (
                         <ItemCard
                             key={card.id}
                             {...card}
