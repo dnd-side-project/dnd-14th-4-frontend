@@ -51,9 +51,10 @@ export function useSearchState(query: string) {
 
   return {
     categorySlugs,
+    selectedLabels,
     filteredPacks,
     hasIntent,
     isEmpty,
-    recommendedPacks, 
+    recommendedPacks,
   };
 }
