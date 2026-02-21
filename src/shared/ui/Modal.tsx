@@ -39,7 +39,7 @@ export const Modal = ({
                 </h3>
 
                 {description && (
-                    <p className="text-[14px] text-neutral-500 mb-6 text-center">
+                    <p className="type-caption2 text-status-destructive mb-6 mt-2 text-center">
                         {description}
                     </p>
                 )}

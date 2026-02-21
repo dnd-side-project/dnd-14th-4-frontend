@@ -22,6 +22,7 @@ export interface PackCardData {
 interface PackCardProps extends Omit<PackCardData, "id"> {
   id: string
   onMoreClick?: () => void
+  showLikeBtn?: boolean
 }
 
 export function PackCard({
@@ -32,6 +33,7 @@ export function PackCard({
   author,
   liked = false,
   onMoreClick,
+  showLikeBtn = true,
 }: PackCardProps) {
   const [isLiked, setIsLiked] = useState(liked)
   const router = useRouter()
@@ -66,21 +68,23 @@ export function PackCard({
           </div>
 
           <div className="flex shrink-0 items-center gap-2">
-            <button
-              type="button"
-              aria-label={isLiked ? "Unlike" : "Like"}
-              className="text-neutral-300 transition-colors hover:text-red-400"
-              onClick={(e) => {
-                e.stopPropagation()
-                setIsLiked((prev) => !prev)
-              }}
-            >
-              {isLiked ? (
-                <IcSvgWish className="h-5 w-5 sm:h-6 sm:w-6 text-red-500" />
-              ) : (
-                <IcSvgWishBtn className="h-5 w-5 sm:h-6 sm:w-6" />
-              )}
-            </button>
+            {showLikeBtn && (
+              <button
+                type="button"
+                aria-label={isLiked ? "Unlike" : "Like"}
+                className="text-neutral-300 transition-colors hover:text-red-400"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  setIsLiked((prev) => !prev)
+                }}
+              >
+                {isLiked ? (
+                  <IcSvgWish className="h-5 w-5 sm:h-6 sm:w-6 text-red-500" />
+                ) : (
+                  <IcSvgWishBtn className="h-5 w-5 sm:h-6 sm:w-6" />
+                )}
+              </button>
+            )}
             <button
               type="button"
               aria-label="More options"

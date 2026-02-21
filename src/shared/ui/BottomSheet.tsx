@@ -27,8 +27,10 @@ export const BottomSheet = ({ isOpen, onClose, title, children }: BottomSheetPro
     };
 
     const sheetVariants: Variants = {
-        hidden: { y: "100%", transition: { type: "tween", duration: 0.3 } },
-        visible: { y: 0, transition: { type: "spring", damping: 25, stiffness: 300 } },
+        hidden: { y: "100%", transition: { type: "tween", duration: 0.2 } },
+        visible: {
+            y: 0, transition: { type: "tween", duration: 0.2 }
+        },
     };
 
     return (
@@ -67,7 +69,8 @@ export const BottomSheet = ({ isOpen, onClose, title, children }: BottomSheetPro
                         </div>
                     </motion.div>
                 </div>
-            )}
-        </AnimatePresence>
+            )
+            }
+        </AnimatePresence >
     );
 };

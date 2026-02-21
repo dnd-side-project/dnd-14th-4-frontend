@@ -52,7 +52,7 @@ export const MyPackPage = () => {
                     ))}
                 {state.activeTab === "pack" &&
                     MOCK_PACK_CARDS.map((card) => (
-                        <PackCard key={card.id} {...card} onMoreClick={() => actions.handleMoreClick(card.id)} />
+                        <PackCard key={card.id} {...card} onMoreClick={() => actions.handleMoreClick(card.id)} showLikeBtn={false} />
                     ))}
             </div>
 
@@ -77,7 +77,7 @@ export const MyPackPage = () => {
             <Modal
                 isOpen={state.isDeleteModalOpen}
                 onClose={() => actions.setIsDeleteModalOpen(false)}
-                title="아이템을 삭제할까요?"
+                title={state.activeTab === "item" ? "아이템을 삭제할까요?" : "팩을 삭제할까요?"}
                 confirmText="삭제하기"
                 onConfirm={actions.handleFinalDelete}
             />
@@ -86,7 +86,6 @@ export const MyPackPage = () => {
                 <div className="mb-6">
                     {state.selectedItem && <ItemBox item={MOCK_ITEMS[0]} />}
                 </div>
-                {/* mainbutton 수정 예정 */}
                 <div className="flex gap-3">
                     <button className="flex-1 h-[52px] rounded-[12px] bg-beige-100 text-gray-900 font-medium active:bg-beige-200">
                         팩 추가하기

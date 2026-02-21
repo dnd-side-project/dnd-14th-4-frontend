@@ -24,7 +24,6 @@ type Action =
     | { type: "COMPLETE_DELETE" }
     | { type: "SET_MODAL_STATE"; modal: "isMoreMenuOpen" | "isDeleteModalOpen" | "isItemDetailOpen"; isOpen: boolean };
 
-// 2. 초기 상태
 const initialState: State = {
     activeTab: "item",
     isSelectMode: false,
@@ -68,7 +67,6 @@ export const useMyPack = () => {
     const router = useRouter();
     const [state, dispatch] = useReducer(reducer, initialState);
 
-    // --- Handlers ---
     const handleTabChange = (tab: "item" | "pack") => dispatch({ type: "SET_TAB", payload: tab });
     const toggleSelectMode = () => dispatch({ type: "TOGGLE_SELECT_MODE" });
     const handleSelect = (id: string) => dispatch({ type: "TOGGLE_ITEM_SELECTION", payload: id });
@@ -83,8 +81,13 @@ export const useMyPack = () => {
 
     const handleEditRedirect = () => {
         dispatch({ type: "SET_MODAL_STATE", modal: "isMoreMenuOpen", isOpen: false });
+
         if (state.activeMoreId) {
-            router.push(`/items-edit/${state.activeMoreId}`);
+            if (state.activeTab === "item") {
+                router.push(`/items-edit/${state.activeMoreId}`);
+            } else if (state.activeTab === "pack") {
+                router.push(`/pack/${state.activeMoreId}?edit=true`);;
+            }
         }
     };
 
