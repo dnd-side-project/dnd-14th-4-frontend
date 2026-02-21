@@ -14,7 +14,7 @@ export default function WishListPage() {
   const nickname = "홍길동"; // TODO: 유저 닉네임 연결
 
   const [activeTab, setActiveTab] = React.useState<ActiveTab>("item");
-  const [isSelectMode,] = React.useState(false);
+  const isSelectMode = false;
   const [checkedIds, setCheckedIds] = React.useState<Set<string>>(new Set());
 
   const items: ItemCardData[] = React.useMemo(() => {
