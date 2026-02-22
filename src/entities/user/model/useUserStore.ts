@@ -24,7 +24,6 @@ export const useUserStore = create<UserState>((set) => ({
     try {
       const { data } = await apiClient.get<MypageResponse>("/api/v1/users/mypage");
 
-      console.log(data)
       set({
         user: {
           name: data.name,

@@ -35,6 +35,7 @@ export const useItemForm = (initialData?: Partial<Item>, isEdit = false) => {
             const newFileImages = images.filter((img): img is File => img instanceof File);
 
             await submitItem({
+                itemId: isEdit ? formData.id : undefined,
                 request: {
                     brandName: formData.brandName,
                     productName: formData.productName,
