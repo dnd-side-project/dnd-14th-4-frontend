@@ -7,6 +7,7 @@ export const BOTTOM_NAV_HIDE_RULES = [
   "/items-create",
   "/items-edit",
   "/pack/*",
+  "/splash",
   "/dev*",
 ];
 
