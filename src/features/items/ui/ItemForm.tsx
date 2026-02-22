@@ -7,7 +7,7 @@ import { ImageReviewSection } from './section/ImageReviewSection';
 import { UsagePeriodSection } from './section/UsagePeriodSection';
 import { PurchaseSection } from './section/PurchaseSection';
 import { FixedBottomButton } from '@/shared/ui/FixedBottomButton';
-import { useItemForm } from '@/features/items/model/useItemForm';
+import { useItemForm } from '@/entities/item/model/useItemForm';
 import { buildDisplayTags } from '@/shared/utils/ItemCard.utils';
 import { Item } from '@/entities/item/model/types';
 

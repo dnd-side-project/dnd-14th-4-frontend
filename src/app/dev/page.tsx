@@ -17,7 +17,6 @@ import TextBtn from "@/shared/ui/TextBtn";
 import IconButton from "@/shared/ui/IconBtn";
 import { BackHeader } from "@/shared/ui/BackHeader";
 import { PackCard } from "@/shared/ui/item/PackCard";
-import { ItemCard } from "@/shared/ui/item/ItemCard";
 import { MOCK_PACK_CARDS } from "@/features/search/model/mock";
 
 
@@ -46,11 +45,7 @@ export default function DevUiPageClient() {
             <PackCard key={card.id} {...card} />
           ))}
         </div>
-        <div className="space-y-4 max-w-[352px]">
-          {MOCK_PACK_CARDS.map((card) => (
-            <ItemCard key={card.id} {...card} />
-          ))}
-        </div>
+
 
         {/*-------------- BtnSelection--------------------- */}
         <section className="space-y-4">

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { apiClient } from "@/shared/api/apiClient";
-import type { ItemAddRequestDTO, ItemAddResponse, ItemAddErrorResponse } from "../model/types";
+import type { ItemAddRequestDTO, ItemAddResponse, ItemAddErrorResponse } from "../../../features/items/model/types";
 import { AxiosError } from "axios";
 
 export interface ItemSubmitParams {

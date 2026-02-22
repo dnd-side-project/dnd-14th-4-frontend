@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useItemSubmit } from '@/features/items/model/useItemSubmit';
+import { useItemSubmit } from '@/entities/item/model/useItemSubmit';
 import { appToast } from '@/shared/utils/toast';
 import { Item } from '@/entities/item/model/types';
 import { PERIOD_TO_SERVER, SATISFACTION_TO_SERVER } from '@/shared/utils/ItemCard.utils';
