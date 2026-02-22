@@ -1,31 +1,48 @@
 'use client';
 
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { usePathname } from 'next/navigation';
+import { motion, AnimatePresence, Variants } from 'framer-motion';
+import { usePathname, useRouter } from 'next/navigation';
 import IconButton from '@/shared/ui/IconBtn';
 import { FAB_HIDE_RULES } from '@/shared/constants/nav.constants';
 
 const menuVariants = {
     open: {
         opacity: 1,
-        transition: { staggerChildren: 0.1, delayChildren: 0.1 }
+        transition: {
+            staggerChildren: 0.1,
+            delayChildren: 0.1,
+            staggerDirection: -1
+        }
     },
     closed: {
         opacity: 0,
-        transition: { staggerChildren: 0.1, staggerDirection: -1 }
+        transition: {
+            staggerChildren: 0.05,
+            staggerDirection: 1
+        }
     }
 };
 
-const itemVariants = {
-    open: { opacity: 1, y: 0, scale: 1 },
-    closed: { opacity: 0, y: 20, scale: 0.8 }
+const itemVariants: Variants = {
+    open: {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        transition: { type: "spring", stiffness: 300, damping: 20 }
+    },
+    closed: {
+        opacity: 0,
+        y: 50,
+        scale: 0.5
+    }
 };
 
 export default function FabMenu() {
     const pathname = usePathname();
-    const [isOpen, setIsOpen] = useState(false);
+    const router = useRouter();
 
+    const [isOpen, setIsOpen] = useState(false);
     const [prevPathname, setPrevPathname] = useState(pathname);
 
     if (pathname !== prevPathname) {
@@ -61,14 +78,14 @@ export default function FabMenu() {
                         <motion.div variants={itemVariants}>
                             <IconButton
                                 variant="pack"
-                                onClick={() => console.log('Pack 클릭됨')}
+                                onClick={() => router.push('/pack-create')}
                             />
                         </motion.div>
 
                         <motion.div variants={itemVariants}>
                             <IconButton
                                 variant="item"
-                                onClick={() => console.log('Item 클릭됨')}
+                                onClick={() => router.push('/item-create')}
                             />
                         </motion.div>
                     </motion.div>

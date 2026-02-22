@@ -11,6 +11,7 @@ import { FixedBottomButton } from '@/shared/ui/FixedBottomButton';
 import { Modal } from '@/shared/ui/Modal';
 import { ItemAddButton } from '@/shared/ui/ItemAddButton';
 import { PackCardData } from '@/shared/ui/item/PackCard';
+import { ProfileModal } from '@/views/pack-detail/ui/components/profileModal';
 
 type PageMode = 'view' | 'edit' | 'add';
 
@@ -28,6 +29,8 @@ function PackDetailInner({ packData, onAddItem }: PackDetailContentProps) {
     const [pageMode, setPageMode] = useState<PageMode>(initialMode);
     const [descriptionValue, setDescriptionValue] = useState(packData.description || "");
     const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
+
+    const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
 
     const { title, author, tag, date } = packData;
 
@@ -62,7 +65,10 @@ function PackDetailInner({ packData, onAddItem }: PackDetailContentProps) {
                 <Tag2Btn status>{tag}</Tag2Btn>
 
                 <div className='flex mt-6 items-center gap-2 mb-6'>
-                    <div className="w-12 h-12 bg-common-100 rounded-full" />
+                    <div
+                        className="w-12 h-12 bg-common-100 rounded-full cursor-pointer hover:opacity-80 transition-opacity"
+                        onClick={() => setIsProfileModalOpen(true)}
+                    />
                     <div className='flex flex-col gap-0.5'>
                         <p className='type-label1'>{author}</p>
                         <p className='type-caption1 text-gray-300'>{date}</p>
@@ -105,6 +111,12 @@ function PackDetailInner({ packData, onAddItem }: PackDetailContentProps) {
                 description={pageMode === 'add' ? "지금 나가면 작성 중인 팩이 저장되지 않아요." : "변경된 내용은 저장되지 않아요."}
                 confirmText="확인"
                 onConfirm={handleConfirmCancel}
+            />
+
+            <ProfileModal
+                isOpen={isProfileModalOpen}
+                onClose={() => setIsProfileModalOpen(false)}
+                authorName={author}
             />
         </>
     );
