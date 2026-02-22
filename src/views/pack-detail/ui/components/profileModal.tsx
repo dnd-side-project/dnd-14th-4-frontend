@@ -25,19 +25,28 @@ export function ProfileModal({ isOpen, onClose, authorName }: ProfileModalProps)
 
                     <motion.div
                         className="relative w-full max-w-sm bg-white rounded-2xl px-4 pb-12 flex flex-col items-center justify-center gap-4 h-[323px]"
+                        role='dialog'
+                        aria-modal='true'
+                        aria-labelledby='profile-model-title'
                         initial={{ opacity: 0, scale: 0.95, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95, y: 20 }}
                         transition={{ type: 'spring', damping: 25, stiffness: 300 }}
                     >
                         <div className='flex justify-end w-full'>
-                            <IcSvgCloseBig onClick={onClose} width={24} height={24} />
+                            <button
+                                type="button"
+                                aria-label="닫기"
+                                onClick={onClose}
+                            >
+                                <IcSvgCloseBig width={24} height={24} />
+                            </button>
                         </div>
 
                         <div className="w-[115px] h-[115px] bg-common-100 rounded-full" />
 
                         <div className="text-center">
-                            <h2 className="type-heading2 text-label-default">{authorName}</h2>
+                            <h2 id='profile-model-title' className="type-heading2 text-label-default">{authorName}</h2>
                         </div>
 
 
@@ -46,8 +55,9 @@ export function ProfileModal({ isOpen, onClose, authorName }: ProfileModalProps)
                             <Tag2Btn status>면접/취준</Tag2Btn>
                         </div>
                     </motion.div>
-                </div>
-            )}
-        </AnimatePresence>
+                </div >
+            )
+            }
+        </AnimatePresence >
     );
 }

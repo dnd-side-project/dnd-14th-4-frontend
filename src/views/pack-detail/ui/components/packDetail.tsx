@@ -24,7 +24,9 @@ function PackDetailInner({ packData, onAddItem }: PackDetailContentProps) {
     const router = useRouter();
     const searchParams = useSearchParams();
 
-    const initialMode = (searchParams?.get('mode') as PageMode) || 'view';
+    const rawMode = searchParams.get('mode');
+    const initialMode: PageMode =
+        rawMode === 'edit' || rawMode === 'add' ? rawMode : 'view';
 
     const [pageMode, setPageMode] = useState<PageMode>(initialMode);
     const [descriptionValue, setDescriptionValue] = useState(packData.description || "");
