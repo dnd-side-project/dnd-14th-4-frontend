@@ -12,6 +12,8 @@ interface State {
     isItemDetailOpen: boolean;
     selectedItem: ItemData | null;
     activeMoreId: string | null;
+    isFilterOpen: boolean;
+    selectedFilter: string[];
 }
 
 type Action =
@@ -22,7 +24,9 @@ type Action =
     | { type: "OPEN_MORE_MENU"; payload: string }
     | { type: "OPEN_DELETE_MODAL" }
     | { type: "COMPLETE_DELETE" }
-    | { type: "SET_MODAL_STATE"; modal: "isMoreMenuOpen" | "isDeleteModalOpen" | "isItemDetailOpen"; isOpen: boolean };
+    | { type: "SET_MODAL_STATE"; modal: "isMoreMenuOpen" | "isDeleteModalOpen" | "isItemDetailOpen"; isOpen: boolean }
+    | { type: "TOGGLE_FILTER" }
+    | { type: "SET_FILTER"; payload: string | null };
 
 const initialState: State = {
     activeTab: "item",
@@ -33,6 +37,8 @@ const initialState: State = {
     isItemDetailOpen: false,
     selectedItem: null,
     activeMoreId: null,
+    isFilterOpen: false,
+    selectedFilter: [],
 };
 
 const reducer = (state: State, action: Action): State => {
@@ -58,6 +64,16 @@ const reducer = (state: State, action: Action): State => {
             return { ...state, isDeleteModalOpen: false, activeMoreId: null };
         case "SET_MODAL_STATE":
             return { ...state, [action.modal]: action.isOpen };
+
+        case "TOGGLE_FILTER":
+            return { ...state, isFilterOpen: !state.isFilterOpen };
+        case "SET_FILTER":
+            return {
+                ...state,
+                selectedFilter: state.selectedFilter.includes(action.payload as string)
+                    ? state.selectedFilter.filter((f) => f !== action.payload)
+                    : [...state.selectedFilter, action.payload as string]
+            };
         default:
             return state;
     }
@@ -73,6 +89,9 @@ export const useMyPack = () => {
     const handleDetailClick = (item: ItemData) => dispatch({ type: "OPEN_ITEM_DETAIL", payload: item });
     const handleMoreClick = (id: string) => dispatch({ type: "OPEN_MORE_MENU", payload: id });
     const onClickDeleteMenu = () => dispatch({ type: "OPEN_DELETE_MODAL" });
+
+    const toggleFilter = () => dispatch({ type: "TOGGLE_FILTER" });
+    const handleFilterSelect = (filter: string) => dispatch({ type: "SET_FILTER", payload: filter });
 
     const handleFinalDelete = () => {
         dispatch({ type: "COMPLETE_DELETE" });
@@ -105,7 +124,8 @@ export const useMyPack = () => {
         actions: {
             handleTabChange, toggleSelectMode, handleSelect, handleDetailClick,
             handleMoreClick, onClickDeleteMenu, handleFinalDelete, handleEditRedirect, handleCreatePack,
-            setIsMoreMenuOpen, setIsDeleteModalOpen, setIsItemDetailOpen
+            setIsMoreMenuOpen, setIsDeleteModalOpen, setIsItemDetailOpen,
+            toggleFilter, handleFilterSelect
         }
     };
 };

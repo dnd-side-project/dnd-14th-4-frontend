@@ -10,6 +10,8 @@ import { FixedBottomButton } from "@/shared/ui/FixedBottomButton";
 import { ItemBox } from "@/shared/ui/item/ItemBox";
 import { MOCK_ITEMS, MOCK_PACK_CARDS } from "@/features/search/model/mock";
 import { useMyPack } from "@/views/my-pack/model/useMyPack";
+import Tag1Btn from "@/shared/ui/Tag1Btn";
+import { MOMENT_OPTIONS } from "@/views/onboarding/model/constants";
 
 interface MyPackProps {
     onGoToItemAdd: () => void;
@@ -20,9 +22,12 @@ export const MyPack = ({ onGoToItemAdd }: MyPackProps) => {
 
     return (
         <div className="px-6 pb-24">
-            <header className="flex items-center justify-between mt-16 mb-10">
-                <div className="w-12 h-12 bg-common-100 rounded-full" />
-                <div role="tablist" className="flex gap-7 w-37">
+            <header className={`flex items-center justify-between mt-16 ${state.isFilterOpen ? 'mb-5' : 'mb-10'}`}>
+                <div className="flex-1 flex justify-start">
+                    <div className="w-12 h-12 bg-common-100 rounded-full" />
+                </div>
+
+                <div role="tablist" className="flex gap-7 w-37 items-center justify-center">
                     <TabItem isActive={state.activeTab === "item"} onClick={() => actions.handleTabChange("item")}>
                         아이템
                     </TabItem>
@@ -30,16 +35,40 @@ export const MyPack = ({ onGoToItemAdd }: MyPackProps) => {
                         팩
                     </TabItem>
                 </div>
-                <div className="flex items-center gap-3">
-                    <IcSvgFilter width={24} height={24} className="text-label-subtle" />
-                    <button
-                        onClick={actions.toggleSelectMode}
-                        className={`type-label1 transition-colors ${state.isSelectMode ? "text-primary-normal font-bold" : "text-label-subtle"}`}
-                    >
-                        {state.isSelectMode ? "취소" : "선택"}
+
+                <div className="flex-1 flex items-center justify-end gap-3">
+                    <button onClick={actions.toggleFilter}>
+                        <IcSvgFilter
+                            width={24} height={24}
+                            className={state.isFilterOpen ? "text-primary-normal" : "text-label-subtle"}
+                        />
                     </button>
+                    {state.activeTab === "item" && (
+                        <button
+                            onClick={actions.toggleSelectMode}
+                            className={`type-label1 transition-colors ${state.isSelectMode ? "text-primary-normal font-bold" : "text-label-subtle"}`}
+                        >
+                            {state.isSelectMode ? "취소" : "선택"}
+                        </button>
+                    )}
                 </div>
             </header>
+            {state.isFilterOpen && (
+                <div className="flex gap-1 overflow-x-auto mb-5 ">
+                    {MOMENT_OPTIONS.map((moment) => (
+                        <Tag1Btn
+                            key={moment}
+                            mode="btn"
+                            variant={state.selectedFilter.includes(moment) ? "primary" : "unpressed"}
+                            onClick={() => actions.handleFilterSelect(moment)}
+                        >
+                            {moment}
+                        </Tag1Btn>
+                    ))}
+                </div>
+            )}
+
+
 
             <div className="flex flex-col gap-3">
                 {state.activeTab === "item" &&
