@@ -3,11 +3,12 @@ export interface Item {
     brandName: string;
     productName: string;
     satisfaction: string;
-    review: string;
-    reviewImagePaths: string[];
-    usePeriod: string;
-    purchaseLocation: string;
+    review?: string;
+    reviewImagePaths?: string[];
+    usePeriod?: string;
+    purchaseLocation?: string;
     liked?: boolean;
+    tags?: string[];
 }
 
 export interface GetItemsErrorResponse {

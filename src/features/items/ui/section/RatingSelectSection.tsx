@@ -17,8 +17,8 @@ export function RatingSelectSection({ selected, onSelect }: RatingProps) {
             {options.map((opt) => (
                 <BtnSelection
                     key={opt.id}
-                    selected={selected === opt.id}
-                    onClick={() => onSelect(opt.id)}
+                    selected={selected === opt.label}
+                    onClick={() => onSelect(opt.label)}
                 >
                     {opt.label}
                 </BtnSelection>

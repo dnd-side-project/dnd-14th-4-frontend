@@ -55,6 +55,7 @@ export function ItemCard({
   const [isLiked, setIsLiked] = useState(liked)
   const displayTags = buildDisplayTags(satisfaction, usePeriod);
 
+
   const handleCardClick = () => {
     if (isSelectMode) {
       onSelect?.(String(id))
