@@ -1,4 +1,4 @@
-import { WishlistPage } from "@/views/wishlist/ui/WishlistPage";
+import WishlistPage from "@/views/wishlist/ui/WishlistPage";
 
 export default function Page() {
     return <WishlistPage />;

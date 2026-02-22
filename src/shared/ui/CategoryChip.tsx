@@ -18,9 +18,9 @@ export function CategoryChip({ label, onRemove }: CategoryChipProps) {
           type="button"
           aria-label={`${label} 제거`}
           onClick={onRemove}
-          className="grid place-items-center rounded-full p-0.5 text-white transition-colors hover:bg-neutral-700"
+          className="grid place-items-center rounded-full p-0.5 text-white transition-colors "
         >
-          <IcSvgCloseSmall className="h-4 w-4 [&_path]:fill-white" />
+          <IcSvgCloseSmall className="h-6 w-6 [&_path]:fill-white" />
         </button>
       }
     >
