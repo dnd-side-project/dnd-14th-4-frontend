@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { IcSvgMore, IcSvgWish, IcSvgWishBtn } from "@/shared/icons"
+import { IcSvgMore, IcSvgWish, IcSvgWishBtn, IcSvgCheckCircle } from "@/shared/icons"
 import { Tag2Btn } from "@/shared/ui/Tag2Btn"
 import { PackFolderBg } from "./packfolder-bg"
 import { useRouter } from "next/navigation"
@@ -18,11 +18,14 @@ export interface PackCardData {
   date?: string
 }
 
-
 interface PackCardProps extends Omit<PackCardData, "id"> {
   id: string
   onMoreClick?: () => void
   showLikeBtn?: boolean
+  // 선택 모드 관련 프롭 추가
+  isSelectMode?: boolean
+  isChecked?: boolean
+  onSelect?: (id: string) => void
 }
 
 export function PackCard({
@@ -34,12 +37,19 @@ export function PackCard({
   liked = false,
   onMoreClick,
   showLikeBtn = true,
+  isSelectMode = false,
+  isChecked = false,
+  onSelect,
 }: PackCardProps) {
   const [isLiked, setIsLiked] = useState(liked)
   const router = useRouter()
 
   const handleCardClick = () => {
-    router.push(`/pack/${id}`)
+    if (isSelectMode) {
+      onSelect?.(id)
+    } else {
+      router.push(`/pack/${id}`)
+    }
   }
 
   return (
@@ -85,17 +95,34 @@ export function PackCard({
                 )}
               </button>
             )}
-            <button
-              type="button"
-              aria-label="More options"
-              className="rounded-full p-0.5 text-neutral-400 transition-colors hover:bg-black/5"
-              onClick={(e) => {
-                e.stopPropagation()
-                onMoreClick?.()
-              }}
-            >
-              <IcSvgMore className="h-5 w-5 sm:h-6 sm:w-6" />
-            </button>
+
+            {isSelectMode ? (
+              <button
+                type="button"
+                aria-label="Select pack"
+                className="rounded-full p-0.5 transition-colors hover:bg-black/5"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  onSelect?.(id)
+                }}
+              >
+                <IcSvgCheckCircle
+                  className={`h-7 w-7 ${isChecked ? "text-primary-normal" : "text-neutral-200"}`}
+                />
+              </button>
+            ) : (
+              <button
+                type="button"
+                aria-label="More options"
+                className="rounded-full p-0.5 text-neutral-400 transition-colors hover:bg-black/5"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  onMoreClick?.()
+                }}
+              >
+                <IcSvgMore className="h-5 w-5 sm:h-6 sm:w-6" />
+              </button>
+            )}
           </div>
         </div>
       </div>

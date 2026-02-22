@@ -86,7 +86,7 @@ export const useMyPack = () => {
             if (state.activeTab === "item") {
                 router.push(`/items-edit/${state.activeMoreId}`);
             } else if (state.activeTab === "pack") {
-                router.push(`/pack/${state.activeMoreId}?edit=true`);;
+                router.push(`/pack/${state.activeMoreId}?mode=edit`);;
             }
         }
     };
