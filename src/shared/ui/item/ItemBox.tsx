@@ -1,80 +1,68 @@
 "use client"
 
-import { useState } from "react"
 import { IcSvgWishBtn } from "@/shared/icons"
 import Tag1Btn from "@/shared/ui/Tag1Btn"
 import Image from "next/image"
-import ItemTagChip from "../ItemTagChip"
+import { Item } from "@/entities/item/model/types"
+import { buildDisplayTags } from "@/shared/utils/ItemCard.utils"
 
-export interface ItemData {
-    id: number;
-    title: string;
-    brand: string;
-    category: string;
-    purchaseAt: string;
-    images: string[];
-    isWished: boolean;
-    mainTags: {
-        satisfaction: string;
-        period: string;
-    };
-    subTags: string[];
+interface ItemBoxProps {
+    item: Item;
+    showWishBtn?: boolean;
+    isWished?: boolean;
+    onWishClick?: () => void;
 }
 
-export function ItemBox({ item }: { item: ItemData }) {
-    const [isWished, setIsWished] = useState(item.isWished);
+export function ItemBox({
+    item,
+    showWishBtn = false,
+    isWished = false,
+    onWishClick
+}: ItemBoxProps) {
+
+    const displayTags = buildDisplayTags(item.satisfaction, item.usePeriod);
+    const satisfactionTag = displayTags.find(t => t.variant === "black")?.label;
+    const periodTag = displayTags.find(t => t.variant === "beige60")?.label;
+
     return (
         <div className="w-full p-4 shadow-emphasize rounded-[20px] bg-white">
             <div className="flex justify-between items-start">
                 <div className="flex flex-wrap gap-1 items-center">
-                    <h2 className="type-heading2 text-label-default">{item.title}</h2>
-                    <Tag1Btn mode="chip" variant="pressed">
-                        {item.category}
-                    </Tag1Btn>
+                    <h2 className="type-heading2 text-label-default">{item.productName}</h2>
                 </div>
-                <button
-                    type="button"
-                    onClick={() => setIsWished(!isWished)}
-                    className="p-1"
-                >
-                    <IcSvgWishBtn
-                        className="w-7 h-7"
-                        fillColor={isWished ? "var(--color-primary-subtler)" : "var(--alpha-5)"}
-                        strokeColor={isWished ? "var(--color-primary-subtle)" : "var(--alpha-22)"}
-                    />
-                </button>
+
+                {showWishBtn && (
+                    <button
+                        type="button"
+                        onClick={onWishClick}
+                        className="p-1"
+                    >
+                        <IcSvgWishBtn
+                            className="w-7 h-7"
+                            fillColor={isWished ? "var(--color-primary-subtler)" : "var(--alpha-5)"}
+                            strokeColor={isWished ? "var(--color-primary-subtle)" : "var(--alpha-22)"}
+                        />
+                    </button>
+                )}
             </div>
 
-            <p className="type-body1 text-label-subtle mt-1">{item.brand}</p>
+            <p className="type-body1 text-label-subtle mt-1">{item.brandName}</p>
 
             <div className="w-full overflow-x-auto mt-4 no-scrollbar">
                 <div className="flex gap-[10px] w-max">
-                    {item.images.map((src, idx) => (
-                        <div
-                            key={`${src}-${idx}`}
-                            className="w-[100px] h-[100px] flex-shrink-0 overflow-hidden rounded-[8px] bg-neutral-95 relative"
-                        >
-                            <Image
-                                src={src}
-                                alt={`${item.title} 이미지 ${idx + 1}`}
-                                fill
-                                className="object-cover"
-                            />
+                    {item.reviewImagePaths?.map((src, idx) => (
+                        <div key={`${src}-${idx}`} className="w-[100px] h-[100px] flex-shrink-0 overflow-hidden rounded-[8px] bg-neutral-95 relative">
+                            <Image src={src} alt={`${item.productName} 이미지 ${idx + 1}`} fill className="object-cover" />
                         </div>
                     ))}
                 </div>
             </div>
 
             <div className="flex items-center gap-2 mt-4">
-                <Tag1Btn variant="primary" mode="chip">{item.mainTags.satisfaction}</Tag1Btn>
-                <Tag1Btn variant="secondary" mode="chip">{item.mainTags.period}</Tag1Btn>
-                <p className="type-caption2 text-label-subtle">구매처 : {item.purchaseAt}</p>
-            </div>
+                {satisfactionTag && <Tag1Btn variant="primary" mode="chip">{satisfactionTag}</Tag1Btn>}
+                {periodTag && <Tag1Btn variant="secondary" mode="chip">{periodTag}</Tag1Btn>}
 
-            <div className="flex gap-2 flex-wrap mt-3">
-                {item.subTags.map((tag) => (
-                    <ItemTagChip key={tag}>{tag}</ItemTagChip>
-                ))}
+                <p className="type-caption2 text-label-subtle">구매처 : {item.purchaseLocation}</p>
             </div>
         </div>
     )

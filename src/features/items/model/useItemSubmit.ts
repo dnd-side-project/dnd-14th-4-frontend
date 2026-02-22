@@ -29,7 +29,8 @@ export const useItemSubmit = () => {
 
             formData.append(
                 "request",
-                new Blob([JSON.stringify(request)], { type: "application/json" })
+                new Blob([JSON.stringify(request)], { type: "application/json" }),
+                "request.json"
             );
 
             if (reviewImages && reviewImages.length > 0) {

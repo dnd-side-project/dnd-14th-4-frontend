@@ -9,11 +9,6 @@ export interface ItemAddRequestDTO {
     reviewImage?: File[];
 }
 
-export interface ItemAddParams {
-    request: ItemAddRequestDTO;
-    reviewImages?: File[];
-}
-
 export interface ItemAddResponse {
     id: number;
     brandName: string;

@@ -18,6 +18,7 @@ const PROFILE_COLOR_CLASS: Record<string, string> = {
 };
 
 export const MyPage = () => {
+
     const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
     const router = useRouter();
     const { user, isLoaded } = useUserStore();

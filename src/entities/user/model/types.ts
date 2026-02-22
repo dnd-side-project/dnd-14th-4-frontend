@@ -1,11 +1,13 @@
 export interface MypageResponse {
   /** 프로필 이미지 URL 또는 기본 색상: yellow | red | blue | green | purple */
+  name: string;
   profileImageUrl: string;
   contextCategoryNames: string[];
 }
 
 /** 앱에서 사용하는 유저(프로필) 타입 */
 export interface User {
+  name: string;
   profileImageUrl: string;
   contextCategoryNames: string[];
 }

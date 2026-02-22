@@ -41,14 +41,14 @@ export const useItemForm = (initialData?: Partial<ItemAddRequestDTO>, isEdit = f
             const satisfactionMap: Record<string, string> = {
                 "1": "GOOD",
                 "2": "VERY_GOOD",
-                "3": "BEST",
+                "3": "MUST_HAVE",
             };
 
             const usePeriodMap: Record<string, string> = {
                 "1": "BELOW_ONE_YEAR",
-                "2": "OVER_ONE_YEAR",
-                "3": "OVER_THREE_YEAR",
-                "4": "OVER_FIVE_YEAR",
+                "2": "ABOVE_ONE_YEAR",
+                "3": "ABOVE_THREE_YEAR",
+                "4": "ABOVE_FIVE_YEAR",
             };
 
             await submitItem({

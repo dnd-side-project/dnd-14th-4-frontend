@@ -7,6 +7,7 @@ export interface Item {
     reviewImagePaths: string[];
     usePeriod: string;
     purchaseLocation: string;
+    liked?: boolean;
 }
 
 export interface GetItemsErrorResponse {

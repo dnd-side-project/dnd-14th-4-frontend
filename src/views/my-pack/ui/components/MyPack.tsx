@@ -3,15 +3,16 @@
 import { IcSvgFilter } from "@/shared/icons";
 import TabItem from "@/shared/ui/TabItem";
 import { PackCard } from "@/shared/ui/item/PackCard";
-import { ItemCard, MOCK_ITEM_CARDS } from "@/shared/ui/item/ItemCard";
+import { ItemCard } from "@/shared/ui/item/ItemCard";
 import { BottomSheet } from "@/shared/ui/BottomSheet";
 import { Modal } from "@/shared/ui/Modal";
 import { FixedBottomButton } from "@/shared/ui/FixedBottomButton";
 import { ItemBox } from "@/shared/ui/item/ItemBox";
-import { MOCK_ITEMS, MOCK_PACK_CARDS } from "@/features/search/model/mock";
+import { MOCK_PACK_CARDS } from "@/features/search/model/mock";
 import { useMyPack } from "@/views/my-pack/model/useMyPack";
 import Tag1Btn from "@/shared/ui/Tag1Btn";
 import { MOMENT_OPTIONS } from "@/views/onboarding/model/constants";
+import { useGetItems } from "@/entities/item/model/useGetItems";
 
 interface MyPackProps {
     onGoToItemAdd: () => void;
@@ -20,6 +21,7 @@ interface MyPackProps {
 export const MyPack = ({ onGoToItemAdd }: MyPackProps) => {
     const { state, actions } = useMyPack();
 
+    const { data } = useGetItems();
     return (
         <div className="px-6 pb-24">
             <header className={`flex items-center justify-between mt-16 ${state.isFilterOpen ? 'mb-5' : 'mb-10'}`}>
@@ -72,15 +74,15 @@ export const MyPack = ({ onGoToItemAdd }: MyPackProps) => {
 
             <div className="flex flex-col gap-3">
                 {state.activeTab === "item" &&
-                    MOCK_ITEM_CARDS.map((card) => (
+                    data?.map((card) => (
                         <ItemCard
                             key={card.id}
                             {...card}
                             isSelectMode={state.isSelectMode}
-                            isChecked={state.selectedIds.includes(card.id)}
-                            onSelect={actions.handleSelect}
-                            onDetailClick={() => actions.handleDetailClick(MOCK_ITEMS[0])}
-                            onMoreClick={() => actions.handleMoreClick(card.id)}
+                            isChecked={state.selectedIds.includes(String(card.id))}
+                            onSelect={(id) => actions.handleSelect(String(id))}
+                            onDetailClick={() => actions.handleDetailClick(card)}
+                            onMoreClick={() => actions.handleMoreClick(String(card.id))}
                         />
                     ))}
                 {state.activeTab === "pack" &&
@@ -116,7 +118,7 @@ export const MyPack = ({ onGoToItemAdd }: MyPackProps) => {
 
             <BottomSheet isOpen={state.isItemDetailOpen} onClose={() => actions.setIsItemDetailOpen(false)}>
                 <div className="mb-6">
-                    {state.selectedItem && <ItemBox item={MOCK_ITEMS[0]} />}
+                    {state.selectedItem && <ItemBox item={state.selectedItem} />}
                 </div>
                 <div className="flex gap-3">
                     <button
