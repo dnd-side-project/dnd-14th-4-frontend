@@ -22,7 +22,7 @@ export default function Tag1Btn({
   ...props
 }: Tag1BtnProps) {
   const baseStyle =
-    "inline-flex items-center justify-center type-label1 rounded-full transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed";
+    "shrink-0 inline-flex items-center justify-center type-label1 rounded-full transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed";
 
   const paddingStyle = mode === "btn" ? "px-5 py-[7px]" : "px-4";
 

@@ -61,7 +61,7 @@ export const ItemForm = ({ initialData, isEdit = false }: ItemFormProps) => {
     };
 
     return (
-        <div className="flex flex-col gap-12">
+        <div className="flex flex-col gap-12 pb-20">
             <ItemDetailSection values={itemDetail} onChange={handleDetailChange} />
 
             {(isEdit || isDetailFilled) && (

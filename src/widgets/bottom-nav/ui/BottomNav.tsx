@@ -4,6 +4,7 @@ import { BOTTOM_NAV_HIDE_RULES } from "@/shared/constants/nav.constants";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { IcSvgHome, IcSvgFolder, IcSvgWish, IcSvgMypage } from "@/shared/icons";
+import FabMenu from "@/shared/ui/FabMenu";
 
 export const BottomNav = () => {
   const pathname = usePathname();
@@ -30,19 +31,27 @@ export const BottomNav = () => {
     "flex items-center justify-center p-3 transition-colors duration-200";
 
   return (
-    <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-mobile bg-white border-t border-gray-100 h-[84px] flex justify-between px-5 z-30 pt-2 pb-[46px]">
-      {navItems.map(({ href, label, icon: Icon }) => {
-        const isActive = pathname === href;
+    <>
+      <div className="fixed bottom-[100px] left-1/2 -translate-x-1/2 w-full max-w-mobile z-40 pointer-events-none">
+        <div className="absolute right-4 bottom-0 pointer-events-auto">
+          <FabMenu />
+        </div>
+      </div>
 
-        return (
-          <Link key={href} href={href} aria-label={label} className={linkBase}>
-            <Icon
-              className={`w-[30px] h-[30px] shrink-0 transition-colors ${isActive ? "text-neutral-10" : "text-neutral-70"
-                }`}
-            />
-          </Link>
-        );
-      })}
-    </nav>
+      <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-mobile bg-white border-t border-gray-100 h-[84px] flex justify-between px-5 z-30 pt-2 pb-[46px]">
+        {navItems.map(({ href, label, icon: Icon }) => {
+          const isActive = pathname === href;
+
+          return (
+            <Link key={href} href={href} aria-label={label} className={linkBase}>
+              <Icon
+                className={`w-[30px] h-[30px] shrink-0 transition-colors ${isActive ? "text-neutral-10" : "text-neutral-70"
+                  }`}
+              />
+            </Link>
+          );
+        })}
+      </nav>
+    </>
   );
 };

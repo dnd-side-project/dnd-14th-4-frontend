@@ -3,8 +3,12 @@
 import { useState } from 'react';
 import { ReasonStep } from '../components/ReasonStep';
 import { ConfirmStep } from '../components/ConfirmStep'; // 다음 단계 컴포넌트가 있다면
+import { BackHeader } from '@/shared/ui/BackHeader';
+import { useRouter } from 'next/navigation';
+import { FixedBottomButton } from '@/shared/ui/FixedBottomButton';
 
 export const WithdrawalPage = () => {
+    const router = useRouter();
     const [step, setStep] = useState(1);
 
     const [selectedReasons, setSelectedReasons] = useState<string[]>([]);
@@ -26,32 +30,32 @@ export const WithdrawalPage = () => {
     };
 
     return (
-        <div className="max-w-md mx-auto min-h-screen bg-white p-5 flex flex-col">
-            <main className="flex-1">
-                {step === 1 ? (
-                    <ReasonStep
-                        selectedReasons={selectedReasons}
-                        onToggle={toggleReason}
-                        feedback={feedback}
-                        onFeedbackChange={setFeedback}
-                    />
-                ) : (
-                    <ConfirmStep
-                        isAgreed={isAgreed}
-                        onAgreeToggle={() => setIsAgreed(!isAgreed)}
-                    />
-                )}
-            </main>
+        <div className='min-h-screen'>
+            <BackHeader onBack={() => router.back()}></BackHeader>
+            <div className="max-w-md mx-auto bg-white p-5 flex flex-col">
+                <main className="flex-1">
+                    {step === 1 ? (
+                        <ReasonStep
+                            selectedReasons={selectedReasons}
+                            onToggle={toggleReason}
+                            feedback={feedback}
+                            onFeedbackChange={setFeedback}
+                        />
+                    ) : (
+                        <ConfirmStep
+                            isAgreed={isAgreed}
+                            onAgreeToggle={() => setIsAgreed(!isAgreed)}
+                        />
+                    )}
+                </main>
 
-            <footer className="mt-6 pb-4">
-                <button
+                <FixedBottomButton
                     onClick={handleNext}
                     disabled={(step === 1 && selectedReasons.length === 0) || (step === 2 && !isAgreed)}
-                    className="w-full py-4 rounded-xl bg-neutral-900 text-white font-medium disabled:bg-neutral-200 disabled:text-neutral-400 transition-colors"
                 >
                     {step === 1 ? "다음" : "탈퇴하기"}
-                </button>
-            </footer>
+                </FixedBottomButton>
+            </div>
         </div>
     );
 };
