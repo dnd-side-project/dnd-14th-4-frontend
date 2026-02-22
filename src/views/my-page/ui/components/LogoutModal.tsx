@@ -1,6 +1,8 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { Modal } from "@/shared/ui/Modal";
+import { useUserStore } from "@/entities/user/model";
 
 interface LogoutModalProps {
     isOpen: boolean;
@@ -8,13 +10,13 @@ interface LogoutModalProps {
 }
 
 export const LogoutModal = ({ isOpen, onClose }: LogoutModalProps) => {
-    const handleLogout = async () => {
-        try {
-            console.log("서버에 로그아웃 요청 진행!");
-            onClose();
-        } catch (error) {
-            console.error("로그아웃 실패:", error);
-        }
+    const router = useRouter();
+    const logout = useUserStore((s) => s.logout);
+
+    const handleLogout = () => {
+        logout();
+        onClose();
+        router.replace("/login");
     };
 
     return (

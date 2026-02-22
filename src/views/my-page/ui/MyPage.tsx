@@ -1,32 +1,65 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { Tag2Btn } from '@/shared/ui/Tag2Btn';
 import { MenuCard } from './components/MenuCard';
 import { IcSvgInstagram, IcSvgKakaoTalk } from '@/shared/icons';
 import Link from 'next/link';
 import { LogoutModal } from './components/LogoutModal';
+import { useUserStore, isProfileDefaultColor } from '@/entities/user/model';
+
+const PROFILE_COLOR_CLASS: Record<string, string> = {
+    yellow: 'bg-amber-400',
+    red: 'bg-red-500',
+    blue: 'bg-blue-500',
+    green: 'bg-green-500',
+    purple: 'bg-purple-500',
+};
 
 export const MyPage = () => {
     const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+    const router = useRouter();
+    const { user, isLoaded } = useUserStore();
+
+    useEffect(() => {
+        if (isLoaded && !user) {
+            router.replace('/login');
+        }
+    }, [isLoaded, user, router]);
+
+    if (!isLoaded) {
+        return (
+            <div className="flex min-h-[50vh] items-center justify-center">
+                <div className="h-8 w-8 animate-spin rounded-full border-2 border-blue-600 border-t-transparent" />
+            </div>
+        );
+    }
+
+    if (!user) {
+        return null;
+    }
 
     return (
         <div className="max-w-md mx-auto min-h-screen bg-white p-5 relative pb-40">
             <header className="flex flex-col gap-2 items-center mb-4">
-                <div className="w-[115px] h-[115px] bg-pink-40 rounded-full flex items-center justify-center text-white text-xl font-bold">
-                    닉
+                <div
+                    className={`w-[115px] h-[115px] rounded-full flex items-center justify-center text-white text-xl font-bold overflow-hidden ${isProfileDefaultColor(user.profileImageUrl) ? PROFILE_COLOR_CLASS[user.profileImageUrl] ?? 'bg-neutral-300' : ''}`}
+                    style={!isProfileDefaultColor(user.profileImageUrl) ? { backgroundImage: `url(${user.profileImageUrl})`, backgroundSize: 'cover' } : undefined}
+                >
+                    {isProfileDefaultColor(user.profileImageUrl) ? user.profileImageUrl.charAt(0).toUpperCase() : null}
                 </div>
-                <h2 className="type-heading2 p-[10px]">닉네임4조짱최고</h2>
+                <h2 className="type-heading2 p-[10px]">마이페이지</h2>
                 <div className="flex gap-2 p-[10px] flex-wrap justify-center">
-                    <Tag2Btn mode="chip" status={true} >
-                        취미/생활
-                    </Tag2Btn>
-                    <Tag2Btn mode="chip" status={true}>
-                        취미/생활
-                    </Tag2Btn>
-                    <Tag2Btn mode="chip" status={true}>
-                        취미/생활
-                    </Tag2Btn>
+                    {user.contextCategoryNames.length > 0 ? (
+                        user.contextCategoryNames.map((name) => (
+                            <Tag2Btn key={name} mode="chip" status={true}>
+                                {name}
+                            </Tag2Btn>
+                        ))
+                    ) : (
+                        <span className="type-caption1 text-label-subtle">관심 카테고리를 설정해 보세요.</span>
+                    )}
                 </div>
             </header>
 
