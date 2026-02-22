@@ -12,11 +12,9 @@ export const LoginSuccessPage = () => {
 
   useEffect(() => {
     if (didHandle.current) return;
-
     if (accessToken) {
       didHandle.current = true;
       setAccessToken(accessToken);
-
       window.location.replace("/");
     }
   }, [accessToken]);
