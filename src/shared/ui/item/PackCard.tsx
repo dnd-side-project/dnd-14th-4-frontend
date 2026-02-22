@@ -100,6 +100,7 @@ export function PackCard({
               <button
                 type="button"
                 aria-label="Select pack"
+                aria-pressed={isChecked}
                 className="rounded-full p-0.5 transition-colors hover:bg-black/5"
                 onClick={(e) => {
                   e.stopPropagation()

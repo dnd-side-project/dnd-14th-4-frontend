@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { MOCK_ITEMS } from '@/features/search/model/mock';
 import { BackHeader } from '@/shared/ui/BackHeader';
@@ -19,14 +19,14 @@ interface PackDetailContentProps {
     onAddItem: () => void;
 }
 
-export default function PackDetailContent({ packData, onAddItem }: PackDetailContentProps) {
+function PackDetailInner({ packData, onAddItem }: PackDetailContentProps) {
     const router = useRouter();
     const searchParams = useSearchParams();
 
     const initialMode = (searchParams?.get('mode') as PageMode) || 'view';
 
     const [pageMode, setPageMode] = useState<PageMode>(initialMode);
-    const [descriptionValue, setDescriptionValue] = useState("");
+    const [descriptionValue, setDescriptionValue] = useState(packData.description || "");
     const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
 
     const { title, author, tag, date } = packData;
@@ -107,5 +107,13 @@ export default function PackDetailContent({ packData, onAddItem }: PackDetailCon
                 onConfirm={handleConfirmCancel}
             />
         </>
+    );
+}
+
+export default function PackDetailContent(props: PackDetailContentProps) {
+    return (
+        <Suspense fallback={<div className="min-h-screen" />}>
+            <PackDetailInner {...props} />
+        </Suspense>
     );
 }

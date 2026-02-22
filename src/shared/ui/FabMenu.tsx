@@ -9,17 +9,11 @@ import { FAB_HIDE_RULES } from '@/shared/constants/nav.constants';
 const menuVariants = {
     open: {
         opacity: 1,
-        transition: {
-            staggerChildren: 0.1,
-            delayChildren: 0.1,
-        }
+        transition: { staggerChildren: 0.1, delayChildren: 0.1 }
     },
     closed: {
         opacity: 0,
-        transition: {
-            staggerChildren: 0.1,
-            staggerDirection: -1
-        }
+        transition: { staggerChildren: 0.1, staggerDirection: -1 }
     }
 };
 
@@ -29,8 +23,15 @@ const itemVariants = {
 };
 
 export default function FabMenu() {
-    const [isOpen, setIsOpen] = useState(false);
     const pathname = usePathname();
+    const [isOpen, setIsOpen] = useState(false);
+
+    const [prevPathname, setPrevPathname] = useState(pathname);
+
+    if (pathname !== prevPathname) {
+        setPrevPathname(pathname);
+        setIsOpen(false);
+    }
 
     const shouldHideFab = (currentPath: string) => {
         return FAB_HIDE_RULES.some((rule) => {
