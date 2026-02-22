@@ -68,11 +68,12 @@ const reducer = (state: State, action: Action): State => {
         case "TOGGLE_FILTER":
             return { ...state, isFilterOpen: !state.isFilterOpen };
         case "SET_FILTER":
+            if (action.payload === null) return { ...state, selectedFilter: [] };
             return {
                 ...state,
-                selectedFilter: state.selectedFilter.includes(action.payload as string)
+                selectedFilter: state.selectedFilter.includes(action.payload)
                     ? state.selectedFilter.filter((f) => f !== action.payload)
-                    : [...state.selectedFilter, action.payload as string]
+                    : [...state.selectedFilter, action.payload]
             };
         default:
             return state;

@@ -67,7 +67,9 @@ function PackDetailInner({ packData, onAddItem }: PackDetailContentProps) {
                 <Tag2Btn status>{tag}</Tag2Btn>
 
                 <div className='flex mt-6 items-center gap-2 mb-6'>
-                    <div
+                    <button
+                        type="button"
+                        aria-label={`${author} 프로필 보기`}
                         className="w-12 h-12 bg-common-100 rounded-full cursor-pointer hover:opacity-80 transition-opacity"
                         onClick={() => setIsProfileModalOpen(true)}
                     />
