@@ -50,7 +50,6 @@ export default function WishListPage() {
 
   if (isLoading) return <div className="p-10 text-center">로딩 중...</div>;
 
-  console.log(wishlist);
   return (
     <main className="min-h-dvh bg-background-alternative2 px-5 pt-12 pb-28">
       <div className="flex items-start justify-between">

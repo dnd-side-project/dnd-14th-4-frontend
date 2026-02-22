@@ -15,7 +15,7 @@ interface ImageReviewSectionProps {
 }
 
 export function ImageReviewSection({ images, onImagesChange, tags, onTagsChange }: ImageReviewSectionProps) {
-    const { fileInputRef, openPicker, handleFileChange, removeImage } = useImageUpload(images as File[], onImagesChange);
+    const { fileInputRef, openPicker, handleFileChange, removeImage } = useImageUpload(images.filter((img): img is File => img instanceof File), onImagesChange);
     const { inputValue, onKeyDown, removeTag, isError, errorMessage, setInputValue } = useTagInput(tags, onTagsChange);
 
     const currentHelperText = isError ? errorMessage : "*태그 당 최대 10자";
