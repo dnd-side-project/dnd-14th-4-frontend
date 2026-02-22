@@ -1,5 +1,8 @@
+"use client"
 
+import { BackHeader } from '@/shared/ui/BackHeader';
 import { NoticeItem } from '@/views/notice/components/NoticeItem';
+import { useRouter } from 'next/navigation';
 
 interface BoardItemType {
     id: number | string;
@@ -13,18 +16,22 @@ interface BoardListProps {
 }
 
 export const BoardList = ({ items, type }: BoardListProps) => {
+    const router = useRouter();
     return (
-        <div className="max-w-md mx-auto min-h-screen bg-white">
-            <div className="px-5">
-                <h1>{type === 'notice' ? '공지사항' : '이용약관 및 정책'}</h1>
-                {items.map((item) => (
-                    <NoticeItem
-                        key={item.id}
-                        title={item.title}
-                        date={item.date}
-                        href={`/my-page/notice/${item.id}`}
-                    />
-                ))}
+        <div className='min-h-screen'>
+            <BackHeader onBack={() => router.back()}></BackHeader>
+            <div className="max-w-md mx-auto bg-white">
+                <div className="px-5">
+                    <h1>{type === 'notice' ? '공지사항' : '이용약관 및 정책'}</h1>
+                    {items.map((item) => (
+                        <NoticeItem
+                            key={item.id}
+                            title={item.title}
+                            date={item.date}
+                            href={`/my-page/notice/${item.id}`}
+                        />
+                    ))}
+                </div>
             </div>
         </div>
     );

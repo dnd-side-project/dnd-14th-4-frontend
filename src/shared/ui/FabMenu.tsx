@@ -10,9 +10,9 @@ const menuVariants = {
     open: {
         opacity: 1,
         transition: {
-            staggerChildren: 0.1,
-            delayChildren: 0.1,
-            staggerDirection: -1
+            staggerChildren: 0.1, // 0.1초 간격으로 차례대로 촤르륵 나옴
+            delayChildren: 0.05,
+            staggerDirection: -1 // 아래서부터 위로 순차적 실행
         }
     },
     closed: {
@@ -28,13 +28,20 @@ const itemVariants: Variants = {
     open: {
         opacity: 1,
         y: 0,
+        x: 0,
+        rotate: 0,
         scale: 1,
-        transition: { type: "spring", stiffness: 300, damping: 20 }
+        transition: {
+            type: "spring",
+            stiffness: 400,
+            damping: 25
+        }
     },
     closed: {
         opacity: 0,
-        y: 50,
-        scale: 0.5
+        y: 80,
+        rotate: -20,
+        scale: 0.4
     }
 };
 
@@ -85,7 +92,7 @@ export default function FabMenu() {
                         <motion.div variants={itemVariants}>
                             <IconButton
                                 variant="item"
-                                onClick={() => router.push('/item-create')}
+                                onClick={() => router.push('/items-create')}
                             />
                         </motion.div>
                     </motion.div>
