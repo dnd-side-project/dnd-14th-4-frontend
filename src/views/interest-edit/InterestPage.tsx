@@ -6,18 +6,39 @@ import { MOMENT_OPTIONS } from '@/views/onboarding/model/constants';
 import { MultiSelectGroup } from '@/shared/ui/MultiSelectGroup';
 import { BackHeader } from '@/shared/ui/BackHeader';
 import { useRouter } from 'next/navigation';
+import { useUserStore } from '@/entities/user/model';
+import { useUpdateInterest } from '@/entities/user/model/useUpdateInterest';
 
 export const InterestPage = () => {
     const router = useRouter();
-    const [selectedMoments, setSelectedMoments] = useState<string[]>([]);
+    const { user } = useUserStore();
 
-    const handleSubmit = () => {
-        console.log('서버로 저장할 관심 상황:', selectedMoments);
+    const { updateInterest } = useUpdateInterest();
+
+    const [selectedMoments, setSelectedMoments] = useState<string[]>(() => {
+        return user?.contextCategoryNames || [];
+    });
+
+
+    const handleSubmit = async () => {
+        try {
+
+
+            await updateInterest(selectedMoments);
+
+            alert('관심 상황이 수정되었습니다.');
+            router.back();
+        } catch (error) {
+            console.error('수정 실패:', error);
+            alert('저장에 실패했습니다.');
+        }
     };
+
+    if (!user) return null;
 
     return (
         <div className='min-h-screen'>
-            <BackHeader onBack={() => router.back()}></BackHeader>
+            <BackHeader onBack={() => router.back()} />
             <div className='max-w-md mx-auto bg-white pt-5'>
                 <FlowLayout>
                     <FlowLayout.Header
@@ -38,6 +59,7 @@ export const InterestPage = () => {
 
                     <FlowLayout.Footer
                         label="완료"
+                        disabled={selectedMoments.length === 0}
                         onClick={handleSubmit}
                     />
                 </FlowLayout>

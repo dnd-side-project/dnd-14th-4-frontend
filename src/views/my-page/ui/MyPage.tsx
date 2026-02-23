@@ -9,12 +9,12 @@ import Link from 'next/link';
 import { LogoutModal } from './components/LogoutModal';
 import { useUserStore, isProfileDefaultColor } from '@/entities/user/model';
 
-const PROFILE_COLOR_CLASS: Record<string, string> = {
-    yellow: 'bg-amber-400',
-    red: 'bg-red-500',
-    blue: 'bg-blue-500',
-    green: 'bg-green-500',
-    purple: 'bg-purple-500',
+export const PROFILE_COLOR_CLASS: Record<string, string> = {
+    yellow: 'bg-[#FFD37C]',
+    red: 'bg-[#FF7BAC]',
+    blue: 'bg-[#86BEFF]',
+    green: 'bg-[#D7D467]',
+    purple: 'bg-[#C1B7F7]',
 };
 
 export const MyPage = () => {
@@ -48,7 +48,9 @@ export const MyPage = () => {
                     className={`w-[115px] h-[115px] rounded-full flex items-center justify-center text-white text-xl font-bold overflow-hidden ${isProfileDefaultColor(user.profileImageUrl) ? PROFILE_COLOR_CLASS[user.profileImageUrl] ?? 'bg-neutral-300' : ''}`}
                     style={!isProfileDefaultColor(user.profileImageUrl) ? { backgroundImage: `url(${user.profileImageUrl})`, backgroundSize: 'cover' } : undefined}
                 >
-                    {isProfileDefaultColor(user.profileImageUrl) ? user.profileImageUrl.charAt(0).toUpperCase() : null}
+                    {isProfileDefaultColor(user.profileImageUrl) ? (
+                        (user.name || '?').charAt(0).toUpperCase()
+                    ) : null}
                 </div>
                 <h2 className="type-heading2 p-[10px]">마이페이지</h2>
                 <div className="flex gap-2 p-[10px] flex-wrap justify-center">

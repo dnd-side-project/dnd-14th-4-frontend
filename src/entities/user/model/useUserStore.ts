@@ -29,6 +29,8 @@ export const useUserStore = create<UserState>((set) => ({
           name: data.name,
           profileImageUrl: data.profileImageUrl,
           contextCategoryNames: data.contextCategoryNames ?? [],
+          age: data.age,
+          gender: data.gender,
         },
         isLoaded: true,
       });
