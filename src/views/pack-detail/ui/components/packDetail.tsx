@@ -23,7 +23,6 @@ interface PackDetailContentProps {
 function PackDetailInner({ packData, onAddItem }: PackDetailContentProps) {
     const router = useRouter();
     const searchParams = useSearchParams();
-
     const rawMode = searchParams.get('mode');
     const initialMode: PageMode =
         rawMode === 'edit' || rawMode === 'add' ? rawMode : 'view';

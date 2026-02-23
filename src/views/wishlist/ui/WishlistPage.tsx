@@ -1,43 +1,43 @@
 "use client";
 
 import * as React from "react";
-
-import { ItemCard, MOCK_ITEM_CARDS, type ItemCardData } from "@/shared/ui/item/ItemCard";
+import { ItemCard } from "@/shared/ui/item/ItemCard";
 import { PackCard, type PackCardData } from "@/shared/ui/item/PackCard";
 import { MOCK_PACK_CARDS } from "@/features/search/model/mock";
 import TabItem from "@/shared/ui/TabItem";
+import { useWishlist } from "@/entities/wishlist/model/useWishlist";
 
 type ActiveTab = "item" | "pack";
 
 export default function WishListPage() {
-
   const nickname = "홍길동"; // TODO: 유저 닉네임 연결
+
+  const { data: wishlist, isLoading } = useWishlist();
 
   const [activeTab, setActiveTab] = React.useState<ActiveTab>("item");
   const isSelectMode = false;
   const [checkedIds, setCheckedIds] = React.useState<Set<string>>(new Set());
 
-  const items: ItemCardData[] = React.useMemo(() => {
-    const base = [
-      ...MOCK_ITEM_CARDS,
-      { ...MOCK_ITEM_CARDS[0], id: "2" },
-      { ...MOCK_ITEM_CARDS[0], id: "3" },
-    ];
+  const items = React.useMemo(() => {
+    if (!wishlist) return [];
 
-    return base.map((it) => ({
-      ...it,
+    return wishlist.map((it) => ({
+      id: it.id,
+      brandName: it.brandName,
+      productName: it.productName,
+      reviewImagePaths: it.reviewImagePaths,
+      satisfaction: it.satisfaction,
+      usePeriod: it.usePeriod,
+      purchaseLocation: it.purchaseLocation,
+      tags: it.tags,
       liked: true,
     }));
-  }, []);
+  }, [wishlist]);
 
   const packs: PackCardData[] = React.useMemo(() => {
     const base = MOCK_PACK_CARDS as unknown as PackCardData[];
-    return base.map((p) => ({
-      ...p,
-      liked: true, 
-    }));
+    return base.map((p) => ({ ...p, liked: true }));
   }, []);
-
 
   const onSelect = (id: string) => {
     setCheckedIds((prev) => {
@@ -47,6 +47,8 @@ export default function WishListPage() {
       return next;
     });
   };
+
+  if (isLoading) return <div className="p-10 text-center">로딩 중...</div>;
 
   return (
     <main className="min-h-dvh bg-background-alternative2 px-5 pt-12 pb-28">
@@ -58,11 +60,11 @@ export default function WishListPage() {
             위시리스트
           </h1>
         </div>
-
         <div className="shrink-0">
           <div className="h-14 w-14 rounded-full bg-neutral-900" />
         </div>
       </div>
+
       <header className="mt-6 mb-6 flex items-center justify-center">
         <div role="tablist" className="flex gap-7 w-37">
           <div className="flex-1">
@@ -78,36 +80,40 @@ export default function WishListPage() {
         </div>
       </header>
 
-      {/* 리스트 */}
+
       <section className="space-y-6">
         {activeTab === "item" ? (
           <ul className="space-y-6">
-            {items.map((it) => (
-              <li key={it.id}>
-                <ItemCard
-                  {...it}
-                  showLike
-                  isSelectMode={isSelectMode}
-                  isChecked={checkedIds.has(it.id)}
-                  onSelect={onSelect}
-                  onMoreClick={() => {}}
-                  onDetailClick={() => {}}
-                />
-              </li>
-            ))}
+            {items.length > 0 ? (
+              items.map((it) => (
+                <li key={it.id}>
+                  <ItemCard
+                    {...it}
+                    showLike
+                    isSelectMode={isSelectMode}
+                    isChecked={checkedIds.has(String(it.id))}
+                    onSelect={onSelect}
+                    onMoreClick={() => { }}
+                    onDetailClick={() => { }}
+                  />
+                </li>
+              ))
+            ) : (
+              <div className="py-20 text-center text-label-assistive">
+                위시리스트에 담긴 아이템이 없어요.
+              </div>
+            )}
           </ul>
         ) : (
           <ul className="space-y-6">
             {packs.slice(0, 3).map((p) => (
               <li key={p.id}>
-                <PackCard {...p} onMoreClick={() => {}} />
+                <PackCard {...p} onMoreClick={() => { }} />
               </li>
             ))}
           </ul>
         )}
       </section>
-
-     
     </main>
   );
 }
