@@ -45,10 +45,7 @@ export function HomePage() {
   const onFilterClick = () => router.push("/filter-search");
 
   const [selectedTag, setSelectedTag] = React.useState<Tag>(TAGS[0]);
-  const [trendingByTag, setTrendingByTag] = React.useState<
-    Record<string, HomePackApiDto[]>
-  >({});
-  const [, setFetchError] = React.useState<string | null>(null);
+  const [trendingByTag] = React.useState<Record<string, HomePackApiDto[]>>({});
 
   const newPacks =
     trendingByTag[selectedTag] ?? PACKS_BY_TAG[selectedTag] ?? [];
@@ -60,54 +57,11 @@ export function HomePage() {
     setGreeting(pickRandomGreeting());
   }, []);
 
-  // fetch trending packs by tag
-  React.useEffect(() => {
-    let mounted = true;
-    (async () => {
-      try {
-        const res = await fetch("/api/v1/packs/trending-tags");
-        if (!res.ok) {
-          if (res.status === 404) {
-            setFetchError("데이터를 찾을 수 없습니다. (404)");
-          } else {
-            setFetchError(`서버 오류: ${res.status}`);
-          }
-          return;
-        }
-        const data = await res.json();
-
-        const map: Record<string, HomePackApiDto[]> = {};
-        TAGS.forEach((t) => {
-          const list = data[t] ?? [];
-          map[t] = Array.isArray(list) ? list.slice(0, 3) : [];
-        });
-
-        if (mounted) {
-          setTrendingByTag(map);
-          setFetchError(null);
-        }
-      } catch (err: unknown) {
-        if (mounted) {
-          const msg =
-            err instanceof Error
-              ? err.message
-              : "네트워크 오류가 발생했습니다.";
-          setFetchError(msg);
-        }
-      }
-    })();
-    return () => {
-      mounted = false;
-    };
-  }, []);
-
-  //  API 응답(목데이터) -> 카테고리별 묶기
   const categoryMap = React.useMemo(
     () => groupByCategory(MOCK_HOME_PACKS_API),
     [],
   );
 
-  // 온보딩 선택 카테고리 순서대로 섹션 구성 + PackImageCardData로 매핑
   const sections = React.useMemo(() => {
     return MOCK_ONBOARDING_CATEGORIES.map((category: string) => {
       const list: HomePackApiDto[] = categoryMap.get(category) ?? [];
@@ -130,7 +84,7 @@ export function HomePage() {
   }, [categoryMap]);
 
   return (
-    <div className="min-h-dvh bg-background-alternative2 pt-12 px-5 pb-35">
+    <div className="min-h-dvh bg-background-alternative pt-12 px-5 pb-35">
       <motion.div
         initial={false}
         animate={{ opacity: titleVisible ? 1 : 0, y: titleVisible ? 0 : -8 }}
