@@ -5,6 +5,7 @@ import Tag1Btn from "@/shared/ui/Tag1Btn"
 import Image from "next/image"
 import { Item } from "@/entities/item/model/types"
 import { buildDisplayTags } from "@/shared/utils/ItemCard.utils"
+import ItemTagChip from "../ItemTagChip"
 
 interface ItemBoxProps {
     item: Item;
@@ -23,7 +24,6 @@ export function ItemBox({
     const displayTags = buildDisplayTags(item.satisfaction, item.usePeriod);
     const satisfactionTag = displayTags.find(t => t.variant === "black")?.label;
     const periodTag = displayTags.find(t => t.variant === "beige60")?.label;
-
     return (
         <div className="w-full p-4 shadow-emphasize rounded-[20px] bg-white">
             <div className="flex justify-between items-start">
@@ -63,6 +63,11 @@ export function ItemBox({
                 {periodTag && <Tag1Btn variant="secondary" mode="chip">{periodTag}</Tag1Btn>}
 
                 <p className="type-caption2 text-label-subtle">구매처 : {item.purchaseLocation}</p>
+            </div>
+            <div className="flex gap-2 flex-wrap mt-3">
+                {item.tags?.map((tag) => (
+                    <ItemTagChip key={tag}>{tag}</ItemTagChip>
+                ))}
             </div>
         </div>
     )

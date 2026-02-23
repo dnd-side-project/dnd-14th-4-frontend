@@ -33,7 +33,6 @@ export const ItemForm = ({ initialData, isEdit = false }: ItemFormProps) => {
     const isDetailFilled = formData.brandName?.trim() !== "" && formData.productName?.trim() !== "";
     const isRatingSelected = formData.satisfaction !== "";
     const showAllSections = isEdit || (isDetailFilled && isRatingSelected);
-
     return (
         <div className="flex flex-col gap-12 pb-20">
             <ItemDetailSection
