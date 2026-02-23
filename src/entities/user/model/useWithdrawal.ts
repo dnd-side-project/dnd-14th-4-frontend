@@ -12,8 +12,7 @@ export const useWithdrawal = () => {
 
             if (setUser) setUser(null);
 
-            localStorage.clear();
-            sessionStorage.clear();
+            localStorage.removeItem('access_token');
 
             alert('탈퇴가 완료되었습니다. 그동안 이용해 주셔서 감사합니다.');
 

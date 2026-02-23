@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 export const useItemForm = (initialData?: Partial<Item>, isEdit = false) => {
     const router = useRouter();
     const [formData, setFormData] = useState<Item>({
-        id: initialData?.id || 0,
+        id: initialData?.id ?? 0,
         brandName: initialData?.brandName || "",
         productName: initialData?.productName || "",
         satisfaction: initialData?.satisfaction || "",
@@ -35,7 +35,7 @@ export const useItemForm = (initialData?: Partial<Item>, isEdit = false) => {
             const newFileImages = images.filter((img): img is File => img instanceof File);
 
             await submitItem({
-                itemId: isEdit ? formData.id : undefined,
+                itemId: isEdit && formData.id ? formData.id : undefined,
                 request: {
                     brandName: formData.brandName,
                     productName: formData.productName,

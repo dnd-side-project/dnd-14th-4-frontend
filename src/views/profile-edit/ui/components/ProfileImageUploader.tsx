@@ -19,7 +19,7 @@ export const ProfileImageUploader = ({
 
     const profileColor = user?.profileImageUrl;
     const bgColorClass = (profileColor && PROFILE_COLOR_CLASS[profileColor]) || 'bg-pink-40';
-    const initialChar = user?.name?.charAt(0) || user?.name?.charAt(0) || '?';
+    const initialChar = user?.name?.charAt(0).toUpperCase() || '?';
     const [localPreview, setLocalPreview] = useState<string | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
