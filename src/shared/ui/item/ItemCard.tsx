@@ -6,6 +6,7 @@ import { ItemFolderBg } from "./itemfolder-bg"
 import Tag1Btn from "../Tag1Btn"
 import { Item } from "@/entities/item/model/types"
 import { buildDisplayTags } from "@/shared/utils/ItemCard.utils"
+import { useToggleWish } from "@/entities/wishlist/model/useToggleWish"
 
 /** API 만족도 값 → 검정 배경 */
 export type ItemCardSatisfaction = "좋아요" | "매우좋아요" | "인생템"
@@ -52,9 +53,29 @@ export function ItemCard({
   isChecked = false,
   onSelect,
 }: ItemCardProps) {
-  const [isLiked, setIsLiked] = useState(liked)
+  const [isLiked, setIsLiked] = useState(liked);
+  const { mutate: toggleWish } = useToggleWish();
   const displayTags = buildDisplayTags(satisfaction, usePeriod);
 
+
+
+  const handleLikeClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+
+    const nextLikedStatus = !isLiked;
+
+    toggleWish(
+      { itemId: id, isWished: isLiked },
+      {
+        onSuccess: () => {
+          setIsLiked(nextLikedStatus);
+        },
+        onError: () => {
+          setIsLiked(isLiked);
+        }
+      }
+    );
+  };
 
   const handleCardClick = () => {
     if (isSelectMode) {
@@ -105,10 +126,7 @@ export function ItemCard({
                 className="text-neutral-300 transition-colors"
                 aria-label={isLiked ? "좋아요 취소" : "좋아요"}
                 aria-pressed={isLiked}
-                onClick={(e) => {
-                  e.stopPropagation()
-                  setIsLiked((prev) => !prev)
-                }}
+                onClick={handleLikeClick}
               >
                 {isLiked ? (
                   <IcSvgWish className="h-5 w-5 sm:h-6 sm:w-6 text-red-500" />
