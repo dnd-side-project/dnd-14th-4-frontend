@@ -1,12 +1,13 @@
 "use client";
 
-import { useFormContext } from "react-hook-form";
-import type { OnboardingFormValues } from "../../model/schema";
 import { cn } from "@/shared/lib/cn";
 
-export function StepWelcome() {
-  const { watch } = useFormContext<OnboardingFormValues>();
-  const nickname = (watch("nickname") ?? "").trim();
+interface StepWelcomeProps {
+  nickname: string;
+}
+
+export function StepWelcome({ nickname }: StepWelcomeProps) {
+  const displayNickname = (nickname || "").trim();
 
   return (
     <div className="pt-2 space-y-2">
@@ -14,8 +15,8 @@ export function StepWelcome() {
 
       <p className="type-heading2 text-label-default leading-relaxed whitespace-pre-line">
         이제
-        <span className={cn("px-1", nickname && "text-pink-500")}>
-          {nickname || "사용자"}
+        <span className={cn("px-1", displayNickname && "text-pink-500")}>
+          {displayNickname || "사용자"}
         </span>
         님을 위한{"\n"}
         팩을 탐색해보세요!

@@ -1,23 +1,20 @@
 "use client";
 
-import { useFormContext } from "react-hook-form";
 import { MOMENT_OPTIONS } from "../../model/constants";
-import type { OnboardingFormValues } from "../../model/schema";
-
 import { MultiSelectGroup } from "@/shared/ui/MultiSelectGroup";
 
-export function StepMoments() {
-  const { watch, setValue } = useFormContext<OnboardingFormValues>();
-  const selected = watch("moments");
+interface StepMomentsProps {
+  selected: string[];
+  onChange: (selected: string[]) => void;
+}
 
+export function StepMoments({ selected, onChange }: StepMomentsProps) {
   return (
     <div>
       <MultiSelectGroup
         options={MOMENT_OPTIONS}
         selected={selected}
-        onChange={(newSelected) =>
-          setValue("moments", newSelected as OnboardingFormValues["moments"], { shouldValidate: true })
-        }
+        onChange={(newSelected) => onChange(newSelected as string[])}
         maxCount={3}
       />
     </div>
