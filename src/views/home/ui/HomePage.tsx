@@ -4,14 +4,21 @@ import React from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 
-import { SearchBarOverlay, useSearchBarTransition } from "@/features/search/transition";
+import {
+  SearchBarOverlay,
+  useSearchBarTransition,
+} from "@/features/search/transition";
 import { HomeSearchHeader } from "@/widgets/home-search-header/ui/HomeSearchHeader";
 import Tag1Btn from "@/shared/ui/Tag1Btn";
 import IcSvgArrowRightSmall from "@/shared/icons/ic_arrowrightsmall";
 import { PACKS_BY_TAG, Tag, TAGS } from "@/features/search/model/mock";
-import { MAIN_GREETINGS, pickRandomGreeting, type Greeting } from "../model/greeting";
+import {
+  MAIN_GREETINGS,
+  pickRandomGreeting,
+  type Greeting,
+} from "../model/greeting";
 
-import {  type PackCardData } from "@/shared/ui/item/PackCard";
+import { type PackImageCardData } from "@/shared/ui/item/PackImageCard";
 
 import {
   MOCK_HOME_PACKS_API,
@@ -38,22 +45,74 @@ export function HomePage() {
   const onFilterClick = () => router.push("/filter-search");
 
   const [selectedTag, setSelectedTag] = React.useState<Tag>(TAGS[0]);
-  const newPacks = PACKS_BY_TAG[selectedTag] ?? [];
+  const [trendingByTag, setTrendingByTag] = React.useState<
+    Record<string, HomePackApiDto[]>
+  >({});
+  const [, setFetchError] = React.useState<string | null>(null);
 
-  const [greeting, setGreeting] = React.useState<Greeting>(() => MAIN_GREETINGS[0]);
+  const newPacks =
+    trendingByTag[selectedTag] ?? PACKS_BY_TAG[selectedTag] ?? [];
+
+  const [greeting, setGreeting] = React.useState<Greeting>(
+    () => MAIN_GREETINGS[0],
+  );
   React.useEffect(() => {
     setGreeting(pickRandomGreeting());
   }, []);
 
-  //  API 응답(목데이터) -> 카테고리별 묶기
-  const categoryMap = React.useMemo(() => groupByCategory(MOCK_HOME_PACKS_API), []);
+  // fetch trending packs by tag
+  React.useEffect(() => {
+    let mounted = true;
+    (async () => {
+      try {
+        const res = await fetch("/api/v1/packs/trending-tags");
+        if (!res.ok) {
+          if (res.status === 404) {
+            setFetchError("데이터를 찾을 수 없습니다. (404)");
+          } else {
+            setFetchError(`서버 오류: ${res.status}`);
+          }
+          return;
+        }
+        const data = await res.json();
 
-  // 온보딩 선택 카테고리 순서대로 섹션 구성 + PackCardData로 매핑
+        const map: Record<string, HomePackApiDto[]> = {};
+        TAGS.forEach((t) => {
+          const list = data[t] ?? [];
+          map[t] = Array.isArray(list) ? list.slice(0, 3) : [];
+        });
+
+        if (mounted) {
+          setTrendingByTag(map);
+          setFetchError(null);
+        }
+      } catch (err: unknown) {
+        if (mounted) {
+          const msg =
+            err instanceof Error
+              ? err.message
+              : "네트워크 오류가 발생했습니다.";
+          setFetchError(msg);
+        }
+      }
+    })();
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  //  API 응답(목데이터) -> 카테고리별 묶기
+  const categoryMap = React.useMemo(
+    () => groupByCategory(MOCK_HOME_PACKS_API),
+    [],
+  );
+
+  // 온보딩 선택 카테고리 순서대로 섹션 구성 + PackImageCardData로 매핑
   const sections = React.useMemo(() => {
     return MOCK_ONBOARDING_CATEGORIES.map((category: string) => {
       const list: HomePackApiDto[] = categoryMap.get(category) ?? [];
 
-      const packs: PackCardData[] = list.map((p) => ({
+      const packs: PackImageCardData[] = list.map((p) => ({
         id: String(p.id),
         tag: p.contextCategory,
         itemCount: p.items,
@@ -67,7 +126,7 @@ export function HomePage() {
         title: getCategoryTitle(category),
         packs,
       };
-    }).filter((s: { packs: PackCardData[] }) => s.packs.length > 0);
+    }).filter((s: { packs: PackImageCardData[] }) => s.packs.length > 0);
   }, [categoryMap]);
 
   return (
@@ -92,21 +151,32 @@ export function HomePage() {
       </motion.div>
 
       <div ref={searchBarRef} className="mt-6">
-        <HomeSearchHeader onSearchBarClick={startTransition} onFilterClick={onFilterClick} />
+        <HomeSearchHeader
+          onSearchBarClick={startTransition}
+          onFilterClick={onFilterClick}
+        />
       </div>
 
-      <SearchBarOverlay forward={forwardOverlay} return={returnOverlay} config={transitionConfig} />
+      <SearchBarOverlay
+        forward={forwardOverlay}
+        return={returnOverlay}
+        config={transitionConfig}
+      />
 
-      <section className="mt-8 space-y-10">
+      <section className="mt-8 space-y-6">
         {sections.map((s) => (
           <div key={s.category}>
-            <h2 className="text-[18px] font-bold text-neutral-900">{s.title}</h2>
+            <h2 className="text-[18px] font-bold text-neutral-900">
+              {s.title}
+            </h2>
             <PackCarousel packs={s.packs} />
           </div>
         ))}
 
         <div>
-          <h2 className="text-[18px] font-bold text-neutral-900">지금 등록된 따끈따끈한 신상 팩</h2>
+          <h2 className="text-[18px] font-bold text-neutral-900">
+            지금 등록된 따끈따끈한 신상 팩
+          </h2>
 
           <div className="mt-6 -mx-5 px-5 overflow-x-auto">
             <div className="flex gap-2 w-max pb-2">
@@ -132,8 +202,12 @@ export function HomePage() {
               >
                 <div className="h-12 w-12 rounded-xl bg-neutral-900 shrink-0" />
                 <div className="min-w-0 flex-1">
-                  <p className="type-headline2 text-neutral-900 truncate">{item.title}</p>
-                  <p className="text-label-subtle type-caption1 truncate">{item.nickname}</p>
+                  <p className="type-headline2 text-neutral-900 truncate">
+                    {item.title}
+                  </p>
+                  <p className="text-label-subtle type-caption1 truncate">
+                    {item.nickname}
+                  </p>
                 </div>
                 <IcSvgArrowRightSmall className="w-8 h-8 text-label-subtle shrink-0" />
               </button>
