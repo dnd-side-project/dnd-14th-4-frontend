@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
 import { usePathname, useRouter } from 'next/navigation';
 import IconButton from '@/shared/ui/IconBtn';
-import { FAB_HIDE_RULES } from '@/shared/constants/nav.constants';
+import { FAB_HIDE_RULES } from '@/shared/constants/fav.constants';
 
 const menuVariants = {
     open: {
@@ -85,7 +85,7 @@ export default function FabMenu() {
                         <motion.div variants={itemVariants}>
                             <IconButton
                                 variant="pack"
-                                onClick={() => router.push('/pack-create')}
+                                onClick={() => router.push('/pack-create/step-1')}
                             />
                         </motion.div>
 
