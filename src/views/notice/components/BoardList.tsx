@@ -22,7 +22,7 @@ export const BoardList = ({ items, type }: BoardListProps) => {
             <BackHeader onBack={() => router.back()}></BackHeader>
             <div className="max-w-md mx-auto bg-white">
                 <div className="px-5">
-                    <h1>{type === 'notice' ? '공지사항' : '이용약관 및 정책'}</h1>
+                    <h1 className='sr-only'>{type === 'notice' ? '공지사항' : '이용약관 및 정책'}</h1>
                     {items.map((item) => (
                         <NoticeItem
                             key={item.id}

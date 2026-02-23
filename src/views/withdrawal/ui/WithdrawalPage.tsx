@@ -6,11 +6,12 @@ import { ConfirmStep } from '../components/ConfirmStep'; // 다음 단계 컴포
 import { BackHeader } from '@/shared/ui/BackHeader';
 import { useRouter } from 'next/navigation';
 import { FixedBottomButton } from '@/shared/ui/FixedBottomButton';
+import { useWithdrawal } from '@/entities/user/model/useWithdrawal';
 
 export const WithdrawalPage = () => {
     const router = useRouter();
     const [step, setStep] = useState(1);
-
+    const { withdraw } = useWithdrawal();
     const [selectedReasons, setSelectedReasons] = useState<string[]>([]);
     const [feedback, setFeedback] = useState("");
     const [isAgreed, setIsAgreed] = useState(false);
@@ -22,10 +23,10 @@ export const WithdrawalPage = () => {
         }
     };
 
-    const handleNext = () => {
+    const handleNext = async () => {
         if (step === 1) setStep(2);
         else {
-            // 탈퇴 처리
+            await withdraw();
         }
     };
 

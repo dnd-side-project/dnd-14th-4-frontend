@@ -1,7 +1,7 @@
 import { useReducer } from "react";
 import { useRouter } from "next/navigation";
 import { appToast } from "@/shared/utils/toast";
-import { ItemData } from "@/shared/ui/item/ItemBox";
+import { Item } from "@/entities/item/model/types";
 
 interface State {
     activeTab: "item" | "pack";
@@ -10,7 +10,7 @@ interface State {
     isMoreMenuOpen: boolean;
     isDeleteModalOpen: boolean;
     isItemDetailOpen: boolean;
-    selectedItem: ItemData | null;
+    selectedItem: Item | null;
     activeMoreId: string | null;
     isFilterOpen: boolean;
     selectedFilter: string[];
@@ -20,7 +20,7 @@ type Action =
     | { type: "SET_TAB"; payload: "item" | "pack" }
     | { type: "TOGGLE_SELECT_MODE" }
     | { type: "TOGGLE_ITEM_SELECTION"; payload: string }
-    | { type: "OPEN_ITEM_DETAIL"; payload: ItemData }
+    | { type: "OPEN_ITEM_DETAIL"; payload: Item }
     | { type: "OPEN_MORE_MENU"; payload: string }
     | { type: "OPEN_DELETE_MODAL" }
     | { type: "COMPLETE_DELETE" }
@@ -87,7 +87,7 @@ export const useMyPack = () => {
     const handleTabChange = (tab: "item" | "pack") => dispatch({ type: "SET_TAB", payload: tab });
     const toggleSelectMode = () => dispatch({ type: "TOGGLE_SELECT_MODE" });
     const handleSelect = (id: string) => dispatch({ type: "TOGGLE_ITEM_SELECTION", payload: id });
-    const handleDetailClick = (item: ItemData) => dispatch({ type: "OPEN_ITEM_DETAIL", payload: item });
+    const handleDetailClick = (item: Item) => dispatch({ type: "OPEN_ITEM_DETAIL", payload: item });
     const handleMoreClick = (id: string) => dispatch({ type: "OPEN_MORE_MENU", payload: id });
     const onClickDeleteMenu = () => dispatch({ type: "OPEN_DELETE_MODAL" });
 

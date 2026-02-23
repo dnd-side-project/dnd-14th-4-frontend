@@ -4,9 +4,10 @@ import { useState } from "react";
 import { MOCK_PACK_CARDS } from "@/features/search/model/mock";
 import { BackHeader } from "@/shared/ui/BackHeader";
 import { FixedBottomButton } from "@/shared/ui/FixedBottomButton";
-import { ItemCard, MOCK_ITEM_CARDS } from "@/shared/ui/item/ItemCard";
+import { ItemCard } from "@/shared/ui/item/ItemCard";
 import { PackCard } from "@/shared/ui/item/PackCard";
 import { useRouter } from "next/navigation";
+import { useGetItems } from "@/entities/item/model/useGetItems";
 
 interface ItemAddProps {
     onBack: () => void;
@@ -16,7 +17,7 @@ interface ItemAddProps {
 export function ItemAdd({ onBack, addMode = "pack" }: ItemAddProps) {
     const router = useRouter();
     const [selectedPackId, setSelectedPackId] = useState<string | null>(null);
-
+    const { data: items } = useGetItems();
     const handleSelectPack = (id: string) => {
         setSelectedPackId((prev) => (prev === id ? null : id));
     };
@@ -38,7 +39,7 @@ export function ItemAdd({ onBack, addMode = "pack" }: ItemAddProps) {
             <div className="flex flex-col px-6 pb-24">
 
                 <div className="flex flex-col gap-4">
-                    {MOCK_ITEM_CARDS.map((item) => (
+                    {items?.map((item) => (
                         <ItemCard key={item.id} {...item} />
                     ))}
                 </div>

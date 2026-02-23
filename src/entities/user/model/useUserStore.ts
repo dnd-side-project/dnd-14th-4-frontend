@@ -23,10 +23,14 @@ export const useUserStore = create<UserState>((set) => ({
     }
     try {
       const { data } = await apiClient.get<MypageResponse>("/api/v1/users/mypage");
+
       set({
         user: {
+          name: data.name,
           profileImageUrl: data.profileImageUrl,
           contextCategoryNames: data.contextCategoryNames ?? [],
+          age: data.age,
+          gender: data.gender,
         },
         isLoaded: true,
       });

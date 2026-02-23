@@ -11,15 +11,15 @@ export const RECENT_SEARCHES: RecentSearch[] = [
 ];
 
 export const POPULAR_KEYWORDS: PopularKeyword[] = [
-  { id: "p1", label: "업무/출근" ,value: "work"},
-  { id: "p2", label: "여행/캠핑" ,value: "travel"},
-  { id: "p3", label: "공부/시험" ,value: "study"},
+  { id: "p1", label: "업무/출근", value: "work" },
+  { id: "p2", label: "여행/캠핑", value: "travel" },
+  { id: "p3", label: "공부/시험", value: "study" },
 ];
 export const TAGS = ["공부/시험", "면접/취준", "업무/취준", "약속/데이트", "운동/산책"] as const;
 export type Tag = (typeof TAGS)[number];
 
 export type PackItem = {
-    id: string;
+  id: string;
   title: string;
   nickname: string;
 };
@@ -49,31 +49,32 @@ export const WITHDRAWAL_GUIDELINES = [
 export const MOCK_ITEMS = [
   {
     id: 1,
-    title: "원통형 2홀 연필깎이",
-    brand: "나이키",
-    category: "문구",
-    purchaseAt: "쿠팡",
-    isWished: true,
-    images: ["/img1.jpg", "/img2.jpg", "/img3.jpg", "/img4.jpg"],
-    mainTags: {
-      satisfaction: "👍좋아요",
-      period: "1년 이상"
-    },
-    subTags: ["가벼움", "가성비", "내어깨를지켜준아이템", "휴대성이좋은", "이거제발사세요"]
+    brandName: "애플",
+    productName: "아이폰 15 프로",
+    satisfaction: "MUST_HAVE", // 🏆인생템
+    review: "카메라 성능이 정말 압도적입니다. 티타늄 소재라 가벼워요!",
+    reviewImagePaths: [
+      "https://images.unsplash.com/photo-1696446701796-da61225697cc",
+      "https://images.unsplash.com/photo-1678911820864-e2c567c655d7"
+    ],
+    usePeriod: "ABOVE_ONE_YEAR", // 1년 이상
+    purchaseLocation: "애플 가로수길",
+    liked: true,
+    tags: ["애플", "아이폰", "스마트폰"]
   },
   {
     id: 2,
-    title: "원통형 3홀 연필깎이",
-    brand: "나이키",
-    category: "문구",
-    purchaseAt: "쿠팡",
-    isWished: true,
-    images: ["/img1.jpg", "/img2.jpg"],
-    mainTags: {
-      satisfaction: "👍좋아요",
-      period: "1년 이상"
-    },
-    subTags: ["가벼움", "가성비", "내어깨를지켜준아이템", "휴대성이좋은", "이거제발사세요"]
+    brandName: "이솝",
+    productName: "레저렉션 아로마틱 핸드 밤",
+    satisfaction: "VERY_GOOD", // ♥️매우좋아요
+    review: "향이 너무 좋아서 회사 책상에 두고 매일 써요. 보습력도 최고!",
+    reviewImagePaths: [
+      "https://images.unsplash.com/photo-1556228578-0d85b1a4d571"
+    ],
+    usePeriod: "ABOVE_THREE_YEAR", // 3년 이상
+    purchaseLocation: "카카오톡 선물하기",
+    liked: true,
+    tags: ["핸드크림", "이솝", "선물추천"]
   }
 ];
 

@@ -8,14 +8,14 @@ import { useTagInput } from "../../model/useTagInput";
 import Image from "next/image";
 
 interface ImageReviewSectionProps {
-    images: File[];
+    images: (File | string)[];
     onImagesChange: (files: File[]) => void;
     tags: string[];
     onTagsChange: (tags: string[]) => void;
 }
 
 export function ImageReviewSection({ images, onImagesChange, tags, onTagsChange }: ImageReviewSectionProps) {
-    const { fileInputRef, openPicker, handleFileChange, removeImage } = useImageUpload(images, onImagesChange);
+    const { fileInputRef, openPicker, handleFileChange, removeImage } = useImageUpload(images.filter((img): img is File => img instanceof File), onImagesChange);
     const { inputValue, onKeyDown, removeTag, isError, errorMessage, setInputValue } = useTagInput(tags, onTagsChange);
 
     const currentHelperText = isError ? errorMessage : "*태그 당 최대 10자";
@@ -39,28 +39,31 @@ export function ImageReviewSection({ images, onImagesChange, tags, onTagsChange 
                         onClick={openPicker}
                     />
                 </div>
+                {images.map((img: File | string, index: number) => {
+                    const imgSrc = typeof img === "string" ? img : URL.createObjectURL(img);
 
-                {images.map((file: File, index: number) => (
-                    <div key={`${file.name}-${index}`} className="relative flex-shrink-0 w-[100px] h-[100px]">
-                        <Image
-                            src={URL.createObjectURL(file)}
-                            alt="preview"
-                            fill
-                            className="object-cover rounded-lg"
-                            onLoad={(e) => {
-                                const target = e.target as HTMLImageElement;
-                                URL.revokeObjectURL(target.src);
-                            }}
-                        />
-                        <button
-                            type="button"
-                            onClick={() => removeImage(index)}
-                            className="absolute z-10 -top-2 -right-2 bg-black text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
-                        >
-                            ✕
-                        </button>
-                    </div>
-                ))}
+                    return (
+                        <div key={index} className="relative flex-shrink-0 w-[100px] h-[100px]">
+                            <Image
+                                src={imgSrc}
+                                alt="preview"
+                                fill
+                                className="object-cover rounded-lg"
+                                onLoad={() => {
+                                    // File 객체로 만든 URL만 메모리 해제
+                                    if (typeof img !== "string") URL.revokeObjectURL(imgSrc);
+                                }}
+                            />
+                            <button
+                                type="button"
+                                onClick={() => removeImage(index)}
+                                className="absolute z-10 -top-2 -right-2 bg-black text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
+                            >
+                                ✕
+                            </button>
+                        </div>
+                    );
+                })}
             </div>
 
             <TextField

@@ -1,15 +1,14 @@
 'use client';
 
-
 export const Placeholder = ({
-    value,
+    value = '',
     setValue,
 }: {
     value: string;
     setValue: (value: string) => void;
 }) => {
-
-    const currentLength = value.length;
+    const safeValue = value ?? '';
+    const currentLength = safeValue.length;
     const maxLength = 10;
 
     let status: 'default' | 'good' | 'bad' = 'default';
@@ -29,12 +28,10 @@ export const Placeholder = ({
         }
     };
 
-
-
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { value } = e.target;
+        const { value: inputValue } = e.target;
 
-        const filtered = value
+        const filtered = inputValue
             .replace(/[^a-zㄱ-ㅎ가-힣0-9]/g, '')
             .slice(0, maxLength);
 
@@ -48,7 +45,8 @@ export const Placeholder = ({
                     className="type-body2 w-full outline-none bg-transparent placeholder-neutral-70"
                     placeholder="닉네임을 입력해주세요"
                     maxLength={maxLength}
-                    value={value}
+                    // ✅ value={value} 대신 반드시 safeValue를 전달해야 합니다.
+                    value={safeValue}
                     onChange={handleChange}
                 />
             </div>

@@ -4,6 +4,9 @@ import { useState } from "react"
 import { IcSvgCheckCircle, IcSvgMore, IcSvgWish, IcSvgWishBtn } from "@/shared/icons"
 import { ItemFolderBg } from "./itemfolder-bg"
 import Tag1Btn from "../Tag1Btn"
+import { Item } from "@/entities/item/model/types"
+import { buildDisplayTags } from "@/shared/utils/ItemCard.utils"
+import { useToggleWish } from "@/entities/wishlist/model/useToggleWish"
 
 /** API 만족도 값 → 검정 배경 */
 export type ItemCardSatisfaction = "좋아요" | "매우좋아요" | "인생템"
@@ -15,30 +18,10 @@ export type ItemCardUsagePeriod =
   | "3년이상"
   | "5년이상"
 
-export interface ItemCardData {
-  id: string
-  satisfaction?: ItemCardSatisfaction
-  usagePeriod?: ItemCardUsagePeriod
-  itemCount: number
-  title: string
-  author: string
-  liked?: boolean
-}
 
-export const MOCK_ITEM_CARDS: ItemCardData[] = [
-  {
-    id: "1",
-    satisfaction: "좋아요",
-    usagePeriod: "1년이상",
-    itemCount: 8,
-    title: "아이템 이름은 최대 길이 20자입니다",
-    author: "닉네임은열자가최대야",
-    liked: false,
-  },
-]
 
-interface ItemCardProps extends Omit<ItemCardData, "id"> {
-  id: string
+interface ItemCardProps extends Omit<Item, "id"> {
+  id: number
   onMoreClick?: () => void
   onDetailClick?: () => void
   showLike?: boolean
@@ -54,23 +37,14 @@ const tagVariantClass = {
     "!bg-beige-60 !text-white border-0 hover:!bg-beige-60 active:!bg-beige-60",
 } as const
 
-/** API 값(satisfaction, usagePeriod)을 태그 표시용 배열로 변환 */
-function buildDisplayTags(
-  satisfaction?: ItemCardSatisfaction,
-  usagePeriod?: ItemCardUsagePeriod
-): { label: string; variant: "black" | "beige60" }[] {
-  const tags: { label: string; variant: "black" | "beige60" }[] = []
-  if (satisfaction) tags.push({ label: satisfaction, variant: "black" })
-  if (usagePeriod) tags.push({ label: usagePeriod, variant: "beige60" })
-  return tags
-}
+
 
 export function ItemCard({
   id,
   satisfaction,
-  usagePeriod,
-  title,
-  author,
+  usePeriod,
+  brandName,
+  productName,
   liked = false,
   onMoreClick,
   onDetailClick,
@@ -79,12 +53,33 @@ export function ItemCard({
   isChecked = false,
   onSelect,
 }: ItemCardProps) {
-  const [isLiked, setIsLiked] = useState(liked)
-  const displayTags = buildDisplayTags(satisfaction, usagePeriod)
+  const [isLiked, setIsLiked] = useState(liked);
+  const { mutate: toggleWish } = useToggleWish();
+  const displayTags = buildDisplayTags(satisfaction, usePeriod);
+
+
+
+  const handleLikeClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+
+    const nextLikedStatus = !isLiked;
+
+    toggleWish(
+      { itemId: id, isWished: isLiked },
+      {
+        onSuccess: () => {
+          setIsLiked(nextLikedStatus);
+        },
+        onError: () => {
+          setIsLiked(isLiked);
+        }
+      }
+    );
+  };
 
   const handleCardClick = () => {
     if (isSelectMode) {
-      onSelect?.(id)
+      onSelect?.(String(id))
     } else {
       onDetailClick?.()
     }
@@ -117,10 +112,10 @@ export function ItemCard({
         <div className="mt-4 flex items-start justify-between gap-2 sm:mt-5">
           <div className="min-w-0 flex-1">
             <h3 className="truncate type-headline2 sm:text-lg text-neutral-900">
-              {title}
+              {productName}
             </h3>
             <p className="mt-0.5 truncate type-caption1 sm:mt-1 sm:text-sm text-neutral-400">
-              {author}
+              {brandName}
             </p>
           </div>
 
@@ -131,10 +126,7 @@ export function ItemCard({
                 className="text-neutral-300 transition-colors"
                 aria-label={isLiked ? "좋아요 취소" : "좋아요"}
                 aria-pressed={isLiked}
-                onClick={(e) => {
-                  e.stopPropagation()
-                  setIsLiked((prev) => !prev)
-                }}
+                onClick={handleLikeClick}
               >
                 {isLiked ? (
                   <IcSvgWish className="h-5 w-5 sm:h-6 sm:w-6 text-red-500" />
@@ -152,7 +144,7 @@ export function ItemCard({
               onClick={(e) => {
                 e.stopPropagation()
                 if (isSelectMode) {
-                  onSelect?.(id)
+                  onSelect?.(String(id))
                 } else {
                   onMoreClick?.()
                 }
