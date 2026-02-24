@@ -10,7 +10,7 @@ export function SplashPage() {
   //TODO: 로그인 여부 확인 후 이동
   useEffect(() => {
     const t = setTimeout(() => {
-      router.replace("/");
+      router.replace("/intro");
     }, SPLASH_DURATION_MS);
   
     return () => clearTimeout(t);
