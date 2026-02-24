@@ -13,6 +13,8 @@ import { useMyPack } from "@/views/my-pack/model/useMyPack";
 import Tag1Btn from "@/shared/ui/Tag1Btn";
 import { MOMENT_OPTIONS } from "@/views/onboarding/model/constants";
 import { useGetItems } from "@/entities/item/model/useGetItems";
+import { useUserStore, isProfileDefaultColor } from "@/entities/user/model";
+import { PROFILE_COLOR_CLASS } from "@/views/my-page/ui/MyPage";
 
 interface MyPackProps {
     onGoToItemAdd: () => void;
@@ -20,13 +22,33 @@ interface MyPackProps {
 
 export const MyPack = ({ onGoToItemAdd }: MyPackProps) => {
     const { state, actions } = useMyPack();
+    const { user } = useUserStore();
 
     const { data } = useGetItems();
+    const nickname = user?.name ?? "사용자";
+    const profileImageUrl = user?.profileImageUrl;
+    const profileInitial = nickname.charAt(0).toUpperCase();
     return (
         <div className="px-6 pb-24">
             <header className={`flex items-center justify-between mt-16 ${state.isFilterOpen ? 'mb-5' : 'mb-10'}`}>
                 <div className="flex-1 flex justify-start">
-                    <div className="w-12 h-12 bg-common-100 rounded-full" />
+                    {profileImageUrl && !isProfileDefaultColor(profileImageUrl) ? (
+                        <div
+                            className="w-12 h-12 rounded-full bg-neutral-300 bg-cover bg-center"
+                            style={{ backgroundImage: `url(${profileImageUrl})` }}
+                            aria-label={`${nickname} 프로필 이미지`}
+                            role="img"
+                        />
+                    ) : (
+                        <div
+                            className={`w-12 h-12 rounded-full flex items-center justify-center text-white font-bold ${profileImageUrl && isProfileDefaultColor(profileImageUrl)
+                                ? PROFILE_COLOR_CLASS[profileImageUrl] ?? "bg-neutral-300"
+                                : "bg-common-100"
+                                }`}
+                        >
+                            {profileInitial || "?"}
+                        </div>
+                    )}
                 </div>
 
                 <div role="tablist" className="flex gap-7 w-37 items-center justify-center">

@@ -17,13 +17,16 @@ import {
   pickRandomGreeting,
   type Greeting,
 } from "../model/greeting";
+import { useUserStore } from "@/entities/user/model/useUserStore";
+import { isProfileDefaultColor } from "@/entities/user/model";
+import { PROFILE_COLOR_CLASS } from "@/views/my-page/ui/MyPage";
 
 import { useTrendingTags } from "../model/useTrendingTags";
 import type { HomePackApiDto } from "../model/mockHome";
 
 export function HomePage() {
   const router = useRouter();
-
+  const user = useUserStore((state) => state.user);
   const {
     searchBarRef,
     titleVisible,
@@ -34,8 +37,9 @@ export function HomePage() {
     transitionConfig,
   } = useSearchBarTransition(router);
 
-  // TODO: 실제 로그인 유저 닉네임으로 교체
-  const nickname = "홍길동";
+  const nickname = user?.name ?? "사용자";
+  const profileImageUrl = user?.profileImageUrl;
+  const profileInitial = nickname.charAt(0).toUpperCase();
   const onFilterClick = () => router.push("/filter-search");
 
   const [greeting, setGreeting] = React.useState<Greeting>(
@@ -85,9 +89,25 @@ export function HomePage() {
           </h1>
         </div>
 
-        {/* TODO: 프로필 이미지 */}
         <div className="shrink-0">
-          <div className="h-14 w-14 rounded-full bg-neutral-900" />
+          {profileImageUrl && !isProfileDefaultColor(profileImageUrl) ? (
+            <div
+              className="h-14 w-14 rounded-full bg-neutral-300 bg-cover bg-center"
+              style={{ backgroundImage: `url(${profileImageUrl})` }}
+              aria-label={`${nickname} 프로필 이미지`}
+              role="img"
+            />
+          ) : (
+            <div
+              className={`h-14 w-14 rounded-full flex items-center justify-center text-white font-bold ${
+                profileImageUrl && isProfileDefaultColor(profileImageUrl)
+                  ? PROFILE_COLOR_CLASS[profileImageUrl] ?? "bg-neutral-300"
+                  : "bg-neutral-900"
+              }`}
+            >
+              {profileInitial || "?"}
+            </div>
+          )}
         </div>
       </motion.div>
 
@@ -104,7 +124,6 @@ export function HomePage() {
         config={transitionConfig}
       />
 
-      {/* 하단 신상 팩 영역 */}
       <section className="mt-8">
         <h2 className="text-[18px] font-bold text-neutral-900">
           지금 등록된 따끈따끈한 신상 팩
