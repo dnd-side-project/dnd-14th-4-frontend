@@ -9,7 +9,7 @@ export function IntroPage() {
   return (
     <div
       className="fixed inset-0 z-[100] flex flex-col justify-end bg-cover bg-center bg-no-repeat"
-      style={{ backgroundImage: "url('/background/bg-intro.png')" }} // ← public 경로
+      style={{ backgroundImage: "url('/background/bg-intro.png')" }}
     >
       <section className="px-6 pb-[140px]">
         <p className="text-center type-headline2 text-neutral-800/90">
