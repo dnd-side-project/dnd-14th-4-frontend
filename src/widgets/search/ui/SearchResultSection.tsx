@@ -15,7 +15,7 @@ export function SearchResultSection({
   recommended,
 }: Props) {
   const hasResults = packs.length > 0;
-  
+
   if (hasResults) {
     return (
       <section className="px-4 pt-6">
@@ -30,7 +30,6 @@ export function SearchResultSection({
     );
   }
 
-  // ✅ 검색 결과가 진짜로 0개일 때만 empty UI + 추천 노출
   return (
     <section className="px-4 pt-6">
       <div className="pt-24 text-center">
