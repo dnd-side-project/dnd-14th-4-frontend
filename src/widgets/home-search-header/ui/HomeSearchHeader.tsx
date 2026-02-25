@@ -15,14 +15,18 @@ export function HomeSearchHeader({ onSearchBarClick, onFilterClick }: Props) {
   const router = useRouter();
   const { setFromHome } = useSearchTransitionContext();
 
-  const goSearchPage = useCallback(() => {
-    if (onSearchBarClick) {
-      onSearchBarClick();
-      return;
-    }
-    setFromHome(true);
-    router.push("/search", { scroll: false });
-  }, [router, onSearchBarClick, setFromHome]);
+  const goSearchPage = useCallback(
+    (q: string) => {
+      if (onSearchBarClick) {
+        onSearchBarClick();
+        return;
+      }
+
+      setFromHome(true);
+      router.push(`/search?q=${encodeURIComponent(q)}`, { scroll: false });
+    },
+    [router, onSearchBarClick, setFromHome]
+  );
 
   const goFilterSearchPage = useCallback(() => {
     if (onFilterClick) {
@@ -40,7 +44,7 @@ export function HomeSearchHeader({ onSearchBarClick, onFilterClick }: Props) {
             isSearchMode={false}
             query=""
             onChange={() => {}}
-            onEnterSearchMode={goSearchPage}
+            onSearch={goSearchPage}
           />
         </div>
 
