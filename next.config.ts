@@ -20,6 +20,11 @@ const nextConfig: NextConfig = {
         hostname: 'whatsinmypack.s3.ap-northeast-2.amazonaws.com',
         pathname: '/**',
       },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+        pathname: "/**",
+      },
     ],
   },
 };

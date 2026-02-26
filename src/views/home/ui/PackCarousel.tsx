@@ -50,7 +50,7 @@ export function PackCarousel({ packs }: { packs: PackImageCardData[] }) {
             >
               <PackImageCard
                 {...p}
-                href={`/packs/${p.id}`}
+                href={`/pack/${p.id}`}
                 imageSrc={isValidImageSrc(p.imageSrc) ? p.imageSrc : fallbackImageSrc}
                 imageAlt={p.imageAlt ?? fallbackImageAlt}
               />

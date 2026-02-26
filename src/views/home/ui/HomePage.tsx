@@ -225,7 +225,7 @@ export function HomePage() {
                 key={item.id}
                 type="button"
                 className="w-full text-left px-4 py-4 flex items-center gap-4 border-b border-neutral-200 last:border-b-0"
-                onClick={() => router.push(`/packs/${item.id}`)}
+                onClick={() => router.push(`/pack/${item.id}`)}
               >
                 <div className="h-12 w-12 rounded-xl bg-neutral-900 shrink-0" />
                 <div className="min-w-0 flex-1">
