@@ -1,12 +1,13 @@
 "use client";
 
+import { useEffect, useMemo } from "react";
+import Image from "next/image";
 import { TextField } from "@/shared/ui/TextField";
 import { Tag2Btn } from "@/shared/ui/Tag2Btn";
+import { IcSvgCloseBig } from "@/shared/icons";
 import { ImageUploadBox } from "../ImageUploadBox";
 import { useImageUpload } from "../../model/useImageUpload";
 import { useTagInput } from "../../model/useTagInput";
-import Image from "next/image";
-import { IcSvgCloseBig } from "@/shared/icons";
 
 interface ImageReviewSectionProps {
     images: (File | string)[];
@@ -15,9 +16,66 @@ interface ImageReviewSectionProps {
     onTagsChange: (tags: string[]) => void;
 }
 
-export function ImageReviewSection({ images, onImagesChange, tags, onTagsChange }: ImageReviewSectionProps) {
-    const { fileInputRef, openPicker, handleFileChange, removeImage } = useImageUpload(images.filter((img): img is File => img instanceof File), onImagesChange);
-    const { inputValue, onKeyDown, removeTag, isError, errorMessage, setInputValue } = useTagInput(tags, onTagsChange);
+
+function PreviewItem({
+    img,
+    index,
+    onRemove,
+}: {
+    img: File | string;
+    index: number;
+    onRemove: (idx: number) => void;
+}) {
+    const imgSrc = useMemo(() => {
+        if (typeof img === "string") {
+            return encodeURI(img);
+        }
+        return URL.createObjectURL(img);
+    }, [img]);
+
+    useEffect(() => {
+        return () => {
+            // Blob URL인 경우에만 해제
+            if (imgSrc.startsWith("blob:")) {
+                URL.revokeObjectURL(imgSrc);
+            }
+        };
+    }, [imgSrc]);
+    if (!imgSrc) return null;
+
+    return (
+        <div className="relative flex-shrink-0 w-[100px] h-[100px]">
+            <Image
+                src={imgSrc}
+                alt={`preview-${index}`}
+                fill
+                className="object-cover rounded-lg"
+                unoptimized
+            />
+            <button
+                type="button"
+                onClick={() => onRemove(index)}
+                className="absolute z-10 top-1 right-1 bg-black/50 text-white rounded-full w-5 h-5 flex items-center justify-center hover:bg-black/70 transition-colors"
+            >
+                <IcSvgCloseBig className="w-3 h-3 text-white" />
+            </button>
+        </div>
+    );
+}
+
+export function ImageReviewSection({
+    images,
+    onImagesChange,
+    tags,
+    onTagsChange,
+}: ImageReviewSectionProps) {
+    const { fileInputRef, openPicker, handleFileChange, removeImage } = useImageUpload(
+        images.filter((img): img is File => img instanceof File),
+        onImagesChange
+    );
+
+    const { inputValue, onKeyDown, removeTag, isError, errorMessage, setInputValue } =
+        useTagInput(tags, onTagsChange);
 
     const currentHelperText = isError ? errorMessage : "*태그 당 최대 10자";
 
@@ -32,7 +90,7 @@ export function ImageReviewSection({ images, onImagesChange, tags, onTagsChange 
                 multiple
             />
 
-            <div className="flex gap-4 overflow-x-auto">
+            <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
                 <div className="flex-shrink-0">
                     <ImageUploadBox
                         count={images.length}
@@ -40,30 +98,15 @@ export function ImageReviewSection({ images, onImagesChange, tags, onTagsChange 
                         onClick={openPicker}
                     />
                 </div>
-                {images.map((img, index) => {
-                    const imgSrc = typeof img === "string"
-                        ? encodeURI(img)
-                        : URL.createObjectURL(img);
 
-                    return (
-                        <div key={`image-${index}`} className="relative flex-shrink-0 w-[100px] h-[100px]">
-                            <Image
-                                src={imgSrc}
-                                alt="preview"
-                                fill
-                                className="object-cover rounded-lg"
-                                unoptimized
-                            />
-                            <button
-                                type="button"
-                                onClick={() => removeImage(index)}
-                                className="absolute z-10 top-1 right-1 bg-black/50 text-white rounded-full w-5 h-5 flex items-center justify-center"
-                            >
-                                <IcSvgCloseBig className="w-8 h-8" />
-                            </button>
-                        </div>
-                    );
-                })}
+                {images.map((img, index) => (
+                    <PreviewItem
+                        key={typeof img === "string" ? img : `${img.name}-${index}`}
+                        img={img}
+                        index={index}
+                        onRemove={removeImage}
+                    />
+                ))}
             </div>
 
             <TextField
@@ -77,7 +120,7 @@ export function ImageReviewSection({ images, onImagesChange, tags, onTagsChange 
             >
                 {tags.map((tag, index) => (
                     <Tag2Btn
-                        key={tag}
+                        key={`${tag}-${index}`}
                         status
                         hasX
                         onClick={(e) => {

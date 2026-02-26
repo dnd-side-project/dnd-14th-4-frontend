@@ -1,24 +1,20 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { ItemForm } from "@/features/items/ui/ItemForm";
 import { BackHeader } from "@/shared/ui/BackHeader";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import { Modal } from "@/shared/ui/Modal";
-import { useParams } from "next/navigation";
-import { useGetItems } from "@/entities/item/model/useGetItems";
+import { useGetItemDetail } from "@/entities/item/model/useGetItemDetail";
+
 export default function ItemEditPage() {
     const router = useRouter();
     const params = useParams();
-    const id = params?.id;
+    const id = params?.id as string; // URL 파라미터에서 ID 추출
+
     const [isExitModalOpen, setIsExitModalOpen] = useState(false);
-    const { data } = useGetItems();
 
-
-    const itemData = useMemo(() => {
-        if (!data || !id) return undefined;
-        return data.find((item) => String(item.id) === id);
-    }, [data, id]);
+    const { data: itemData, isLoading } = useGetItemDetail(id);
 
     const handleBackClick = () => {
         setIsExitModalOpen(true);
@@ -29,10 +25,10 @@ export default function ItemEditPage() {
         router.back();
     };
 
+    if (isLoading) return <div className="p-10 text-center">불러오는 중</div>;
     return (
         <>
             <BackHeader onBack={handleBackClick} />
-
             <main className="max-w-md mx-auto px-5 pb-[100px]">
                 <ItemForm isEdit initialData={itemData} />
             </main>
