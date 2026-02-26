@@ -7,12 +7,12 @@ type Props = {
   isSearchMode?: boolean;
   query: string;
   onChange: (v: string) => void;
-  onEnter?: () => void; // Enter 처리만
+  onEnter?: () => void; 
   onSearch?: (q: string) => void;
 };
 
 const barClass =
-  "flex h-10 items-center gap-2 rounded-xl bg-common-0 px-3 transition-all duration-300";
+  "flex h-10 items-center border border-pink-50 gap-2 rounded-xl bg-common-0 px-3 transition-all duration-300";
 const placeholderClass = "text-sm text-neutral-400";
 
 export function SearchInput({
@@ -30,7 +30,7 @@ export function SearchInput({
         className={`${barClass} w-full cursor-pointer text-left`}
         aria-label="검색 페이지로 이동"
       >
-        <FiSearch className="h-5 w-5 shrink-0 text-label-subtle" />
+        <FiSearch className="h-5 w-5 shrink-0 text-pink-50" />
         <span className={placeholderClass}>다양한 팩을 검색해보세요.</span>
       </button>
     );

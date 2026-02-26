@@ -40,14 +40,12 @@ export const ItemForm = ({ initialData, isEdit = false }: ItemFormProps) => {
                 onChange={(field, value) => updateField(field, value)}
             />
 
-            {(isEdit || isDetailFilled) && (
-                <FormSection title="만족도">
-                    <RatingSelectSection
-                        selected={isEdit ? satisfactionLabel : formData.satisfaction}
-                        onSelect={(value) => updateField("satisfaction", value)}
-                    />
-                </FormSection>
-            )}
+            <FormSection title="만족도">
+                <RatingSelectSection
+                    selected={isEdit ? satisfactionLabel : formData.satisfaction}
+                    onSelect={(value) => updateField("satisfaction", value)}
+                />
+            </FormSection>
 
             {showAllSections && (
                 <div className="flex flex-col gap-12">

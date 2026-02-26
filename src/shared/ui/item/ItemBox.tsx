@@ -39,8 +39,8 @@ export function ItemBox({
                     >
                         <IcSvgWishBtn
                             className="w-7 h-7"
-                            fillColor={isWished ? "var(--color-primary-subtler)" : "var(--alpha-5)"}
-                            strokeColor={isWished ? "var(--color-primary-subtle)" : "var(--alpha-22)"}
+                            fill={isWished ? "var(--color-primary-subtler)" : "var(--alpha-5)"}
+                            stroke={isWished ? "var(--color-primary-subtle)" : "var(--alpha-22)"}
                         />
                     </button>
                 )}
