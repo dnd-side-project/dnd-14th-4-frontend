@@ -2,8 +2,8 @@
 import { useRef } from "react";
 
 export const useImageUpload = (
-    images: File[],
-    onImagesChange: (images: File[]) => void
+    images: (string | File)[],
+    onImagesChange: (newImages: (string | File)[]) => void
 ) => {
     const fileInputRef = useRef<HTMLInputElement>(null);
 
