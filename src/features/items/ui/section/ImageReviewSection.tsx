@@ -95,6 +95,8 @@ export function ImageReviewSection({
                         onClick={openPicker}
                     />
                 </div>
+                {images.map((img: File | string, index: number) => {
+                    const imgSrc = typeof img === "string" ? img : URL.createObjectURL(img);
 
                 {images.map((img, index) => (
                     <PreviewItem

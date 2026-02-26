@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { ItemForm } from "@/features/items/ui/ItemForm";
 import { BackHeader } from "@/shared/ui/BackHeader";
 import { useRouter, useParams } from "next/navigation";
@@ -13,6 +13,13 @@ export default function ItemEditPage() {
     const id = params?.id as string; // URL 파라미터에서 ID 추출
 
     const [isExitModalOpen, setIsExitModalOpen] = useState(false);
+    const { data } = useGetItems();
+
+
+    const itemData = useMemo(() => {
+        if (!data || !id) return undefined;
+        return data.find((item) => String(item.id) === id);
+    }, [data, id]);
 
     const { data: itemData, isLoading } = useGetItemDetail(id);
 

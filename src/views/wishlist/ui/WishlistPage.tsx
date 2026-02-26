@@ -6,11 +6,18 @@ import { PackCard, type PackCardData } from "@/shared/ui/item/PackCard";
 import { MOCK_PACK_CARDS } from "@/features/search/model/mock";
 import TabItem from "@/shared/ui/TabItem";
 import { useWishlist } from "@/entities/wishlist/model/useWishlist";
+import { useUserStore, isProfileDefaultColor } from "@/entities/user/model";
+import { PROFILE_COLOR_CLASS } from "@/views/my-page/ui/MyPage";
 
 type ActiveTab = "item" | "pack";
 
 export default function WishListPage() {
-  const nickname = "홍길동"; // TODO: 유저 닉네임 연결
+  const { user } = useUserStore();
+  const nickname = user?.name ?? "사용자";
+  const profileImageUrl = user?.profileImageUrl;
+  const profileInitial = nickname.charAt(0).toUpperCase();
+
+  const { data: wishlist, isLoading } = useWishlist();
 
   const { data: wishlist, isLoading } = useWishlist();
 
@@ -51,7 +58,7 @@ export default function WishListPage() {
   if (isLoading) return <div className="p-10 text-center">로딩 중...</div>;
 
   return (
-    <main className="min-h-dvh bg-background-alternative2 px-5 pt-12 pb-28">
+    <main className="min-h-dvh bg-background-normal px-5 pt-12 pb-28">
       <div className="flex items-start justify-between">
         <div>
           <h1 className="type-heading1 text-label-default">
@@ -61,7 +68,24 @@ export default function WishListPage() {
           </h1>
         </div>
         <div className="shrink-0">
-          <div className="h-14 w-14 rounded-full bg-neutral-900" />
+          {profileImageUrl && !isProfileDefaultColor(profileImageUrl) ? (
+            <div
+              className="h-14 w-14 rounded-full bg-neutral-300 bg-cover bg-center"
+              style={{ backgroundImage: `url(${profileImageUrl})` }}
+              aria-label={`${nickname} 프로필 이미지`}
+              role="img"
+            />
+          ) : (
+            <div
+              className={`h-14 w-14 rounded-full flex items-center justify-center text-white font-bold ${
+                profileImageUrl && isProfileDefaultColor(profileImageUrl)
+                  ? PROFILE_COLOR_CLASS[profileImageUrl] ?? "bg-neutral-300"
+                  : "bg-neutral-900"
+              }`}
+            >
+              {profileInitial || "?"}
+            </div>
+          )}
         </div>
       </div>
 
