@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import Image from "next/image";
 import { TextField } from "@/shared/ui/TextField";
 import { Tag2Btn } from "@/shared/ui/Tag2Btn";
