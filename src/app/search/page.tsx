@@ -4,13 +4,19 @@ import * as React from "react";
 import { Suspense } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useSearchPageTransition } from "@/features/search/transition";
-import { POPULAR_KEYWORDS, RECENT_SEARCHES } from "@/features/search/model/mock";
-import { categoriesToQuery, slugToLabel } from "@/features/search/model/categories";
+import { RECENT_SEARCHES } from "@/features/search/model/mock";
+import {
+  categoriesToQuery,
+  labelToSlug,
+  slugToLabel,
+} from "@/features/search/model/categories";
 import { useSearchState } from "@/widgets/search/model/useSearchState";
 import { SearchHeader } from "@/widgets/search/ui/SearchHeader";
 import { SearchResultSection } from "@/widgets/search/ui/SearchResultSection";
 import { SearchLandingSection } from "@/widgets/search/ui/SearchLandingSection";
 import { CategoryChip } from "@/shared/ui/CategoryChip";
+import { useUserStore } from "@/entities/user/model/useUserStore";
+import { usePopularKeywords } from "@/features/search/model/usePopularKeywords";
 
 function SearchPageContent() {
   const router = useRouter();
@@ -21,7 +27,8 @@ function SearchPageContent() {
   const [recents, setRecents] = React.useState(RECENT_SEARCHES);
   const [selectedPopularId, setSelectedPopularId] =
     React.useState<string | null>(null);
-
+  const user = useUserStore((state) => state.user);
+  const { data: popularKeywords = [] } = usePopularKeywords();
   const {
     categorySlugs,
     selectedLabels,
@@ -73,7 +80,7 @@ function SearchPageContent() {
         <SearchResultSection
           packs={filteredPacks}
           isEmpty={isEmpty}
-          nickname="홍길동"
+          nickname={user?.name ?? "사용자"}
           recommended={recommendedPacks}
         />
       ) : (
@@ -81,11 +88,18 @@ function SearchPageContent() {
           recents={recents}
           onClear={clearAll}
           onRemove={removeOne}
-          popular={POPULAR_KEYWORDS}
+          popular={popularKeywords}
           selectedId={selectedPopularId}
           onSelectPopular={(value, id) => {
             setSelectedPopularId(id);
-            router.push(`/search?categories=${value}`);
+            const categorySlug = labelToSlug(value) ?? value;
+
+            if (labelToSlug(value) || slugToLabel(categorySlug)) {
+              router.push(`/search?categories=${categorySlug}`);
+              return;
+            }
+
+            setQuery(value);
           }}
         />
       )}
