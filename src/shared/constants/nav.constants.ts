@@ -11,6 +11,7 @@ export const BOTTOM_NAV_HIDE_RULES = [
   "/pack/*",
   "/splash",
   "/dev*",
+  "/intro",
 ];
 
 export const FAB_HIDE_RULES = [
@@ -24,4 +25,5 @@ export const FAB_HIDE_RULES = [
   "/pack/*",
   "/dev*",
   "/my-page",
+  "/intro",
 ];
