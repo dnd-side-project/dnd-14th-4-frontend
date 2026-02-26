@@ -23,6 +23,8 @@ import { PROFILE_COLOR_CLASS } from "@/views/my-page/ui/MyPage";
 
 import { useTrendingTags } from "../model/useTrendingTags";
 import type { HomePackApiDto } from "../model/mockHome";
+import { RECOMMENDATION_TITLE_BY_CATEGORY_ID, useRecommendedPacks } from "../model/useRecommendedPacks";
+import { PackCarousel } from "./PackCarousel";
 
 export function HomePage() {
   const router = useRouter();
@@ -51,6 +53,11 @@ export function HomePage() {
   }, []);
 
   const { data, isLoading, isError } = useTrendingTags();
+  const {
+    data: recommendationData,
+    isLoading: isRecommendationLoading,
+    isError: isRecommendationError,
+  } = useRecommendedPacks();
 
   const tags = React.useMemo(
     () => data?.tags ?? [],
@@ -71,6 +78,29 @@ export function HomePage() {
   }, [tags, selectedTag]);
 
   const newPacks: HomePackApiDto[] = rawByCategory[selectedTag] ?? [];
+  const recommendationSections = React.useMemo(() => {
+    if (!recommendationData) return [];
+
+    return Object.entries(recommendationData)
+      .sort(([a], [b]) => Number(a) - Number(b))
+      .filter(([, packs]) => packs.length > 0)
+      .slice(0, 2)
+      .map(([categoryId, packs]) => ({
+        categoryId,
+        title:
+          RECOMMENDATION_TITLE_BY_CATEGORY_ID[categoryId] ??
+          "추천 팩",
+        packs: packs.map((pack) => ({
+          id: String(pack.id),
+          tag: pack.contextCategory,
+          itemCount: pack.items,
+          title: pack.title,
+          author: pack.nickname,
+          imageSrc: pack.imageUrl,
+          imageAlt: `${pack.title} 이미지`,
+        })),
+      }));
+  }, [recommendationData]);
 
   return (
     <div className="min-h-dvh bg-background-alternative pt-12 px-5 pb-35">
@@ -123,8 +153,26 @@ export function HomePage() {
         return={returnOverlay}
         config={transitionConfig}
       />
-
       <section className="mt-8">
+        {isRecommendationLoading && (
+          <div className="text-sm text-neutral-500">추천 팩을 불러오는 중...</div>
+        )}
+
+        {isRecommendationError && (
+          <div className="text-sm text-red-500">추천 팩을 불러오지 못했습니다.</div>
+        )}
+
+        {!isRecommendationLoading &&
+          !isRecommendationError &&
+          recommendationSections.map((section) => (
+            <div key={section.categoryId} className="mb-10 last:mb-0">
+              <h2 className="text-[18px] font-bold text-neutral-900">{section.title}</h2>
+              <PackCarousel packs={section.packs} />
+            </div>
+          ))}
+      </section>
+
+      <section className="mt-8">  
         <h2 className="text-[18px] font-bold text-neutral-900">
           지금 등록된 따끈따끈한 신상 팩
         </h2>
@@ -177,7 +225,7 @@ export function HomePage() {
                 key={item.id}
                 type="button"
                 className="w-full text-left px-4 py-4 flex items-center gap-4 border-b border-neutral-200 last:border-b-0"
-                onClick={() => router.push(`/packs/${item.id}`)}
+                onClick={() => router.push(`/pack/${item.id}`)}
               >
                 <div className="h-12 w-12 rounded-xl bg-neutral-900 shrink-0" />
                 <div className="min-w-0 flex-1">

@@ -2,7 +2,7 @@
 
 import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { MOCK_ITEMS } from '@/features/search/model/mock';
+import type { Item } from '@/entities/item/model/types';
 import { BackHeader } from '@/shared/ui/BackHeader';
 import { ItemBox } from '@/shared/ui/item/ItemBox';
 import { Tag2Btn } from '@/shared/ui/Tag2Btn';
@@ -17,10 +17,11 @@ type PageMode = 'view' | 'edit' | 'add';
 
 interface PackDetailContentProps {
     packData: PackCardData;
+    items: Item[];
     onAddItem: () => void;
 }
 
-function PackDetailInner({ packData, onAddItem }: PackDetailContentProps) {
+function PackDetailInner({ packData, items, onAddItem }: PackDetailContentProps) {
     const router = useRouter();
     const searchParams = useSearchParams();
     const rawMode = searchParams.get('mode');
@@ -87,11 +88,11 @@ function PackDetailInner({ packData, onAddItem }: PackDetailContentProps) {
                 />
 
                 <div className="type-heading2 mt-[50px] flex gap-1">
-                    아이템 <span className="text-primary-normal">{MOCK_ITEMS.length}</span>
+                    아이템 <span className="text-primary-normal">{items.length}</span>
                 </div>
 
                 <div className="flex flex-col gap-4 mt-4">
-                    {MOCK_ITEMS.map((card) => (
+                    {items.map((card) => (
                         <ItemBox key={card.id} item={card} />
                     ))}
 
