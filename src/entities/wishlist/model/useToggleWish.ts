@@ -18,6 +18,8 @@ export const useToggleWish = () => {
         mutationFn: toggleWishlistAPI,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["items"] });
+            queryClient.invalidateQueries({ queryKey: ["wishlist"] });
+
         },
         onError: (error) => {
             console.error("위시리스트 변경 에러:", error);
