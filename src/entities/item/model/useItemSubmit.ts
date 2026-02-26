@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiClient } from "@/shared/api/apiClient";
 import type { ItemAddRequestDTO, ItemAddResponse, ItemAddErrorResponse } from "../../../features/items/model/types";
 import { AxiosError } from "axios";
+import { appToast } from "@/shared/utils/toast";
 
 export interface ItemSubmitParams {
     itemId?: number;
@@ -9,62 +10,53 @@ export interface ItemSubmitParams {
     reviewImages?: File[];
 }
 
+const submitItemApi = async ({ itemId, request, reviewImages }: ItemSubmitParams) => {
+    if (reviewImages && reviewImages.length > 5) {
+        throw new Error("리뷰 이미지는 최대 5개까지만 업로드 가능합니다.");
+    }
+
+    const formData = new FormData();
+
+    formData.append(
+        "request",
+        new Blob([JSON.stringify(request)], { type: "application/json" }),
+        "request.json"
+    );
+
+    if (reviewImages && reviewImages.length > 0) {
+        reviewImages.forEach((file) => formData.append("reviewImages", file));
+    }
+
+    const isEdit = !!itemId;
+    const url = isEdit ? `/api/v1/items/${itemId}` : "/api/v1/items/new";
+
+    const response = await apiClient({
+        method: isEdit ? "patch" : "post",
+        url,
+        data: formData,
+        headers: { "Content-Type": "multipart/form-data" },
+    });
+
+    return response.data as ItemAddResponse;
+};
+
 export const useItemSubmit = () => {
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+    const queryClient = useQueryClient();
 
-    const submitItem = async ({ itemId, request, reviewImages }: ItemSubmitParams) => {
-        setIsLoading(true);
-        setError(null);
+    return useMutation<ItemAddResponse, AxiosError<ItemAddErrorResponse>, ItemSubmitParams>({
+        mutationFn: submitItemApi,
+        onSuccess: (_, variables) => {
+            queryClient.invalidateQueries({ queryKey: ["items"] });
 
-        if (reviewImages && reviewImages.length > 5) {
-            const msg = "리뷰 이미지는 최대 5개까지만 업로드 가능합니다.";
-            setError(msg);
-            setIsLoading(false);
-            throw new Error(msg);
-        }
+            const message = variables.itemId ? "수정되었습니다." : "등록되었습니다.";
+            appToast.success(message);
+        },
+        onError: (err, variables) => {
+            const errorMessage = err.response?.data?.message
+                || `아이템 ${variables.itemId ? '수정' : '등록'}에 실패했습니다.`;
 
-        try {
-            const formData = new FormData();
-
-            formData.append(
-                "request",
-                new Blob([JSON.stringify(request)], { type: "application/json" }),
-                "request.json"
-            );
-
-            if (reviewImages && reviewImages.length > 0) {
-                reviewImages.forEach((file) => formData.append("reviewImages", file));
-            }
-
-            const isEdit = !!itemId;
-            const url = isEdit ? `/api/v1/items/${itemId}` : "/api/v1/items/new";
-            const method = isEdit ? "patch" : "post";
-
-
-
-            const { data } = await apiClient[method]<ItemAddResponse>(
-                url,
-                formData,
-                {
-                    headers: {
-                        "Content-Type": "multipart/form-data"
-                    }
-                }
-            );
-
-            return data;
-        } catch (err) {
-            const axiosError = err as AxiosError<ItemAddErrorResponse>;
-            const errorMessage = axiosError.response?.data?.message
-                || `아이템 ${itemId ? '수정' : '추가'}에 실패했습니다.`;
-
-            setError(errorMessage);
-            throw err;
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    return { submitItem, isLoading, error };
+            appToast.error(errorMessage);
+            console.error("Submit Error:", err);
+        },
+    });
 };

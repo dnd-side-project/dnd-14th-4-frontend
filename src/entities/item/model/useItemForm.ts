@@ -19,7 +19,7 @@ export const useItemForm = (initialData?: Partial<Item>, isEdit = false) => {
 
     const [images, setImages] = useState<(File | string)[]>(initialData?.reviewImagePaths ?? []);
 
-    const { submitItem, isLoading } = useItemSubmit();
+    const { mutateAsync: submitItem, isPending: isLoading } = useItemSubmit();
 
     const updateField = <K extends keyof Item>(field: K, value: Item[K]) => {
         setFormData((prev) => ({ ...prev, [field]: value }));
