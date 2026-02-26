@@ -6,6 +6,7 @@ import { ImageUploadBox } from "../ImageUploadBox";
 import { useImageUpload } from "../../model/useImageUpload";
 import { useTagInput } from "../../model/useTagInput";
 import Image from "next/image";
+import { IcSvgCloseBig } from "@/shared/icons";
 
 interface ImageReviewSectionProps {
     images: (File | string)[];
@@ -39,27 +40,26 @@ export function ImageReviewSection({ images, onImagesChange, tags, onTagsChange 
                         onClick={openPicker}
                     />
                 </div>
-                {images.map((img: File | string, index: number) => {
-                    const imgSrc = typeof img === "string" ? img : URL.createObjectURL(img);
+                {images.map((img, index) => {
+                    const imgSrc = typeof img === "string"
+                        ? encodeURI(img)
+                        : URL.createObjectURL(img);
 
                     return (
-                        <div key={index} className="relative flex-shrink-0 w-[100px] h-[100px]">
+                        <div key={`image-${index}`} className="relative flex-shrink-0 w-[100px] h-[100px]">
                             <Image
                                 src={imgSrc}
                                 alt="preview"
                                 fill
                                 className="object-cover rounded-lg"
-                                onLoad={() => {
-                                    // File 객체로 만든 URL만 메모리 해제
-                                    if (typeof img !== "string") URL.revokeObjectURL(imgSrc);
-                                }}
+                                unoptimized
                             />
                             <button
                                 type="button"
                                 onClick={() => removeImage(index)}
-                                className="absolute z-10 -top-2 -right-2 bg-black text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
+                                className="absolute z-10 top-1 right-1 bg-black/50 text-white rounded-full w-5 h-5 flex items-center justify-center"
                             >
-                                ✕
+                                <IcSvgCloseBig className="w-8 h-8" />
                             </button>
                         </div>
                     );
