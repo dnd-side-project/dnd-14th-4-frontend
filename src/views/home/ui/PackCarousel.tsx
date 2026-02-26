@@ -6,6 +6,15 @@ import {
 
 const fallbackImageSrc = "/splash-bg.png";
 const fallbackImageAlt = "Mock pack image";
+const unavailableImageText = "이미지 경로가 없습니다";
+
+const isValidImageSrc = (imageSrc?: string) => {
+  if (!imageSrc) return false;
+  const trimmed = imageSrc.trim();
+  if (!trimmed) return false;
+  if (trimmed === unavailableImageText) return false;
+  return true;
+};
 
 export function PackCarousel({ packs }: { packs: PackImageCardData[] }) {
   const scrollerRef = React.useRef<HTMLDivElement>(null);
@@ -41,8 +50,8 @@ export function PackCarousel({ packs }: { packs: PackImageCardData[] }) {
             >
               <PackImageCard
                 {...p}
-                href={`/pack/${p.id}`}
-                imageSrc={p.imageSrc?.trim() ? p.imageSrc : fallbackImageSrc}
+                href={`/packs/${p.id}`}
+                imageSrc={isValidImageSrc(p.imageSrc) ? p.imageSrc : fallbackImageSrc}
                 imageAlt={p.imageAlt ?? fallbackImageAlt}
               />
             </div>
