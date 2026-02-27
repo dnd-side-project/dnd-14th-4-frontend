@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import { IcSvgFilter } from "@/shared/icons";
 import TabItem from "@/shared/ui/TabItem";
 import { PackCard } from "@/shared/ui/item/PackCard";
@@ -26,6 +27,11 @@ export const MyPack = ({ onGoToItemAdd }: MyPackProps) => {
 
     const { data: itemData } = useGetItems();
     const { data: packData, isLoading: isPackLoading, isError: isPackError } = useGetMyPacks();
+
+    const sortedPackData = useMemo(() => {
+        if (!packData) return [];
+        return [...packData].reverse();
+    }, [packData]);
 
     const nickname = user?.name ?? "사용자";
     const profileImageUrl = user?.profileImageUrl;
@@ -117,7 +123,7 @@ export const MyPack = ({ onGoToItemAdd }: MyPackProps) => {
                         {!isPackLoading && packData?.length === 0 && (
                             <p className="text-center py-10 text-neutral-400">아직 등록한 팩이 없습니다.</p>
                         )}
-                        {packData?.map((pack) => (
+                        {sortedPackData.map((pack) => (
                             <PackCard
                                 key={pack.id}
                                 id={pack.id}

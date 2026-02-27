@@ -22,9 +22,10 @@ interface PackDetailContentProps {
     packData: PackCardData;
     items: Item[];
     onAddItem: () => void;
+    newlyAddedIds?: number[];
 }
 
-function PackDetailInner({ packData, items, onAddItem }: PackDetailContentProps) {
+function PackDetailInner({ packData, items, onAddItem, newlyAddedIds = [] }: PackDetailContentProps) {
     const router = useRouter()
     const { user } = useUserStore();
     const searchParams = useSearchParams();
@@ -45,17 +46,14 @@ function PackDetailInner({ packData, items, onAddItem }: PackDetailContentProps)
 
 
     const handleComplete = () => {
-        const itemIdsParam = searchParams.get('itemIds');
-        const addItems = itemIdsParam ? itemIdsParam.split(',').map(Number) : [];
-
         updatePack({
             introduction: descriptionValue,
-            addItems: addItems.length > 0 ? addItems : undefined,
+            addItems: newlyAddedIds.length > 0 ? newlyAddedIds : undefined,
             // removeItems: [] // 필요 시 구현
         }, {
             onSuccess: () => {
                 setPageMode('view');
-                // URL에서 쿼리 파라미터 제거하며 상세 페이지로 클린업 이동
+                // URL 클린업 및 상태 초기화 성격의 이동
                 router.replace(`/pack/${packData.id}`);
             }
         });

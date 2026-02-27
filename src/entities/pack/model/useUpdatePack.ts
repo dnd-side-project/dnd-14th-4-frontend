@@ -20,7 +20,8 @@ export function useUpdatePack(packId: number) {
         mutationFn: (payload: UpdatePackRequest) => updatePack(packId, payload),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["pack", "detail", packId] });
-            queryClient.invalidateQueries({ queryKey: ["packs"] }); // 팩 목록 갱신
+            queryClient.invalidateQueries({ queryKey: ["my-packs"] });
+            queryClient.refetchQueries({ queryKey: ["my-packs"] });
             appToast.success("팩이 성공적으로 수정되었습니다.");
         },
         onError: (error) => {

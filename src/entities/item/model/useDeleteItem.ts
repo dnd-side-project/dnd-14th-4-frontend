@@ -14,6 +14,7 @@ export function useDeleteItem() {
         mutationFn: (itemId: number | string) => deleteItem(itemId),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["items"] });
+            queryClient.refetchQueries({ queryKey: ["items"] });
             appToast.success("삭제되었습니다.");
         },
         onError: (error) => {
