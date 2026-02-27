@@ -4,7 +4,7 @@ import {
   type PackImageCardData,
 } from "@/shared/ui/item/PackImageCard";
 
-const fallbackImageSrc = "/splash-bg.png";
+const fallbackImageSrc = "/favicon.svg";
 const fallbackImageAlt = "Mock pack image";
 const unavailableImageText = "이미지 경로가 없습니다";
 

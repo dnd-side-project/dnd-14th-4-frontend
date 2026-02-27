@@ -59,6 +59,9 @@ export function PackImageCard({
     }
   };
 
+
+
+
   return (
     <div
       className="relative w-full min-h-[322px] cursor-pointer"
