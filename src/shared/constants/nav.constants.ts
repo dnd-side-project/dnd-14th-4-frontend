@@ -26,4 +26,5 @@ export const FAB_HIDE_RULES = [
   "/dev*",
   "/my-page",
   "/intro",
+  "/wishlist",
 ];
