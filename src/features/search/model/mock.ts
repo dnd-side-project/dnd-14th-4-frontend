@@ -92,7 +92,7 @@ export const MOCK_ITEM_EDIT_DATA = {
 
 export const MOCK_PACK_CARDS: PackCardData[] = [
   {
-    id: "1",
+    id: 1,
     tag: "운동/산책",
     itemCount: 8,
     title: "팩 이름은 최대 길이 20자입니다다다",
@@ -102,7 +102,7 @@ export const MOCK_PACK_CARDS: PackCardData[] = [
     date: "2일 전"
   },
   {
-    id: "2",
+    id: 2,
     tag: "운동/산책",
     itemCount: 8,
     title: "팩 이름은 최대 길이 20자입니다다다",

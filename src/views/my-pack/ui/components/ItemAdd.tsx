@@ -16,15 +16,15 @@ interface ItemAddProps {
 
 export function ItemAdd({ onBack, addMode = "pack" }: ItemAddProps) {
     const router = useRouter();
-    const [selectedPackId, setSelectedPackId] = useState<string | null>(null);
+    const [selectedPackId, setSelectedPackId] = useState<number | null>(null);
     const { data: items } = useGetItems();
-    const handleSelectPack = (id: string) => {
+    const handleSelectPack = (id: number) => {
         setSelectedPackId((prev) => (prev === id ? null : id));
     };
 
     const handleAction = () => {
         if (addMode === "pack") {
-            if (selectedPackId) {
+            if (selectedPackId !== null) {
                 router.push(`/pack/${selectedPackId}?mode=add`);
             }
         } else {
@@ -67,7 +67,7 @@ export function ItemAdd({ onBack, addMode = "pack" }: ItemAddProps) {
 
                 <FixedBottomButton
                     onClick={handleAction}
-                    disabled={addMode === "pack" && !selectedPackId}
+                    disabled={addMode === "pack" && selectedPackId === null}
                 >
                     {addMode === "pack" ? "다음" : "추가하기"}
                 </FixedBottomButton>

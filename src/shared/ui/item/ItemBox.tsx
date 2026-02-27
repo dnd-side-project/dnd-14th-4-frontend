@@ -1,5 +1,6 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import { IcSvgWishBtn } from "@/shared/icons"
 import Tag1Btn from "@/shared/ui/Tag1Btn"
 import Image from "next/image"
@@ -20,10 +21,22 @@ export function ItemBox({
     isWished = false,
     onWishClick
 }: ItemBoxProps) {
+    const [localLiked, setLocalLiked] = useState(isWished);
+
+    useEffect(() => {
+        setLocalLiked(isWished);
+    }, [isWished]);
 
     const displayTags = buildDisplayTags(item.satisfaction, item.usePeriod);
     const satisfactionTag = displayTags.find(t => t.variant === "black")?.label;
     const periodTag = displayTags.find(t => t.variant === "beige60")?.label;
+
+    const handleLikeClick = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        setLocalLiked((prev) => !prev);
+        onWishClick?.();
+    };
+
     return (
         <div className="w-full p-4 shadow-emphasize rounded-[20px] bg-white">
             <div className="flex justify-between items-start">
@@ -34,13 +47,14 @@ export function ItemBox({
                 {showWishBtn && (
                     <button
                         type="button"
-                        onClick={onWishClick}
+                        aria-label="좋아요"
+                        onClick={handleLikeClick}
                         className="p-1"
                     >
                         <IcSvgWishBtn
                             className="w-7 h-7"
-                            fill={isWished ? "var(--color-primary-subtler)" : "var(--alpha-5)"}
-                            stroke={isWished ? "var(--color-primary-subtle)" : "var(--alpha-22)"}
+                            fill={localLiked ? "var(--color-primary-subtler)" : "var(--alpha-5)"}
+                            strokeColor={localLiked ? "var(--color-primary-subtle)" : "var(--alpha-22)"}
                         />
                     </button>
                 )}

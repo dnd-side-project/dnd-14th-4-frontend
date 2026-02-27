@@ -2,12 +2,12 @@
 
 import * as React from "react";
 import { ItemCard } from "@/shared/ui/item/ItemCard";
-import { PackCard, type PackCardData } from "@/shared/ui/item/PackCard";
-import { MOCK_PACK_CARDS } from "@/features/search/model/mock";
+import { PackCard } from "@/shared/ui/item/PackCard";
 import TabItem from "@/shared/ui/TabItem";
 import { useWishlist } from "@/entities/wishlist/model/useWishlist";
 import { useUserStore, isProfileDefaultColor } from "@/entities/user/model";
 import { PROFILE_COLOR_CLASS } from "@/views/my-page/ui/MyPage";
+import { useGetWishlistPacks } from "@/entities/pack/model/useGetWishlistPacks";
 
 type ActiveTab = "item" | "pack";
 
@@ -17,7 +17,8 @@ export default function WishListPage() {
   const profileImageUrl = user?.profileImageUrl;
   const profileInitial = nickname.charAt(0).toUpperCase();
 
-  const { data: wishlist, isLoading } = useWishlist();
+  const { data: wishlist, isLoading: isItemLoading } = useWishlist();
+  const { data: wishlistPacks, isLoading: isPackLoading } = useGetWishlistPacks();
 
   const [activeTab, setActiveTab] = React.useState<ActiveTab>("item");
   const isSelectMode = false;
@@ -25,7 +26,6 @@ export default function WishListPage() {
 
   const items = React.useMemo(() => {
     if (!wishlist) return [];
-
     return wishlist.map((it) => ({
       id: it.id,
       brandName: it.brandName,
@@ -39,10 +39,17 @@ export default function WishListPage() {
     }));
   }, [wishlist]);
 
-  const packs: PackCardData[] = React.useMemo(() => {
-    const base = MOCK_PACK_CARDS as unknown as PackCardData[];
-    return base.map((p) => ({ ...p, liked: true }));
-  }, []);
+  const packs = React.useMemo(() => {
+    if (!wishlistPacks) return [];
+    return wishlistPacks.map((p) => ({
+      id: p.id,
+      title: p.title,
+      tag: p.contextCategory,
+      itemCount: p.items,
+      author: p.nickname,
+      liked: true,
+    }));
+  }, [wishlistPacks]);
 
   const onSelect = (id: string) => {
     setCheckedIds((prev) => {
@@ -52,6 +59,8 @@ export default function WishListPage() {
       return next;
     });
   };
+
+  const isLoading = activeTab === "item" ? isItemLoading : isPackLoading;
 
   if (isLoading) return <div className="p-10 text-center">로딩 중...</div>;
 
@@ -75,11 +84,10 @@ export default function WishListPage() {
             />
           ) : (
             <div
-              className={`h-14 w-14 rounded-full flex items-center justify-center text-white font-bold ${
-                profileImageUrl && isProfileDefaultColor(profileImageUrl)
-                  ? PROFILE_COLOR_CLASS[profileImageUrl] ?? "bg-neutral-300"
-                  : "bg-neutral-900"
-              }`}
+              className={`h-14 w-14 rounded-full flex items-center justify-center text-white font-bold ${profileImageUrl && isProfileDefaultColor(profileImageUrl)
+                ? PROFILE_COLOR_CLASS[profileImageUrl] ?? "bg-neutral-300"
+                : "bg-neutral-900"
+                }`}
             >
               {profileInitial || "?"}
             </div>
@@ -102,10 +110,9 @@ export default function WishListPage() {
         </div>
       </header>
 
-
       <section className="space-y-6">
         {activeTab === "item" ? (
-          <ul className="space-y-6">
+          <ul className="space-y-2">
             {items.length > 0 ? (
               items.map((it) => (
                 <li key={it.id}>
@@ -127,12 +134,18 @@ export default function WishListPage() {
             )}
           </ul>
         ) : (
-          <ul className="space-y-6">
-            {packs.slice(0, 3).map((p) => (
-              <li key={p.id}>
-                <PackCard {...p} onMoreClick={() => { }} />
-              </li>
-            ))}
+          <ul className="space-y-2">
+            {packs.length > 0 ? (
+              packs.map((p) => (
+                <li key={p.id}>
+                  <PackCard {...p} onMoreClick={() => { }} />
+                </li>
+              ))
+            ) : (
+              <div className="py-20 text-center text-label-assistive">
+                위시리스트에 담긴 팩이 없어요.
+              </div>
+            )}
           </ul>
         )}
       </section>

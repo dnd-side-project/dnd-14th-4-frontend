@@ -1,14 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
-import { IcSvgMore, IcSvgWish, IcSvgWishBtn } from "@/shared/icons";
+import { IcSvgMore, IcSvgWishBtn } from "@/shared/icons";
 import { Tag2Btn } from "@/shared/ui/Tag2Btn";
 import { useRouter } from "next/navigation";
 import { PackImageFolderBg } from "./pack-image-card-bg";
+import { useTogglePackWish } from "@/entities/wishlist/model/useTogglePackWish";
 
 export interface PackImageCardData {
-  id: string;
+  id: number;
   tag: string;
   tagColor?: string;
   itemCount: number;
@@ -20,12 +21,12 @@ export interface PackImageCardData {
   href?: string;
 }
 
-interface PackImageCardProps extends Omit<PackImageCardData, "id"> {
-  onLike?: () => void;
+interface PackImageCardProps extends PackImageCardData {
   onMore?: () => void;
 }
 
 export function PackImageCard({
+  id,
   tag,
   itemCount = 8,
   title,
@@ -33,16 +34,23 @@ export function PackImageCard({
   liked = false,
   imageSrc,
   imageAlt = "",
-  onLike,
   onMore,
   href,
 }: PackImageCardProps) {
   const [isLiked, setIsLiked] = useState(liked);
   const router = useRouter();
 
+  const { mutate } = useTogglePackWish();
+
+  useEffect(() => {
+    setIsLiked(liked);
+  }, [liked]);
+
   const handleLike = () => {
-    setIsLiked((prev) => !prev);
-    onLike?.();
+    const nextState = !isLiked;
+    setIsLiked(nextState);
+
+    mutate({ packId: id, isWished: isLiked });
   };
 
   const handleClick = () => {
@@ -50,6 +58,9 @@ export function PackImageCard({
       router.push(href);
     }
   };
+
+
+
 
   return (
     <div
@@ -77,17 +88,17 @@ export function PackImageCard({
               <button
                 type="button"
                 aria-label="좋아요"
-                className="shrink-0 text-neutral-300 transition-colors hover:text-rose-400"
+                className="shrink-0 p-1 transition-colors"
                 onClick={(e) => {
                   e.stopPropagation();
                   handleLike();
                 }}
               >
-                {isLiked ? (
-                  <IcSvgWish className="h-5 w-5 sm:h-6 sm:w-6 text-red-500" />
-                ) : (
-                  <IcSvgWishBtn className="h-5 w-5 sm:h-6 sm:w-6" />
-                )}
+                <IcSvgWishBtn
+                  className="h-5 w-5 sm:h-6 sm:w-6"
+                  fill={isLiked ? "var(--color-primary-subtler)" : "var(--alpha-5)"}
+                  strokeColor={isLiked ? "var(--color-primary-subtle)" : "var(--alpha-22)"}
+                />
               </button>
             </div>
 
@@ -109,7 +120,6 @@ export function PackImageCard({
           </button>
         </div>
 
-        {/* Image area */}
         <div className="relative mt-4 aspect-[307/138] w-full overflow-hidden rounded-xl bg-neutral-100 sm:mt-5">
           {imageSrc ? (
             <Image

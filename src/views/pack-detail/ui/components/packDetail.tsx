@@ -12,6 +12,8 @@ import { Modal } from '@/shared/ui/Modal';
 import { ItemAddButton } from '@/shared/ui/ItemAddButton';
 import { PackCardData } from '@/shared/ui/item/PackCard';
 import { ProfileModal } from '@/views/pack-detail/ui/components/profileModal';
+import { useUserStore } from "@/entities/user/model";
+import { useToggleWish } from '@/entities/wishlist/model/useToggleWish';
 
 type PageMode = 'view' | 'edit' | 'add';
 
@@ -22,7 +24,8 @@ interface PackDetailContentProps {
 }
 
 function PackDetailInner({ packData, items, onAddItem }: PackDetailContentProps) {
-    const router = useRouter();
+    const router = useRouter()
+    const { user } = useUserStore();
     const searchParams = useSearchParams();
     const rawMode = searchParams.get('mode');
     const initialMode: PageMode =
@@ -33,8 +36,11 @@ function PackDetailInner({ packData, items, onAddItem }: PackDetailContentProps)
     const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
 
     const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
-
     const { title, author, tag, date } = packData;
+    const isMyPack = user?.name === author;
+    const shouldShowWish = pageMode === 'view' && !isMyPack;
+    const { mutate: toggleItemWish } = useToggleWish();
+
 
     const handleComplete = () => {
         if (pageMode === 'edit') {
@@ -93,7 +99,18 @@ function PackDetailInner({ packData, items, onAddItem }: PackDetailContentProps)
 
                 <div className="flex flex-col gap-4 mt-4">
                     {items.map((card) => (
-                        <ItemBox key={card.id} item={card} />
+                        <ItemBox
+                            key={card.id}
+                            item={card}
+                            showWishBtn={shouldShowWish}
+                            isWished={card.liked}
+                            onWishClick={() => {
+                                toggleItemWish({
+                                    itemId: card.id,
+                                    isWished: !!card.liked
+                                });
+                            }}
+                        />
                     ))}
 
                     {pageMode !== 'view' && (
