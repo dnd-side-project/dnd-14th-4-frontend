@@ -13,7 +13,7 @@ export default function SelectedItemsSection({ onAddClick }: SelectedItemsSectio
   const selected = usePackCreateItemsStore((s) => s.selected);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-2">
       {selected.map((item: Item) => (
         <SwipeToDeleteItemCard key={item.id} item={item} />
       ))}
