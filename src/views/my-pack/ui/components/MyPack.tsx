@@ -24,12 +24,20 @@ export const MyPack = ({ onGoToItemAdd }: MyPackProps) => {
     const { state, actions } = useMyPack();
     const { user } = useUserStore();
 
-    const { data: itemData } = useGetItems();
+    const { data: itemData, isLoading: isItemLoading, isError: isItemError } = useGetItems();
     const { data: packData, isLoading: isPackLoading, isError: isPackError } = useGetMyPacks();
 
     const nickname = user?.name ?? "사용자";
     const profileImageUrl = user?.profileImageUrl;
     const profileInitial = nickname.charAt(0).toUpperCase();
+
+    const isItemTab = state.activeTab === "item";
+    const isPackTab = state.activeTab === "pack";
+
+    const isItemEmpty =
+        !isItemLoading && !isItemError && Array.isArray(itemData) && itemData.length === 0;
+    const isPackEmpty =
+        !isPackLoading && !isPackError && Array.isArray(packData) && packData.length === 0;
 
     return (
         <div className="px-4 pb-24">
@@ -97,38 +105,58 @@ export const MyPack = ({ onGoToItemAdd }: MyPackProps) => {
             )}
 
             <div className="flex flex-col gap-3">
-                {state.activeTab === "item" &&
-                    itemData?.map((card) => (
-                        <ItemCard
-                            key={card.id}
-                            {...card}
-                            isSelectMode={state.isSelectMode}
-                            isChecked={state.selectedIds.includes(String(card.id))}
-                            onSelect={(id) => actions.handleSelect(String(id))}
-                            onDetailClick={() => actions.handleDetailClick(card)}
-                            onMoreClick={() => actions.handleMoreClick(String(card.id))}
-                        />
-                    ))}
-
-                {state.activeTab === "pack" && (
+                {isItemTab && (
                     <>
-                        {isPackLoading && <p className="text-center py-10 text-neutral-400">팩을 불러오는 중...</p>}
-                        {isPackError && <p className="text-center py-10 text-red-400">팩 목록을 가져오지 못했습니다.</p>}
-                        {!isPackLoading && packData?.length === 0 && (
+                        {isItemLoading && (
+                            <p className="text-center py-10 text-neutral-400">아이템을 불러오는 중...</p>
+                        )}
+                        {isItemError && (
+                            <p className="text-center py-10 text-red-400">아이템 목록을 가져오지 못했습니다.</p>
+                        )}
+                        {isItemEmpty && (
+                            <p className="text-center py-10 text-neutral-400">아직 등록한 아이템이 없습니다.</p>
+                        )}
+                        {!isItemLoading &&
+                            Array.isArray(itemData) &&
+                            itemData.map((card) => (
+                                <ItemCard
+                                    key={card.id}
+                                    {...card}
+                                    isSelectMode={state.isSelectMode}
+                                    isChecked={state.selectedIds.includes(String(card.id))}
+                                    onSelect={(id) => actions.handleSelect(String(id))}
+                                    onDetailClick={() => actions.handleDetailClick(card)}
+                                    onMoreClick={() => actions.handleMoreClick(String(card.id))}
+                                />
+                            ))}
+                    </>
+                )}
+
+                {isPackTab && (
+                    <>
+                        {isPackLoading && (
+                            <p className="text-center py-10 text-neutral-400">팩을 불러오는 중...</p>
+                        )}
+                        {isPackError && (
+                            <p className="text-center py-10 text-red-400">팩 목록을 가져오지 못했습니다.</p>
+                        )}
+                        {isPackEmpty && (
                             <p className="text-center py-10 text-neutral-400">아직 등록한 팩이 없습니다.</p>
                         )}
-                        {packData?.map((pack) => (
-                            <PackCard
-                                key={pack.id}
-                                id={pack.id}
-                                title={pack.title}
-                                tag={pack.contextCategory}
-                                itemCount={pack.items}
-                                author={pack.nickname}
-                                onMoreClick={() => actions.handleMoreClick(String(pack.id))}
-                                showLikeBtn={false}
-                            />
-                        ))}
+                        {!isPackLoading &&
+                            Array.isArray(packData) &&
+                            packData.map((pack) => (
+                                <PackCard
+                                    key={pack.id}
+                                    id={pack.id}
+                                    title={pack.title}
+                                    tag={pack.contextCategory}
+                                    itemCount={pack.items}
+                                    author={pack.nickname}
+                                    onMoreClick={() => actions.handleMoreClick(String(pack.id))}
+                                    showLikeBtn={false}
+                                />
+                            ))}
                     </>
                 )}
             </div>
