@@ -65,6 +65,12 @@ export function useSearchBarTransition(router: Router) {
 
   const onForwardComplete = useCallback(() => {
     setFromHome(true);
+    try {
+      sessionStorage.setItem("__skip_root_loading_once__", "1");
+      sessionStorage.setItem("__skip_search_fallback_once__", "1");
+    } catch {
+      // ignore storage errors (e.g. disabled)
+    }
     router.push("/search", { scroll: false });
   }, [router, setFromHome]);
 

@@ -47,7 +47,7 @@ export const MyPack = ({ onGoToItemAdd }: MyPackProps) => {
 
     return (
         <div className="px-4 pb-24">
-            <header className={`px-1 flex items-center justify-between mt-16 ${state.isFilterOpen ? 'mb-5' : 'mb-10'}`}>
+            <header className={`px-1 flex items-center justify-between mt-5 ${state.isFilterOpen ? 'mb-5' : 'mb-10'}`}>
                 <div className="flex-1 flex justify-start">
                     {profileImageUrl && !isProfileDefaultColor(profileImageUrl) ? (
                         <div

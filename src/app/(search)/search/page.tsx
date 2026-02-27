@@ -136,9 +136,29 @@ function SearchPageContent() {
 }
 
 function SearchPageFallback() {
+  const [skip] = React.useState(() => {
+    if (typeof window === "undefined") return false;
+    try {
+      return sessionStorage.getItem("__skip_search_fallback_once__") === "1";
+    } catch {
+      return false;
+    }
+  });
+
+  React.useEffect(() => {
+    if (!skip) return;
+    try {
+      sessionStorage.removeItem("__skip_search_fallback_once__");
+    } catch {
+      // ignore storage errors
+    }
+  }, [skip]);
+
   return (
     <main className="min-h-dvh bg-white pb-24 flex items-center justify-center">
-      <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-neutral-80 border-r-transparent" />
+      {skip ? null : (
+        <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-neutral-80 border-r-transparent" />
+      )}
     </main>
   );
 }
