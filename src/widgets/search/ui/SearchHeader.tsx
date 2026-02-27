@@ -9,6 +9,7 @@ import {
 interface Props {
   query: string;
   onChange: (v: string) => void;
+  onCommit?: (v: string) => void;
   onBack: () => void;
   onFilter: () => void;
   inputRef: React.RefObject<HTMLInputElement>;
@@ -17,6 +18,7 @@ interface Props {
 export function SearchHeader({
   query,
   onChange,
+  onCommit,
   onBack,
   onFilter,
   inputRef,
@@ -39,6 +41,12 @@ export function SearchHeader({
               ref={inputRef}
               value={query}
               onChange={(e) => onChange(e.target.value)}
+              onBlur={() => onCommit?.(query)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  onCommit?.(query);
+                }
+              }}
               placeholder="다양한 팩을 검색해보세요."
               className="w-full bg-transparent outline-none text-sm"
             />

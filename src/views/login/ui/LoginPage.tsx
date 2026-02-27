@@ -22,7 +22,7 @@ export const LoginPage = () => {
           bg-[url('/background/bg-intro.png')]
         "
       >
-        <section className="px-6 pb-[140px]">
+        <section className="px-6 pb-[clamp(20px,16vh,80px)]">
           <p className="text-center type-headline2 text-neutral-800/90">
             따로 찾지 말고, 한 번에 팩으로
           </p>

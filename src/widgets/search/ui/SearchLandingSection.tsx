@@ -18,6 +18,7 @@ interface Props {
   recents: RecentItem[];
   onClear: () => void;
   onRemove: (id: string) => void;
+  onSelectRecent: (keyword: string) => void;
   popular: PopularItem[];
   onSelectPopular: (value: string, id: string) => void;
   selectedId: string | null;
@@ -27,6 +28,7 @@ export function SearchLandingSection({
   recents,
   onClear,
   onRemove,
+  onSelectRecent,
   popular,
   onSelectPopular,
   selectedId,
@@ -45,7 +47,13 @@ export function SearchLandingSection({
         {recents.map((item) => (
           <li key={item.id} className="flex items-center gap-3 py-4 border-b border-neutral-95">
             <IcSvgHistory className="h-5 w-5 text-neutral-400" />
-            <span className="flex-1 type-body2 text-label-default">{item.keyword}</span>
+            <button
+              type="button"
+              className="flex-1 type-body2 text-label-default text-left"
+              onClick={() => onSelectRecent(item.keyword)}
+            >
+              {item.keyword}
+            </button>
             <button onClick={() => onRemove(item.id)}>
               <IcSvgCloseBig className="h-5 w-5 text-neutral-400" />
             </button>
