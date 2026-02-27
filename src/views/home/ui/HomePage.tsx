@@ -135,7 +135,7 @@ export function HomePage() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.25, ease: EASE_OUT }}
-      className="min-h-dvh bg-background-alternative pt-12 px-5 pb-35"
+      className="min-h-dvh bg-background-alternative pt-5 px-5 pb-35"
     >
       <motion.div
         initial="hidden"

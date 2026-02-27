@@ -65,7 +65,7 @@ export default function WishListPage() {
   if (isLoading) return <div className="p-10 text-center">로딩 중...</div>;
 
   return (
-    <main className="min-h-dvh bg-background-normal px-5 pt-12 pb-28">
+    <main className="min-h-dvh bg-background-normal px-5 pt-5 pb-28">
       <div className="flex items-start justify-between">
         <div>
           <h1 className="type-heading1 text-label-default">
@@ -128,7 +128,7 @@ export default function WishListPage() {
                 </li>
               ))
             ) : (
-              <div className="py-20 text-center text-label-assistive">
+              <div className="py-20 text-center py-10 text-neutral-400">
                 위시리스트에 담긴 아이템이 없어요.
               </div>
             )}
