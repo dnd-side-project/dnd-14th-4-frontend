@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { FlowLayout } from "@/shared/ui/layouts/flow-chart";
 import { ProgressBar } from "@/views/onboarding/ui/components/ProgressBar";
@@ -12,17 +12,31 @@ export default function Step1SelectItemsPage() {
   const router = useRouter();
   const [isAddingItems, setIsAddingItems] = useState(false);
   const selectedItems = usePackCreateItemsStore((s) => s.selected);
+  const addSelectedItem = usePackCreateItemsStore((s) => s.add);
+  const resetSelectedItems = usePackCreateItemsStore((s) => s.reset);
+  const initialSelectedItemIds = useMemo(
+    () => selectedItems.map((item) => item.id),
+    [selectedItems]
+  );
 
   const canGoNext = selectedItems.length > 0;
 
   const openItemAdd = () => setIsAddingItems(true);
   const closeItemAdd = () => setIsAddingItems(false);
 
+  const applySelectedItems = (items: typeof selectedItems) => {
+    resetSelectedItems();
+    items.forEach((item) => addSelectedItem(item));
+    closeItemAdd();
+  };
+
   if (isAddingItems) {
     return (
       <ItemAdd
         onBack={closeItemAdd}
         addMode="item"
+        initialSelectedItemIds={initialSelectedItemIds}
+        onAddItems={applySelectedItems}
       />
     );
   }
