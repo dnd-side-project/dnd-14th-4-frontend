@@ -1,13 +1,14 @@
 "use client"
 
 import { useState } from "react"
-import { IcSvgMore, IcSvgWish, IcSvgWishBtn, IcSvgCheckCircle } from "@/shared/icons"
+import { IcSvgMore, IcSvgWishBtn, IcSvgCheckCircle } from "@/shared/icons"
 import { Tag2Btn } from "@/shared/ui/Tag2Btn"
 import { PackFolderBg } from "./packfolder-bg"
 import { useRouter } from "next/navigation"
+import { useTogglePackWish } from "@/entities/wishlist/model/useTogglePackWish"
 
 export interface PackCardData {
-  id: string
+  id: number
   tag: string
   tagColor?: string
   itemCount: number
@@ -19,13 +20,12 @@ export interface PackCardData {
 }
 
 interface PackCardProps extends Omit<PackCardData, "id"> {
-  id: string
+  id: number
   onMoreClick?: () => void
   showLikeBtn?: boolean
-  // 선택 모드 관련 프롭 추가
   isSelectMode?: boolean
   isChecked?: boolean
-  onSelect?: (id: string) => void
+  onSelect?: (id: number) => void
 }
 
 export function PackCard({
@@ -44,12 +44,22 @@ export function PackCard({
   const [isLiked, setIsLiked] = useState(liked)
   const router = useRouter()
 
+  const { mutate: toggleWish } = useTogglePackWish();
+
   const handleCardClick = () => {
     if (isSelectMode) {
       onSelect?.(id)
     } else {
       router.push(`/pack/${id}`)
     }
+  }
+
+  const handleLikeClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+
+    toggleWish({ packId: id, isWished: isLiked });
+
+    setIsLiked((prev) => !prev);
   }
 
   return (
@@ -69,32 +79,33 @@ export function PackCard({
 
         <div className="mt-4 flex items-start justify-between gap-2 sm:mt-5">
           <div className="min-w-0 flex-1">
-            <h3 className="truncate type-headline2 text-neutral-900 sm:text-lg">
-              {title}
-            </h3>
+            <div className="flex items-center gap-2">
+
+              <h3 className="truncate type-headline2 text-neutral-900 sm:text-lg">
+                {title}
+              </h3>
+              {showLikeBtn && (
+                <button
+                  type="button"
+                  aria-label="좋아요"
+                  className="shrink-0 p-1 transition-colors"
+                  onClick={handleLikeClick}
+                >
+                  <IcSvgWishBtn
+                    className="h-5 w-5 sm:h-6 sm:w-6"
+                    fill={isLiked ? "var(--color-primary-subtler)" : "var(--alpha-5)"}
+                    strokeColor={isLiked ? "var(--color-primary-subtle)" : "var(--alpha-22)"}
+                  />
+                </button>
+              )}
+            </div>
             <p className="mt-0.5 truncate type-caption1 text-neutral-400 sm:mt-1 sm:text-sm">
               {author}
             </p>
           </div>
 
           <div className="flex shrink-0 items-center gap-2">
-            {showLikeBtn && (
-              <button
-                type="button"
-                aria-label={isLiked ? "Unlike" : "Like"}
-                className="text-neutral-300 transition-colors hover:text-red-400"
-                onClick={(e) => {
-                  e.stopPropagation()
-                  setIsLiked((prev) => !prev)
-                }}
-              >
-                {isLiked ? (
-                  <IcSvgWish className="h-5 w-5 sm:h-6 sm:w-6 text-red-500" />
-                ) : (
-                  <IcSvgWishBtn className="h-5 w-5 sm:h-6 sm:w-6" />
-                )}
-              </button>
-            )}
+
 
             {isSelectMode ? (
               <button

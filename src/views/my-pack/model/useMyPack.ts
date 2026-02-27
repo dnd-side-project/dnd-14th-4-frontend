@@ -1,7 +1,7 @@
 import { useReducer } from "react";
 import { useRouter } from "next/navigation";
-import { appToast } from "@/shared/utils/toast";
 import { Item } from "@/entities/item/model/types";
+import { useDeleteItem } from "@/entities/item/model/useDeleteItem";
 
 interface State {
     activeTab: "item" | "pack";
@@ -83,7 +83,7 @@ const reducer = (state: State, action: Action): State => {
 export const useMyPack = () => {
     const router = useRouter();
     const [state, dispatch] = useReducer(reducer, initialState);
-
+    const { mutate: deleteItemMutation } = useDeleteItem();
     const handleTabChange = (tab: "item" | "pack") => dispatch({ type: "SET_TAB", payload: tab });
     const toggleSelectMode = () => dispatch({ type: "TOGGLE_SELECT_MODE" });
     const handleSelect = (id: string) => dispatch({ type: "TOGGLE_ITEM_SELECTION", payload: id });
@@ -95,8 +95,13 @@ export const useMyPack = () => {
     const handleFilterSelect = (filter: string) => dispatch({ type: "SET_FILTER", payload: filter });
 
     const handleFinalDelete = () => {
-        dispatch({ type: "COMPLETE_DELETE" });
-        appToast.success("삭제되었습니다.");
+        if (!state.activeMoreId) return;
+
+        deleteItemMutation(state.activeMoreId, {
+            onSuccess: () => {
+                dispatch({ type: "COMPLETE_DELETE" });
+            }
+        });
     };
 
     const handleEditRedirect = () => {

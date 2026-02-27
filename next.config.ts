@@ -1,4 +1,5 @@
 import withPWAInit from "@ducanh2912/next-pwa";
+import type { NextConfig } from "next";
 
 const withPWA = withPWAInit({
   dest: "public",       // 서비스 워커 파일이 저장될 위치
@@ -11,8 +12,21 @@ const withPWA = withPWAInit({
   },
 });
 
-const nextConfig = {
-  // 기존 설정이 있다면 여기에 유지
+const nextConfig: NextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'whatsinmypack.s3.ap-northeast-2.amazonaws.com',
+        pathname: '/**',
+      },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+        pathname: "/**",
+      },
+    ],
+  },
 };
 
 export default withPWA(nextConfig);

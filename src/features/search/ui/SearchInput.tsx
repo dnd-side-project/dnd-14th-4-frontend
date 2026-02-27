@@ -7,33 +7,30 @@ type Props = {
   isSearchMode?: boolean;
   query: string;
   onChange: (v: string) => void;
-  onEnterSearchMode?: () => void; // 검색 페이지 이동
+  onEnter?: () => void; 
+  onSearch?: (q: string) => void;
 };
 
 const barClass =
-  "flex h-10 items-center gap-2 rounded-xl bg-common-0 px-3 transition-all duration-300";
-const placeholderClass =
-  "text-sm text-neutral-400";
+  "flex h-10 items-center border border-pink-50 gap-2 rounded-xl bg-common-0 px-3 transition-all duration-300";
+const placeholderClass = "text-sm text-neutral-400";
 
 export function SearchInput({
   isSearchMode = false,
   query,
   onChange,
-  onEnterSearchMode,
+  onEnter,
+  onSearch,
 }: Props) {
-  const handleEnterSearch = () => {
-    if (!isSearchMode) onEnterSearchMode?.();
-  };
-
   if (!isSearchMode) {
     return (
       <button
         type="button"
-        onClick={handleEnterSearch}
+        onClick={() => onSearch?.(query)}
         className={`${barClass} w-full cursor-pointer text-left`}
         aria-label="검색 페이지로 이동"
       >
-        <FiSearch className="h-5 w-5 shrink-0 text-label-subtle" />
+        <FiSearch className="h-5 w-5 shrink-0 text-pink-50" />
         <span className={placeholderClass}>다양한 팩을 검색해보세요.</span>
       </button>
     );
@@ -45,7 +42,12 @@ export function SearchInput({
       <input
         value={query}
         onChange={(e) => onChange(e.target.value)}
-        onKeyDown={(e) => e.key === "Enter" && onEnterSearchMode?.()}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            onEnter?.();
+            onSearch?.(query);
+          }
+        }}
         placeholder="다양한 팩을 검색해보세요."
         className="h-full w-full bg-transparent text-sm text-neutral-800 outline-none placeholder:text-neutral-400"
       />

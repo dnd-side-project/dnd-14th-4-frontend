@@ -4,27 +4,8 @@ export type HomePackApiDto = {
     contextCategory: string; // e.g. "운동/산책"
     nickname: string;
     items: number; // itemCount
+    imageUrl?: string;
   };
-  
-  /**
-   *  백엔드에서 내려줄 것 같은 형태 그대로 목데이터
-   */
-  export const MOCK_HOME_PACKS_API: HomePackApiDto[] = [
-    { id: 1, title: "팩 이름은 최대 길이 20자입니다다다다", contextCategory: "운동/산책", nickname: "닉네임은열자카최대야", items: 8 },
-    { id: 2, title: "러닝 시작하는 사람 필수템", contextCategory: "운동/산책", nickname: "러너민지", items: 6 },
-    { id: 3, title: "헬스장 루틴 생존팩", contextCategory: "운동/산책", nickname: "득근왕", items: 10 },
-  
-    { id: 11, title: "아이패드 작업 효율 미친팩", contextCategory: "취미/작업", nickname: "디자인장인", items: 8 },
-    { id: 12, title: "카메라 입문 장비 추천", contextCategory: "취미/작업", nickname: "사진러", items: 5 },
-    { id: 13, title: "공방/핸드메이드 공구팩", contextCategory: "취미/작업", nickname: "메이커", items: 12 },
-  
-  ];
-  
-  /**
-   * 온보딩에서 선택한 카테고리(API 대체)
-   * - 실제 API 붙이면 이 배열도 서버에서 받는 값으로 교체
-   */
-  export const MOCK_ONBOARDING_CATEGORIES = ["운동/산책", "취미/작업", "공부/시험"] as const;
   
   /**
    *  카테고리별 섹션 타이틀 매핑

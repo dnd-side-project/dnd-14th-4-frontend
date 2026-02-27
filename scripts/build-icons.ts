@@ -26,17 +26,6 @@ function toSnakeCaseFileName(name: string): string {
   return `ic_${snakeName}.tsx`;
 }
 
-async function cleanIconsDir() {
-  await fs.mkdir(ICONS_DIR, { recursive: true });
-  const files = await fs.readdir(ICONS_DIR);
-  await Promise.all(
-    files
-      // 이전 생성물 정리: ic_*.tsx, *.tsx, index.ts 모두 제거
-      .filter((f) => f === "index.ts" || f.endsWith(".tsx"))
-      .map((f) => fs.rm(path.join(ICONS_DIR, f))),
-  );
-}
-
 async function exists(p: string) {
   try {
     await fs.access(p);
@@ -46,72 +35,74 @@ async function exists(p: string) {
   }
 }
 
+function runSvgr(sourceSvgPath: string) {
+  const cmd = [
+    "pnpm",
+    "exec",
+    "svgr",
+    `"${sourceSvgPath}"`,
+    "--out-dir",
+    `"${ICONS_DIR}"`,
+    "--ext",
+    "tsx",
+    "--typescript",
+    "--no-dimensions",
+    "--icon",
+    "--no-index",
+    "--jsx-runtime",
+    "automatic",
+  ].join(" ");
+
+  execFileSync(cmd, {
+    stdio: "inherit",
+    shell: true,
+    windowsHide: true,
+  });
+}
+
+async function getExportedComponentName(iconPath: string) {
+  const content = await fs.readFile(iconPath, "utf8");
+  const match = content.match(/export default ([A-Za-z0-9_]+);/);
+  return match?.[1] ?? null;
+}
+
 async function main() {
   try {
     // 입력/출력 폴더 보장
     await fs.mkdir(SVG_SRC_DIR, { recursive: true });
     await fs.mkdir(ICONS_DIR, { recursive: true });
 
-    // 0) 지난 생성물 제거 → 중복 방지의 핵심
-    await cleanIconsDir();
+    const svgFiles = (await fs.readdir(SVG_SRC_DIR))
+      .filter((file) => file.endsWith(".svg"))
+      .sort((a, b) => a.localeCompare(b));
 
-    // Windows에서 pnpm.cmd/svgr.cmd spawn EINVAL 이슈 회피:
-    //    문자열 커맨드 + shell 실행으로 안정화
-    const cmd = [
-      "pnpm",
-      "exec",
-      "svgr",
-      `"${SVG_SRC_DIR}"`,
-      "--out-dir",
-      `"${ICONS_DIR}"`,
-      "--ext",
-      "tsx",
-      "--typescript",
-      "--no-dimensions",
-      "--icon",
-      "--no-index",
-      "--jsx-runtime",
-      "automatic",
-    ].join(" ");
+    let createdCount = 0;
+    let skippedCount = 0;
 
-    execFileSync(cmd, {
-      stdio: "inherit",
-      shell: true,
-      windowsHide: true,
-    });
+    for (const svgFile of svgFiles) {
+      const sourceSvgPath = path.join(SVG_SRC_DIR, svgFile);
+      const outputFileName = toSnakeCaseFileName(svgFile);
+      const outputIconPath = path.join(ICONS_DIR, outputFileName);
 
-    // 생성된(이번에 svgr가 만든) 파일만 읽기
-    const generatedFiles = (await fs.readdir(ICONS_DIR)).filter(
-      (f) => f.endsWith(".tsx") && !f.startsWith("index"),
-    );
-
-    // output deterministic
-    generatedFiles.sort((a, b) => a.localeCompare(b));
-
-    // export 중복 방지 세트
-    const exportSet = new Set<string>();
-    const exportLines: string[] = [
-      "// (auto-generated) Do not edit manually.",
-      "// Run `pnpm icons` to regenerate.\n",
-    ];
-
-    for (const file of generatedFiles) {
-      const oldPath = path.join(ICONS_DIR, file);
-
-      const newFileName = toSnakeCaseFileName(file);
-      const newPath = path.join(ICONS_DIR, newFileName);
-      const componentName = toPascalCase(file);
-
-      //  rename 충돌 감지
-      if (await exists(newPath)) {
-        throw new Error(
-          `[icons] 파일명 충돌: ${file} -> ${newFileName} (이미 존재)`,
-        );
+      // 기존 아이콘은 유지하고 신규 SVG만 생성
+      if (await exists(outputIconPath)) {
+        skippedCount += 1;
+        continue;
       }
 
-      await fs.rename(oldPath, newPath);
+      runSvgr(sourceSvgPath);
 
-      let content = await fs.readFile(newPath, "utf8");
+      const svgrOutputName = `${path.parse(svgFile).name}.tsx`;
+      const svgrOutputPath = path.join(ICONS_DIR, svgrOutputName);
+      const componentName = toPascalCase(svgFile);
+
+      if (!(await exists(svgrOutputPath))) {
+        throw new Error(`[icons] 생성 결과를 찾을 수 없음: ${svgrOutputName}`);
+      }
+
+      await fs.rename(svgrOutputPath, outputIconPath);
+
+      let content = await fs.readFile(outputIconPath, "utf8");
 
       // stroke 색상은 currentColor로 통일
       content = content.replace(
@@ -137,13 +128,33 @@ async function main() {
         content = content.replace(importMatch[0], `${importMatch[0]}\n`);
       }
 
-      await fs.writeFile(newPath, content);
+      await fs.writeFile(outputIconPath, content, "utf8");
+      createdCount += 1;
+    }
 
-      const exportLine = `export { default as ${componentName} } from './${newFileName.replace(
+    // index.ts는 현재 아이콘 파일 전체를 기준으로 재생성
+    const iconFiles = (await fs.readdir(ICONS_DIR))
+      .filter((file) => file.endsWith(".tsx"))
+      .sort((a, b) => a.localeCompare(b));
+
+    const exportSet = new Set<string>();
+    const exportLines: string[] = [
+      "// (auto-generated) Do not edit manually.",
+      "// Run `pnpm icons` to regenerate.\n",
+    ];
+
+    for (const iconFile of iconFiles) {
+      const iconPath = path.join(ICONS_DIR, iconFile);
+      const componentName = await getExportedComponentName(iconPath);
+
+      if (!componentName) {
+        throw new Error(`[icons] export default를 찾을 수 없음: ${iconFile}`);
+      }
+
+      const exportLine = `export { default as ${componentName} } from './${iconFile.replace(
         ".tsx",
         "",
       )}';`;
-
       if (!exportSet.has(exportLine)) {
         exportSet.add(exportLine);
         exportLines.push(exportLine);
@@ -153,7 +164,9 @@ async function main() {
     exportLines.push("");
     await fs.writeFile(OUT_FILE, exportLines.join("\n"), "utf8");
 
-    console.log(`[icons] 완료: ${exportSet.size}개 생성/갱신`);
+    console.log(
+      `[icons] 완료: 신규 ${createdCount}개 추가, 기존 ${skippedCount}개 유지`,
+    );
   } catch (error) {
     console.error("An error occurred during icon build process:", error);
     process.exit(1);
