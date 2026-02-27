@@ -130,6 +130,11 @@ export function HomePage() {
       }));
   }, [recommendationData]);
 
+  const showRecommendationSections =
+    !isRecommendationLoading &&
+    !isRecommendationError &&
+    recommendationSections.length > 0;
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -185,18 +190,10 @@ export function HomePage() {
         return={returnOverlay}
         config={transitionConfig}
       />
-      <section className="mt-8">
-        {isRecommendationLoading && (
-          <div className="text-sm text-neutral-500">추천 팩을 불러오는 중...</div>
-        )}
 
-        {isRecommendationError && (
-          <div className="text-sm text-red-500">추천 팩을 불러오지 못했습니다.</div>
-        )}
-
-        {!isRecommendationLoading &&
-          !isRecommendationError &&
-          recommendationSections.map((section) => (
+      {showRecommendationSections && (
+        <section className="mt-8">
+          {recommendationSections.map((section) => (
             <motion.div
               key={section.categoryId}
               className="mb-10 last:mb-0"
@@ -211,21 +208,21 @@ export function HomePage() {
               <PackCarousel packs={section.packs} />
             </motion.div>
           ))}
-      </section>
+        </section>
+      )}
 
       <section className="mt-8">
-        <h2 className="text-[18px] font-bold text-neutral-900">
-          지금 등록된 따끈따끈한 신상 팩
-        </h2>
+        <div className="flex items-center justify-between">
+          <h2 className="text-[18px] font-bold text-neutral-900">
+            지금 등록된 따끈따끈한 신상 팩
+          </h2>
+
+        </div>
 
         <div className="mt-6 -mx-5 px-5 overflow-x-auto">
           <LayoutGroup>
             <div className="relative flex gap-2 w-max pb-2">
-              {isLoading && (
-                <div className="text-sm text-neutral-500 px-1">
-                  태그 불러오는 중...
-                </div>
-              )}
+    
 
               {!isLoading &&
                 !isError &&
@@ -276,11 +273,7 @@ export function HomePage() {
         </div>
 
         <div className="mt-4 rounded-xl border border-common-0 bg-common-0 overflow-hidden">
-          {isLoading ? (
-            <div className="px-4 py-6 text-sm text-neutral-500">
-              데이터를 불러오는 중...
-            </div>
-          ) : isError ? (
+          {isError ? (
             <div className="px-4 py-6 text-sm text-red-500">
               데이터를 불러오지 못했습니다.
             </div>
