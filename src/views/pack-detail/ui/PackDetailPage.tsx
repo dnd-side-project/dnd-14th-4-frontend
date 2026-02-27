@@ -22,7 +22,7 @@ export default function PackDetailPage() {
         if (!data) return undefined;
 
         return {
-            id: String(data.id),
+            id: data.id,
             tag: data.contextCategory,
             itemCount: data.itemList.length,
             title: data.title,

@@ -19,6 +19,7 @@ export const useToggleWish = () => {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["items"] });
             queryClient.invalidateQueries({ queryKey: ["wishlist"] });
+            queryClient.invalidateQueries({ queryKey: ["pack"] });
         },
         onError: (error) => {
             console.error("아이템 위시리스트 변경 에러:", error);

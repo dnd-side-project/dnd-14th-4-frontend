@@ -112,7 +112,7 @@ export default function WishListPage() {
 
       <section className="space-y-6">
         {activeTab === "item" ? (
-          <ul className="space-y-6">
+          <ul className="space-y-2">
             {items.length > 0 ? (
               items.map((it) => (
                 <li key={it.id}>
