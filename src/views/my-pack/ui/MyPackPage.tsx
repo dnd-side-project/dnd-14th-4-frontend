@@ -6,17 +6,27 @@ import { ItemAdd } from "@/views/my-pack/ui/components/ItemAdd";
 
 export const MyPackPage = () => {
     const [currentView, setCurrentView] = useState<"mypack" | "itemAdd">("mypack");
+    const [selectedId, setSelectedId] = useState<string | undefined>();
 
-    const handleGoToItemAdd = () => setCurrentView("itemAdd");
+    const handleGoToItemAdd = (id?: string) => {
+        setSelectedId(id);
+        setCurrentView("itemAdd");
+    };
 
-    const handleBackToMyPack = () => setCurrentView("mypack");
+    const handleBackToMyPack = () => {
+        setSelectedId(undefined);
+        setCurrentView("mypack");
+    };
 
     return (
         <>
             {currentView === "mypack" ? (
                 <MyPack onGoToItemAdd={handleGoToItemAdd} />
             ) : (
-                <ItemAdd onBack={handleBackToMyPack} />
+                <ItemAdd
+                    onBack={handleBackToMyPack}
+                    initialSelectedItemIds={selectedId ? [selectedId] : []}
+                />
             )}
         </>
     );

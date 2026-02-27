@@ -17,7 +17,7 @@ import { PROFILE_COLOR_CLASS } from "@/views/my-page/ui/MyPage";
 import { useGetMyPacks } from "@/entities/pack/model/useGetMyPacks";
 
 interface MyPackProps {
-    onGoToItemAdd: () => void;
+    onGoToItemAdd: (id?: string) => void;
 }
 
 export const MyPack = ({ onGoToItemAdd }: MyPackProps) => {
@@ -162,14 +162,14 @@ export const MyPack = ({ onGoToItemAdd }: MyPackProps) => {
                 <div className="mb-6">
                     {state.selectedItem && <ItemBox item={state.selectedItem} />}
                 </div>
-                <div className="flex gap-3">
+                <div className="mx-[-20px] px-5 flex gap-4 border-t border-neutral-100 pt-4">
                     <button
-                        onClick={onGoToItemAdd}
-                        className="flex-1 h-[52px] rounded-[12px] bg-beige-100 text-gray-900 font-medium active:bg-beige-200"
+                        onClick={() => onGoToItemAdd(String(state.selectedItem?.id))}
+                        className="flex-1 h-[48px] rounded-[8px] bg-beige-100 text-gray-900 type-label1"
                     >
-                        팩 추가하기
+                        팩에 추가하기
                     </button>
-                    <button className="flex-1 h-[52px] rounded-[12px] bg-primary-normal text-white font-medium active:opacity-90">
+                    <button className="flex-1/3 h-[48px] rounded-[8px] bg-black text-white type-label1">
                         팩 만들기
                     </button>
                 </div>

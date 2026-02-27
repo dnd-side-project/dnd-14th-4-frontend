@@ -14,6 +14,7 @@ import { PackCardData } from '@/shared/ui/item/PackCard';
 import { ProfileModal } from '@/views/pack-detail/ui/components/profileModal';
 import { useUserStore } from "@/entities/user/model";
 import { useToggleWish } from '@/entities/wishlist/model/useToggleWish';
+import { useUpdatePack } from '@/entities/pack/model/useUpdatePack';
 
 type PageMode = 'view' | 'edit' | 'add';
 
@@ -40,16 +41,24 @@ function PackDetailInner({ packData, items, onAddItem }: PackDetailContentProps)
     const isMyPack = user?.name === author;
     const shouldShowWish = pageMode === 'view' && !isMyPack;
     const { mutate: toggleItemWish } = useToggleWish();
+    const { mutate: updatePack } = useUpdatePack(packData.id);
 
 
     const handleComplete = () => {
-        if (pageMode === 'edit') {
-            console.log("수정된 내용 저장됨:", descriptionValue);
-            setPageMode('view');
-        } else if (pageMode === 'add') {
-            console.log("새로운 팩 생성 완료!");
-            setPageMode('view');
-        }
+        const itemIdsParam = searchParams.get('itemIds');
+        const addItems = itemIdsParam ? itemIdsParam.split(',').map(Number) : [];
+
+        updatePack({
+            introduction: descriptionValue,
+            addItems: addItems.length > 0 ? addItems : undefined,
+            // removeItems: [] // 필요 시 구현
+        }, {
+            onSuccess: () => {
+                setPageMode('view');
+                // URL에서 쿼리 파라미터 제거하며 상세 페이지로 클린업 이동
+                router.replace(`/pack/${packData.id}`);
+            }
+        });
     };
 
     const handleBackClick = () => {
