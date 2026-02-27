@@ -74,6 +74,8 @@ function PackDetailInner({ packData, items, onAddItem }: PackDetailContentProps)
         router.back();
     };
 
+
+
     return (
         <>
             <BackHeader onBack={handleBackClick} />
@@ -147,6 +149,7 @@ function PackDetailInner({ packData, items, onAddItem }: PackDetailContentProps)
                 isOpen={isProfileModalOpen}
                 onClose={() => setIsProfileModalOpen(false)}
                 authorName={author}
+                tag={tag}
             />
         </>
     );

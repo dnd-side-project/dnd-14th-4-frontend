@@ -32,8 +32,8 @@ export const MyPack = ({ onGoToItemAdd }: MyPackProps) => {
     const profileInitial = nickname.charAt(0).toUpperCase();
 
     return (
-        <div className="px-6 pb-24">
-            <header className={`flex items-center justify-between mt-16 ${state.isFilterOpen ? 'mb-5' : 'mb-10'}`}>
+        <div className="px-4 pb-24">
+            <header className={`px-1 flex items-center justify-between mt-16 ${state.isFilterOpen ? 'mb-5' : 'mb-10'}`}>
                 <div className="flex-1 flex justify-start">
                     {profileImageUrl && !isProfileDefaultColor(profileImageUrl) ? (
                         <div
@@ -169,7 +169,10 @@ export const MyPack = ({ onGoToItemAdd }: MyPackProps) => {
                     >
                         팩에 추가하기
                     </button>
-                    <button className="flex-1/3 h-[48px] rounded-[8px] bg-black text-white type-label1">
+                    <button
+                        onClick={() => state.selectedItem && actions.handleCreatePackBySelected(state.selectedItem)}
+                        className="flex-1/3 h-[48px] rounded-[8px] bg-black text-white type-label1"
+                    >
                         팩 만들기
                     </button>
                 </div>

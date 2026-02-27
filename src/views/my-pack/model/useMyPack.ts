@@ -2,6 +2,8 @@ import { useReducer } from "react";
 import { useRouter } from "next/navigation";
 import { Item } from "@/entities/item/model/types";
 import { useDeleteItem } from "@/entities/item/model/useDeleteItem";
+import { usePackCreateItemsStore } from "@/views/pack-create/features/select-pack-items/model/store";
+import { mapApiItemToPackCreateItem } from "@/views/pack-create/shared/model/itemMappers";
 
 interface State {
     activeTab: "item" | "pack";
@@ -84,6 +86,9 @@ export const useMyPack = () => {
     const router = useRouter();
     const [state, dispatch] = useReducer(reducer, initialState);
     const { mutate: deleteItemMutation } = useDeleteItem();
+    const resetPackCreateStore = usePackCreateItemsStore((s) => s.reset);
+    const addPackCreateItem = usePackCreateItemsStore((s) => s.add);
+
     const handleTabChange = (tab: "item" | "pack") => dispatch({ type: "SET_TAB", payload: tab });
     const toggleSelectMode = () => dispatch({ type: "TOGGLE_SELECT_MODE" });
     const handleSelect = (id: string) => dispatch({ type: "TOGGLE_ITEM_SELECTION", payload: id });
@@ -121,6 +126,12 @@ export const useMyPack = () => {
         router.push(`/pack-create?ids=${state.selectedIds.join(",")}`);
     };
 
+    const handleCreatePackBySelected = (item: Item) => {
+        resetPackCreateStore();
+        addPackCreateItem(mapApiItemToPackCreateItem(item));
+        router.push("/pack-create/step-1");
+    };
+
     const setIsMoreMenuOpen = (isOpen: boolean) => dispatch({ type: "SET_MODAL_STATE", modal: "isMoreMenuOpen", isOpen });
     const setIsDeleteModalOpen = (isOpen: boolean) => dispatch({ type: "SET_MODAL_STATE", modal: "isDeleteModalOpen", isOpen });
     const setIsItemDetailOpen = (isOpen: boolean) => dispatch({ type: "SET_MODAL_STATE", modal: "isItemDetailOpen", isOpen });
@@ -130,6 +141,7 @@ export const useMyPack = () => {
         actions: {
             handleTabChange, toggleSelectMode, handleSelect, handleDetailClick,
             handleMoreClick, onClickDeleteMenu, handleFinalDelete, handleEditRedirect, handleCreatePack,
+            handleCreatePackBySelected,
             setIsMoreMenuOpen, setIsDeleteModalOpen, setIsItemDetailOpen,
             toggleFilter, handleFilterSelect
         }

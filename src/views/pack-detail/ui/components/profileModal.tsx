@@ -9,9 +9,10 @@ interface ProfileModalProps {
     isOpen: boolean;
     onClose: () => void;
     authorName: string;
+    tag?: string;
 }
 
-export function ProfileModal({ isOpen, onClose, authorName }: ProfileModalProps) {
+export function ProfileModal({ isOpen, onClose, authorName, tag }: ProfileModalProps) {
 
     const closeButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -65,8 +66,7 @@ export function ProfileModal({ isOpen, onClose, authorName }: ProfileModalProps)
 
 
                         <div className='flex gap-2'>
-                            <Tag2Btn status>공부/시험</Tag2Btn>
-                            <Tag2Btn status>면접/취준</Tag2Btn>
+                            {tag && <Tag2Btn status>{tag}</Tag2Btn>}
                         </div>
                     </motion.div>
                 </div >
