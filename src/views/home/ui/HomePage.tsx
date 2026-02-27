@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { motion } from "framer-motion";
+import { LayoutGroup, motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 
 import {
@@ -26,13 +26,45 @@ import type { HomePackApiDto } from "../model/mockHome";
 import { RECOMMENDATION_TITLE_BY_CATEGORY_ID, useRecommendedPacks } from "../model/useRecommendedPacks";
 import { PackCarousel } from "./PackCarousel";
 
+const EASE_OUT: [number, number, number, number] = [0.16, 1, 0.3, 1];
+
+const headerContainer = {
+  hidden: { opacity: 0, y: -10 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.35,
+      ease: EASE_OUT,
+      staggerChildren: 0.06,
+    },
+  },
+};
+
+const headerItem = {
+  hidden: { opacity: 0, y: -6 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.28, ease: EASE_OUT },
+  },
+};
+
+const sectionReveal = {
+  hidden: { opacity: 0, y: 14 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.32, ease: EASE_OUT },
+  },
+};
+
 export function HomePage() {
   const router = useRouter();
   const user = useUserStore((state) => state.user);
   const {
     searchBarRef,
     titleVisible,
-    titleTransition,
     forwardOverlay,
     returnOverlay,
     startTransition,
@@ -71,13 +103,9 @@ export function HomePage() {
 
   const [selectedTag, setSelectedTag] = React.useState<string>("");
 
-  React.useEffect(() => {
-    if (!selectedTag && tags.length > 0) {
-      setSelectedTag(tags[0]);
-    }
-  }, [tags, selectedTag]);
-
-  const newPacks: HomePackApiDto[] = rawByCategory[selectedTag] ?? [];
+  // 태그 로딩 직후 바로 첫 태그를 선택된 것으로 간주해, 목록이 한 템포 늦게 뜨는 느낌을 줄임
+  const effectiveSelectedTag = selectedTag || tags[0] || "";
+  const newPacks: HomePackApiDto[] = rawByCategory[effectiveSelectedTag] ?? [];
   const recommendationSections = React.useMemo(() => {
     if (!recommendationData) return [];
 
@@ -103,23 +131,28 @@ export function HomePage() {
   }, [recommendationData]);
 
   return (
-    <div className="min-h-dvh bg-background-alternative pt-12 px-5 pb-35">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.25, ease: EASE_OUT }}
+      className="min-h-dvh bg-background-alternative pt-12 px-5 pb-35"
+    >
       <motion.div
-        initial={false}
-        animate={{ opacity: titleVisible ? 1 : 0, y: titleVisible ? 0 : -8 }}
-        transition={titleTransition}
+        initial="hidden"
+        animate={titleVisible ? "show" : "hidden"}
+        variants={headerContainer}
         className="mb-10 flex items-start justify-between gap-4"
       >
-        <div>
+        <motion.div variants={headerItem}>
           <h1 className="type-heading1 text-label-default">
             <span className="text-primary-normal">{nickname}</span>
             {greeting.suffix}
             <br />
             {greeting.line2}
           </h1>
-        </div>
+        </motion.div>
 
-        <div className="shrink-0">
+        <motion.div variants={headerItem} className="shrink-0">
           {profileImageUrl && !isProfileDefaultColor(profileImageUrl) ? (
             <div
               className="h-14 w-14 rounded-full bg-neutral-300 bg-cover bg-center"
@@ -137,7 +170,7 @@ export function HomePage() {
               {profileInitial || "?"}
             </div>
           )}
-        </div>
+        </motion.div>
       </motion.div>
 
       <div ref={searchBarRef} className="mt-6">
@@ -164,10 +197,19 @@ export function HomePage() {
         {!isRecommendationLoading &&
           !isRecommendationError &&
           recommendationSections.map((section) => (
-            <div key={section.categoryId} className="mb-10 last:mb-0">
-              <h2 className="text-[18px] font-bold text-neutral-900">{section.title}</h2>
+            <motion.div
+              key={section.categoryId}
+              className="mb-10 last:mb-0"
+              variants={sectionReveal}
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true, amount: 0.25 }}
+            >
+              <h2 className="text-[18px] font-bold text-neutral-900">
+                {section.title}
+              </h2>
               <PackCarousel packs={section.packs} />
-            </div>
+            </motion.div>
           ))}
       </section>
 
@@ -177,32 +219,60 @@ export function HomePage() {
         </h2>
 
         <div className="mt-6 -mx-5 px-5 overflow-x-auto">
-          <div className="flex gap-2 w-max pb-2">
-            {isLoading && (
-              <div className="text-sm text-neutral-500 px-1">
-                태그 불러오는 중...
-              </div>
-            )}
+          <LayoutGroup>
+            <div className="relative flex gap-2 w-max pb-2">
+              {isLoading && (
+                <div className="text-sm text-neutral-500 px-1">
+                  태그 불러오는 중...
+                </div>
+              )}
 
-            {!isLoading &&
-              !isError &&
-              tags.map((t) => (
-                <Tag1Btn
-                  key={t}
-                  mode="btn"
-                  variant={t === selectedTag ? "primary" : "unpressed"}
-                  onClick={() => setSelectedTag(t)}
-                >
-                  {t}
-                </Tag1Btn>
-              ))}
+              {!isLoading &&
+                !isError &&
+                tags.map((t) => {
+                  const selected = t === effectiveSelectedTag;
 
-            {isError && (
-              <div className="text-sm text-red-500 px-1">
-                태그를 불러오지 못했습니다.
-              </div>
-            )}
-          </div>
+                  return (
+                    <div key={t} className="relative">
+                      {selected && (
+                        <motion.div
+                          layoutId="tag-pill"
+                          className="absolute inset-0 rounded-full bg-primary-normal/10"
+                          style={{ zIndex: 0 }}
+                          transition={{
+                            type: "spring",
+                            stiffness: 500,
+                            damping: 40,
+                          }}
+                        />
+                      )}
+
+                      <motion.div
+                        whileTap={{ scale: 0.98 }}
+                        whileHover={{ scale: 1.02 }}
+                        transition={{ duration: 0.12 }}
+                        className="relative"
+                        style={{ zIndex: 1 }}
+                      >
+                        <Tag1Btn
+                          mode="btn"
+                          variant={selected ? "primary" : "unpressed"}
+                          onClick={() => setSelectedTag(t)}
+                        >
+                          {t}
+                        </Tag1Btn>
+                      </motion.div>
+                    </div>
+                  );
+                })}
+
+              {isError && (
+                <div className="text-sm text-red-500 px-1">
+                  태그를 불러오지 못했습니다.
+                </div>
+              )}
+            </div>
+          </LayoutGroup>
         </div>
 
         <div className="mt-4 rounded-xl border border-common-0 bg-common-0 overflow-hidden">
@@ -241,6 +311,6 @@ export function HomePage() {
           )}
         </div>
       </section>
-    </div>
+    </motion.div>
   );
 }
