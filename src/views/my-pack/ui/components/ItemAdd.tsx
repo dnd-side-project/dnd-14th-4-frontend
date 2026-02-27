@@ -16,9 +16,9 @@ interface ItemAddProps {
 
 export function ItemAdd({ onBack, addMode = "pack" }: ItemAddProps) {
     const router = useRouter();
-    const [selectedPackId, setSelectedPackId] = useState<string | null>(null);
+    const [selectedPackId, setSelectedPackId] = useState<number | null>(null);
     const { data: items } = useGetItems();
-    const handleSelectPack = (id: string) => {
+    const handleSelectPack = (id: number) => {
         setSelectedPackId((prev) => (prev === id ? null : id));
     };
 
