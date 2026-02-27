@@ -36,6 +36,10 @@ function PackDetailPageInner() {
         };
     }, [data]);
 
+    const [newlyAddedIds, setNewlyAddedIds] = useState<string[]>(
+        itemIdsParam ? itemIdsParam.split(",") : []
+    );
+
     const items = useMemo<Item[]>(() => {
         if (!data) return [];
 
@@ -51,17 +55,16 @@ function PackDetailPageInner() {
             tags: item.tags,
         }));
 
-        if (itemIdsParam) {
-            const addedIds = itemIdsParam.split(",");
+        if (newlyAddedIds.length > 0) {
             const addedItems = allItems
-                ?.filter((item) => addedIds.includes(String(item.id)))
+                ?.filter((item) => newlyAddedIds.includes(String(item.id)))
                 .filter((ai) => !existingItems.some((ei) => ei.id === ai.id)) ?? [];
 
             return [...existingItems, ...addedItems];
         }
 
         return existingItems;
-    }, [data, itemIdsParam, allItems]);
+    }, [data, newlyAddedIds, allItems]);
 
     const [isAddingItem, setIsAddingItem] = useState(false);
 
@@ -82,6 +85,12 @@ function PackDetailPageInner() {
             <ItemAdd
                 onBack={() => setIsAddingItem(false)}
                 addMode="item"
+                initialSelectedItemIds={newlyAddedIds}
+                onAddItems={(selectedItems) => {
+                    const ids = selectedItems.map(item => item.id);
+                    setNewlyAddedIds(ids);
+                    setIsAddingItem(false);
+                }}
             />
         );
     }
@@ -94,6 +103,7 @@ function PackDetailPageInner() {
                         packData={packData}
                         items={items}
                         onAddItem={() => setIsAddingItem(true)}
+                        newlyAddedIds={newlyAddedIds.map(Number)}
                     />
 
                 ) :

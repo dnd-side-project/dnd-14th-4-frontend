@@ -2,6 +2,7 @@ import { useReducer } from "react";
 import { useRouter } from "next/navigation";
 import { Item } from "@/entities/item/model/types";
 import { useDeleteItem } from "@/entities/item/model/useDeleteItem";
+import { useDeletePack } from "@/entities/pack/model/useDeletePack";
 import { usePackCreateItemsStore } from "@/views/pack-create/features/select-pack-items/model/store";
 import { mapApiItemToPackCreateItem } from "@/views/pack-create/shared/model/itemMappers";
 
@@ -86,6 +87,7 @@ export const useMyPack = () => {
     const router = useRouter();
     const [state, dispatch] = useReducer(reducer, initialState);
     const { mutate: deleteItemMutation } = useDeleteItem();
+    const { mutate: deletePackMutation } = useDeletePack();
     const resetPackCreateStore = usePackCreateItemsStore((s) => s.reset);
     const addPackCreateItem = usePackCreateItemsStore((s) => s.add);
 
@@ -102,11 +104,19 @@ export const useMyPack = () => {
     const handleFinalDelete = () => {
         if (!state.activeMoreId) return;
 
-        deleteItemMutation(state.activeMoreId, {
-            onSuccess: () => {
-                dispatch({ type: "COMPLETE_DELETE" });
-            }
-        });
+        if (state.activeTab === "item") {
+            deleteItemMutation(state.activeMoreId, {
+                onSuccess: () => {
+                    dispatch({ type: "COMPLETE_DELETE" });
+                }
+            });
+        } else {
+            deletePackMutation(state.activeMoreId, {
+                onSuccess: () => {
+                    dispatch({ type: "COMPLETE_DELETE" });
+                }
+            });
+        }
     };
 
     const handleEditRedirect = () => {
