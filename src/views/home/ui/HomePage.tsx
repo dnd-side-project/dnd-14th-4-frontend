@@ -63,7 +63,7 @@ export function HomePage() {
     () => data?.tags ?? [],
     [data]
   );
-  
+
   const rawByCategory = React.useMemo(
     () => data?.raw ?? {},
     [data]
@@ -91,7 +91,7 @@ export function HomePage() {
           RECOMMENDATION_TITLE_BY_CATEGORY_ID[categoryId] ??
           "추천 팩",
         packs: packs.map((pack) => ({
-          id: String(pack.id),
+          id: pack.id,
           tag: pack.contextCategory,
           itemCount: pack.items,
           title: pack.title,
@@ -129,11 +129,10 @@ export function HomePage() {
             />
           ) : (
             <div
-              className={`h-14 w-14 rounded-full flex items-center justify-center text-white font-bold ${
-                profileImageUrl && isProfileDefaultColor(profileImageUrl)
-                  ? PROFILE_COLOR_CLASS[profileImageUrl] ?? "bg-neutral-300"
-                  : "bg-neutral-900"
-              }`}
+              className={`h-14 w-14 rounded-full flex items-center justify-center text-white font-bold ${profileImageUrl && isProfileDefaultColor(profileImageUrl)
+                ? PROFILE_COLOR_CLASS[profileImageUrl] ?? "bg-neutral-300"
+                : "bg-neutral-900"
+                }`}
             >
               {profileInitial || "?"}
             </div>
@@ -172,7 +171,7 @@ export function HomePage() {
           ))}
       </section>
 
-      <section className="mt-8">  
+      <section className="mt-8">
         <h2 className="text-[18px] font-bold text-neutral-900">
           지금 등록된 따끈따끈한 신상 팩
         </h2>
