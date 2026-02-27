@@ -2,6 +2,7 @@
 
 import { cn } from "@/shared/lib/cn";
 import type { FlowHeaderProps } from "./types";
+import { IcSvgArrowLeftSmall } from "@/shared/icons";
 
 export function FlowLayoutHeader({
   onBack,
@@ -26,11 +27,9 @@ export function FlowLayoutHeader({
               className="p-2 -ml-2"
               aria-label="뒤로가기"
             >
-              ←
+              <IcSvgArrowLeftSmall className="h-5 w-5 text-neutral-800" />
             </button>
           )}
-          {/* TODO: 뒤로가기 공컴 변경 필요 */}
-
           {progressSlot && <div className="flex-1">{progressSlot}</div>}
         </div>
       )}
