@@ -5,6 +5,7 @@ import { BackHeader } from "@/shared/ui/BackHeader";
 import { FixedBottomButton } from "@/shared/ui/FixedBottomButton";
 import { ItemCard } from "@/shared/ui/item/ItemCard";
 import { PackCard } from "@/shared/ui/item/PackCard";
+import Loading from "@/shared/ui/Loading";
 import { useRouter } from "next/navigation";
 import { useGetItems } from "@/entities/item/model/useGetItems";
 import { useGetMyPacks } from "@/entities/pack/model/useGetMyPacks";
@@ -107,15 +108,28 @@ export function ItemAdd({
                 {/* 아이템 선택 모드일 때만 전체 리스트 노출 */}
                 {addMode === "item" && (
                     <div className="flex flex-col gap-4 mt-6">
-                        {items?.map((item) => (
-                            <ItemCard
-                                key={item.id}
-                                {...item}
-                                isSelectMode={!!onAddItems}
-                                isChecked={selectedItemIds.includes(String(item.id))}
-                                onSelect={(id) => toggleSelectItem(id)}
-                            />
-                        ))}
+                        {!items ? (
+                            <Loading />
+                        ) : items.length === 0 ? (
+                            <div className="flex min-h-[50vh] flex-col items-center justify-center px-6 text-center">
+                                <p className="type-body2 text-label-default">
+                                    아직 추가할 아이템이 없어요.
+                                </p>
+                                <p className="mt-2 text-sm text-label-alternative">
+                                    아이템을 먼저 추가한 뒤 다시 시도해 주세요.
+                                </p>
+                            </div>
+                        ) : (
+                            items.map((item) => (
+                                <ItemCard
+                                    key={item.id}
+                                    {...item}
+                                    isSelectMode={!!onAddItems}
+                                    isChecked={selectedItemIds.includes(String(item.id))}
+                                    onSelect={(id) => toggleSelectItem(id)}
+                                />
+                            ))
+                        )}
                     </div>
                 )}
 

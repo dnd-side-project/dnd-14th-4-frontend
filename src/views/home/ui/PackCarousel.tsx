@@ -13,7 +13,11 @@ const isValidImageSrc = (imageSrc?: string) => {
   const trimmed = imageSrc.trim();
   if (!trimmed) return false;
   if (trimmed === unavailableImageText) return false;
-  return true;
+  return (
+    trimmed.startsWith("/") ||
+    /^https?:\/\//.test(trimmed) ||
+    trimmed.startsWith("data:image/")
+  );
 };
 
 export function PackCarousel({ packs }: { packs: PackImageCardData[] }) {
