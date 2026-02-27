@@ -20,7 +20,6 @@ function PackDetailPageInner() {
     const { data, isLoading, isError } = usePackDetail(
         Number.isFinite(packId) ? packId : undefined
     );
-    console.log(data)
     const { data: allItems } = useGetItems();
 
     const packData = useMemo<PackCardData | undefined>(() => {
