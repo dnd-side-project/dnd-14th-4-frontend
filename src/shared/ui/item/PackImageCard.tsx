@@ -42,6 +42,20 @@ export function PackImageCard({
 
   const { mutate } = useTogglePackWish();
 
+  const safeImageSrc = (() => {
+    if (!imageSrc) return undefined;
+    const trimmed = imageSrc.trim();
+    if (!trimmed) return undefined;
+    if (
+      trimmed.startsWith("/") ||
+      /^https?:\/\//.test(trimmed) ||
+      trimmed.startsWith("data:image/")
+    ) {
+      return trimmed;
+    }
+    return undefined;
+  })();
+
   useEffect(() => {
     setIsLiked(liked);
   }, [liked]);
@@ -121,9 +135,9 @@ export function PackImageCard({
         </div>
 
         <div className="relative mt-4 aspect-[307/138] w-full overflow-hidden rounded-xl bg-neutral-100 sm:mt-5">
-          {imageSrc ? (
+          {safeImageSrc ? (
             <Image
-              src={imageSrc}
+              src={safeImageSrc}
               alt={imageAlt}
               fill
               sizes="(max-width: 640px) 100vw, 600px"
