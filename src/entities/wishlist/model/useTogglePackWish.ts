@@ -23,7 +23,7 @@ export const useTogglePackWish = () => {
         mutationFn: togglePackWishlistAPI,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["packs"] });
-            queryClient.invalidateQueries({ queryKey: ["pack-wishlist"] });
+            queryClient.invalidateQueries({ queryKey: ["wishlist-packs"] });
         },
         onError: (error) => {
             console.error("팩 위시리스트 변경 에러:", error);

@@ -24,7 +24,7 @@ export function ItemAdd({ onBack, addMode = "pack" }: ItemAddProps) {
 
     const handleAction = () => {
         if (addMode === "pack") {
-            if (selectedPackId) {
+            if (selectedPackId !== null) {
                 router.push(`/pack/${selectedPackId}?mode=add`);
             }
         } else {
@@ -67,7 +67,7 @@ export function ItemAdd({ onBack, addMode = "pack" }: ItemAddProps) {
 
                 <FixedBottomButton
                     onClick={handleAction}
-                    disabled={addMode === "pack" && !selectedPackId}
+                    disabled={addMode === "pack" && selectedPackId === null}
                 >
                     {addMode === "pack" ? "다음" : "추가하기"}
                 </FixedBottomButton>
