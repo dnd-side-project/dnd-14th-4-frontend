@@ -22,7 +22,8 @@ function toSnakeCaseFileName(name: string): string {
     .split(/[^a-zA-Z0-9]/)
     .filter(Boolean)
     .map((s) => s.toLowerCase())
-    .join("_");
+    // 기존 아이콘 파일명 규칙: 구분자 없이 소문자 연속 (예: arrow_right_small.svg -> ic_arrowrightsmall.tsx)
+    .join("");
   return `ic_${snakeName}.tsx`;
 }
 
@@ -92,7 +93,8 @@ async function main() {
 
       runSvgr(sourceSvgPath);
 
-      const svgrOutputName = `${path.parse(svgFile).name}.tsx`;
+      // svgr은 기본적으로 PascalCase 파일명으로 생성됨 (예: add_big.svg -> AddBig.tsx)
+      const svgrOutputName = `${toPascalCase(svgFile).replace(/^IcSvg/, "")}.tsx`;
       const svgrOutputPath = path.join(ICONS_DIR, svgrOutputName);
       const componentName = toPascalCase(svgFile);
 
