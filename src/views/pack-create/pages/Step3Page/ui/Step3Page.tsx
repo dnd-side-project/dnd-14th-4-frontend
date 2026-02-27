@@ -44,7 +44,7 @@ export default function Step3Page() {
       <FlowLayout.Footer
         label="다음"
         disabled={selectedCategory.length === 0}
-        onClick={() => router.push("/pack/create/step-4")}
+        onClick={() => router.push("/pack-create/step-4")}
       />
     </FlowLayout>
   );

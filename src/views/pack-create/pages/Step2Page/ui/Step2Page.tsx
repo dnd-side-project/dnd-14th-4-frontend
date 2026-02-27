@@ -46,7 +46,7 @@ export default function Step2Page() {
       <FlowLayout.Footer
         label="다음"
         disabled={!canNext}
-        onClick={() => router.push("/pack/create/step-3")}
+        onClick={() => router.push("/pack-create/step-3")}
       />
     </FlowLayout>
   );
