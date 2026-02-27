@@ -8,6 +8,7 @@ import { useWishlist } from "@/entities/wishlist/model/useWishlist";
 import { useUserStore, isProfileDefaultColor } from "@/entities/user/model";
 import { PROFILE_COLOR_CLASS } from "@/views/my-page/ui/MyPage";
 import { useGetWishlistPacks } from "@/entities/pack/model/useGetWishlistPacks";
+import Loading from "@/shared/ui/Loading";
 
 type ActiveTab = "item" | "pack";
 
@@ -62,7 +63,7 @@ export default function WishListPage() {
 
   const isLoading = activeTab === "item" ? isItemLoading : isPackLoading;
 
-  if (isLoading) return <div className="p-10 text-center">로딩 중...</div>;
+  if (isLoading) return <Loading />;
 
   return (
     <main className="min-h-dvh bg-background-normal px-5 pt-5 pb-28">
