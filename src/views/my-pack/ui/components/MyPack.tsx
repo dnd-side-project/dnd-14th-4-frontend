@@ -8,13 +8,13 @@ import { BottomSheet } from "@/shared/ui/BottomSheet";
 import { Modal } from "@/shared/ui/Modal";
 import { FixedBottomButton } from "@/shared/ui/FixedBottomButton";
 import { ItemBox } from "@/shared/ui/item/ItemBox";
-import { MOCK_PACK_CARDS } from "@/features/search/model/mock";
 import { useMyPack } from "@/views/my-pack/model/useMyPack";
 import Tag1Btn from "@/shared/ui/Tag1Btn";
 import { MOMENT_OPTIONS } from "@/views/onboarding/model/constants";
 import { useGetItems } from "@/entities/item/model/useGetItems";
 import { useUserStore, isProfileDefaultColor } from "@/entities/user/model";
 import { PROFILE_COLOR_CLASS } from "@/views/my-page/ui/MyPage";
+import { useGetMyPacks } from "@/entities/pack/model/useGetMyPacks";
 
 interface MyPackProps {
     onGoToItemAdd: () => void;
@@ -24,10 +24,13 @@ export const MyPack = ({ onGoToItemAdd }: MyPackProps) => {
     const { state, actions } = useMyPack();
     const { user } = useUserStore();
 
-    const { data } = useGetItems();
+    const { data: itemData } = useGetItems();
+    const { data: packData, isLoading: isPackLoading, isError: isPackError } = useGetMyPacks();
+
     const nickname = user?.name ?? "사용자";
     const profileImageUrl = user?.profileImageUrl;
     const profileInitial = nickname.charAt(0).toUpperCase();
+
     return (
         <div className="px-6 pb-24">
             <header className={`flex items-center justify-between mt-16 ${state.isFilterOpen ? 'mb-5' : 'mb-10'}`}>
@@ -77,6 +80,7 @@ export const MyPack = ({ onGoToItemAdd }: MyPackProps) => {
                     )}
                 </div>
             </header>
+
             {state.isFilterOpen && (
                 <div className="flex gap-1 overflow-x-auto mb-5 ">
                     {MOMENT_OPTIONS.map((moment) => (
@@ -92,11 +96,9 @@ export const MyPack = ({ onGoToItemAdd }: MyPackProps) => {
                 </div>
             )}
 
-
-
             <div className="flex flex-col gap-3">
                 {state.activeTab === "item" &&
-                    data?.map((card) => (
+                    itemData?.map((card) => (
                         <ItemCard
                             key={card.id}
                             {...card}
@@ -107,10 +109,28 @@ export const MyPack = ({ onGoToItemAdd }: MyPackProps) => {
                             onMoreClick={() => actions.handleMoreClick(String(card.id))}
                         />
                     ))}
-                {state.activeTab === "pack" &&
-                    MOCK_PACK_CARDS.map((card) => (
-                        <PackCard key={card.id} {...card} onMoreClick={() => actions.handleMoreClick(card.id)} showLikeBtn={false} />
-                    ))}
+
+                {state.activeTab === "pack" && (
+                    <>
+                        {isPackLoading && <p className="text-center py-10 text-neutral-400">팩을 불러오는 중...</p>}
+                        {isPackError && <p className="text-center py-10 text-red-400">팩 목록을 가져오지 못했습니다.</p>}
+                        {!isPackLoading && packData?.length === 0 && (
+                            <p className="text-center py-10 text-neutral-400">아직 등록한 팩이 없습니다.</p>
+                        )}
+                        {packData?.map((pack) => (
+                            <PackCard
+                                key={pack.id}
+                                id={pack.id}
+                                title={pack.title}
+                                tag={pack.contextCategory}
+                                itemCount={pack.items}
+                                author={pack.nickname}
+                                onMoreClick={() => actions.handleMoreClick(String(pack.id))}
+                                showLikeBtn={false}
+                            />
+                        ))}
+                    </>
+                )}
             </div>
 
             {state.activeTab === "item" && state.isSelectMode && state.selectedIds.length > 0 && (

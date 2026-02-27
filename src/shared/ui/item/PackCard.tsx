@@ -7,7 +7,7 @@ import { PackFolderBg } from "./packfolder-bg"
 import { useRouter } from "next/navigation"
 
 export interface PackCardData {
-  id: string
+  id: number
   tag: string
   tagColor?: string
   itemCount: number
@@ -19,13 +19,12 @@ export interface PackCardData {
 }
 
 interface PackCardProps extends Omit<PackCardData, "id"> {
-  id: string
+  id: number
   onMoreClick?: () => void
   showLikeBtn?: boolean
-  // 선택 모드 관련 프롭 추가
   isSelectMode?: boolean
   isChecked?: boolean
-  onSelect?: (id: string) => void
+  onSelect?: (id: number) => void
 }
 
 export function PackCard({
