@@ -142,7 +142,7 @@ export default function WishListPage() {
                 </li>
               ))
             ) : (
-              <div className="py-20 text-center text-label-assistive">
+              <div className="py-20 text-center py-10 text-neutral-400">
                 위시리스트에 담긴 팩이 없어요.
               </div>
             )}
