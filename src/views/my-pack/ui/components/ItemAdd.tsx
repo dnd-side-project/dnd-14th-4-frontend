@@ -1,13 +1,14 @@
 "use client"
 
 import { useMemo, useState } from "react";
-import { MOCK_PACK_CARDS } from "@/features/search/model/mock";
 import { BackHeader } from "@/shared/ui/BackHeader";
 import { FixedBottomButton } from "@/shared/ui/FixedBottomButton";
 import { ItemCard } from "@/shared/ui/item/ItemCard";
 import { PackCard } from "@/shared/ui/item/PackCard";
+import Loading from "@/shared/ui/Loading";
 import { useRouter } from "next/navigation";
 import { useGetItems } from "@/entities/item/model/useGetItems";
+import { useGetMyPacks } from "@/entities/pack/model/useGetMyPacks";
 import type { Item as ApiItem } from "@/entities/item/model/types";
 import type { Item as PackCreateItem } from "@/views/pack-create/entities/item/model/types";
 import { mapApiItemToPackCreateItem } from "@/views/pack-create/shared/model/itemMappers";
@@ -28,6 +29,7 @@ export function ItemAdd({
     const router = useRouter();
     const [selectedPackId, setSelectedPackId] = useState<number | null>(null);
     const { data: items } = useGetItems();
+    const { data: myPacks } = useGetMyPacks();
     const [selectedItemIds, setSelectedItemIds] = useState<string[]>(
         initialSelectedItemIds ?? []
     );
@@ -47,7 +49,7 @@ export function ItemAdd({
     const handleAction = () => {
         if (addMode === "pack") {
             if (selectedPackId !== null) {
-                router.push(`/pack/${selectedPackId}?mode=add`);
+                router.push(`/pack/${selectedPackId}?mode=add&itemIds=${selectedItemIds.join(",")}`);
             }
         } else {
             if (onAddItems) {
@@ -63,19 +65,21 @@ export function ItemAdd({
         <>
             <BackHeader onBack={onBack} />
             <div className="flex flex-col px-6 pb-24">
+                {/* 상단: 선택된 아이템 (팩에 추가하기 모드일 때) */}
+                {addMode === "pack" && (
+                    <div className="mt-6 flex flex-col gap-4">
+                        {items?.filter(item => selectedItemIds.includes(String(item.id))).map((item) => (
+                            <ItemCard
+                                key={item.id}
+                                {...item}
+                                isSelectMode={false} // 팩 선택 중에는 아이템 선택 해제 불가
+                                isChecked={true}
+                            />
+                        ))}
+                    </div>
+                )}
 
-                <div className="flex flex-col gap-4">
-                    {items?.map((item) => (
-                        <ItemCard
-                            key={item.id}
-                            {...item}
-                            isSelectMode={addMode === "item" && !!onAddItems}
-                            isChecked={selectedItemIds.includes(String(item.id))}
-                            onSelect={(id) => toggleSelectItem(id)}
-                        />
-                    ))}
-                </div>
-
+                {/* 중앙: 팩 선택 섹션 */}
                 {addMode === "pack" && (
                     <div className="mt-10">
                         <p className="type-heading2 text-label-default">
@@ -83,17 +87,49 @@ export function ItemAdd({
                         </p>
 
                         <div className="mt-4 flex flex-col gap-3">
-                            {MOCK_PACK_CARDS.map((card) => (
+                            {myPacks?.map((pack) => (
                                 <PackCard
-                                    key={card.id}
-                                    {...card}
+                                    key={pack.id}
+                                    id={pack.id}
+                                    title={pack.title}
+                                    tag={pack.contextCategory}
+                                    itemCount={pack.items}
+                                    author={pack.nickname}
                                     isSelectMode={true}
-                                    isChecked={selectedPackId === card.id}
+                                    isChecked={selectedPackId === pack.id}
                                     onSelect={handleSelectPack}
                                     showLikeBtn={false}
                                 />
                             ))}
                         </div>
+                    </div>
+                )}
+
+                {/* 아이템 선택 모드일 때만 전체 리스트 노출 */}
+                {addMode === "item" && (
+                    <div className="flex flex-col gap-4 mt-6">
+                        {!items ? (
+                            <Loading />
+                        ) : items.length === 0 ? (
+                            <div className="flex min-h-[50vh] flex-col items-center justify-center px-6 text-center">
+                                <p className="type-body2 text-label-default">
+                                    아직 추가할 아이템이 없어요.
+                                </p>
+                                <p className="mt-2 text-sm text-label-alternative">
+                                    아이템을 먼저 추가한 뒤 다시 시도해 주세요.
+                                </p>
+                            </div>
+                        ) : (
+                            items.map((item) => (
+                                <ItemCard
+                                    key={item.id}
+                                    {...item}
+                                    isSelectMode={!!onAddItems}
+                                    isChecked={selectedItemIds.includes(String(item.id))}
+                                    onSelect={(id) => toggleSelectItem(id)}
+                                />
+                            ))
+                        )}
                     </div>
                 )}
 

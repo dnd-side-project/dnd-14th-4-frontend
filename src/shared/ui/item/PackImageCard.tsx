@@ -23,6 +23,7 @@ export interface PackImageCardData {
 
 interface PackImageCardProps extends PackImageCardData {
   onMore?: () => void;
+  showLikeBtn?: boolean;
 }
 
 export function PackImageCard({
@@ -36,11 +37,26 @@ export function PackImageCard({
   imageAlt = "",
   onMore,
   href,
+  showLikeBtn = true,
 }: PackImageCardProps) {
   const [isLiked, setIsLiked] = useState(liked);
   const router = useRouter();
 
   const { mutate } = useTogglePackWish();
+
+  const safeImageSrc = (() => {
+    if (!imageSrc) return undefined;
+    const trimmed = imageSrc.trim();
+    if (!trimmed) return undefined;
+    if (
+      trimmed.startsWith("/") ||
+      /^https?:\/\//.test(trimmed) ||
+      trimmed.startsWith("data:image/")
+    ) {
+      return trimmed;
+    }
+    return undefined;
+  })();
 
   useEffect(() => {
     setIsLiked(liked);
@@ -84,22 +100,23 @@ export function PackImageCard({
               <h3 className="truncate text-base font-bold text-neutral-900 sm:text-lg">
                 {title}
               </h3>
-
-              <button
-                type="button"
-                aria-label="좋아요"
-                className="shrink-0 p-1 transition-colors"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleLike();
-                }}
-              >
-                <IcSvgWishBtn
-                  className="h-5 w-5 sm:h-6 sm:w-6"
-                  fill={isLiked ? "var(--color-primary-subtler)" : "var(--alpha-5)"}
-                  strokeColor={isLiked ? "var(--color-primary-subtle)" : "var(--alpha-22)"}
-                />
-              </button>
+              {showLikeBtn && (
+                <button
+                  type="button"
+                  aria-label="좋아요"
+                  className="shrink-0 p-1 transition-colors"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleLike();
+                  }}
+                >
+                  <IcSvgWishBtn
+                    className="h-5 w-5 sm:h-6 sm:w-6"
+                    fill={isLiked ? "var(--color-primary-subtler)" : "var(--alpha-5)"}
+                    strokeColor={isLiked ? "var(--color-primary-subtle)" : "var(--alpha-22)"}
+                  />
+                </button>
+              )}
             </div>
 
             <p className="mt-0.5 truncate text-xs text-neutral-400 sm:mt-1 sm:text-sm">
@@ -121,9 +138,9 @@ export function PackImageCard({
         </div>
 
         <div className="relative mt-4 aspect-[307/138] w-full overflow-hidden rounded-xl bg-neutral-100 sm:mt-5">
-          {imageSrc ? (
+          {safeImageSrc ? (
             <Image
-              src={imageSrc}
+              src={safeImageSrc}
               alt={imageAlt}
               fill
               sizes="(max-width: 640px) 100vw, 600px"

@@ -6,6 +6,8 @@ import { parseCategoriesParam, slugToLabel } from "@/features/search/model/categ
 import { MOCK_PACK_CARDS } from "@/features/search/model/mock";
 import { useSearchPacks } from "@/features/search/model/useSearchPacks";
 import { useDebounce } from "@/shared/lib/useDebounce";
+import { useRecommendedPacks } from "@/views/home/model/useRecommendedPacks";
+import type { PackCardData } from "@/shared/ui/item/PackCard";
 
 export function useSearchState(query: string) {
   const searchParams = useSearchParams();
@@ -54,9 +56,28 @@ export function useSearchState(query: string) {
   const hasIntent = selectedLabels.length > 0 || normalizedQuery.length > 0;
   const isEmpty = hasIntent && filteredPacks.length === 0;
 
+  const { data: recommendationData } = useRecommendedPacks();
+
   const recommendedPacks = React.useMemo(
-    () => MOCK_PACK_CARDS.slice(0, 2),
-    []
+    (): PackCardData[] => {
+      if (!recommendationData) return [];
+
+      const flattened = Object.entries(recommendationData)
+        .sort(([a], [b]) => Number(a) - Number(b))
+        .flatMap(([, packs]) => packs);
+
+      return flattened
+        .slice(0, 2)
+        .map((pack) => ({
+          id: pack.id,
+          tag: pack.contextCategory,
+          itemCount: pack.items,
+          title: pack.title,
+          author: pack.nickname,
+          liked: false,
+        }));
+    },
+    [recommendationData]
   );
 
   return {

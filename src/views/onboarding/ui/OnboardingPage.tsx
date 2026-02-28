@@ -43,17 +43,31 @@ export function OnboardingPage() {
   });
 
   const meta = STEP_META[step];
+  const isWelcome = step === "welcome";
 
   return (
-    <FlowLayout>
+    <FlowLayout
+      className={
+        isWelcome
+          ? "h-dvh overflow-hidden bg-cover bg-center bg-no-repeat bg-[url('/background/bg-splash.png')]"
+          : undefined
+      }
+    >
       <FlowLayout.Header
         onBack={step === "welcome" ? undefined : onBack}
-        progressSlot={<ProgressBar value={progress} />}
+        progressSlot={isWelcome ? undefined : <ProgressBar value={progress} />}
         title={meta.title}
         description={meta.description}
       />
 
-      <FlowLayout.Content hasFooter>
+      <FlowLayout.Content
+        hasFooter={!isWelcome}
+        className={
+          isWelcome
+            ? "!px-0 !pt-0 !pb-0 flex flex-col overflow-hidden"
+            : undefined
+        }
+      >
         {step === "profile" && (
           <StepProfile
             name={profileEdit.name}
@@ -67,19 +81,40 @@ export function OnboardingPage() {
         {step === "moments" && (
           <StepMoments selected={moments} onChange={setMoments} />
         )}
-        {step === "welcome" && <StepWelcome nickname={profileEdit.name} />}
+        {step === "welcome" && (
+          <div className="flex-1 min-h-0 flex flex-col px-5 pt-8 pb-[calc(20px+env(safe-area-inset-bottom))] overflow-hidden">
+            <div className="flex-1 min-h-0">
+              <StepWelcome nickname={profileEdit.name} />
+            </div>
+            <button
+              type="button"
+              disabled={ctaDisabled}
+              onClick={onNext}
+              className={
+                "h-12 w-full rounded-xl type-label1 " +
+                (ctaDisabled
+                  ? "bg-neutral-95 text-label-subtle"
+                  : "bg-black text-secondary-beige")
+              }
+            >
+              {meta.ctaLabel}
+            </button>
+          </div>
+        )}
       </FlowLayout.Content>
 
-      <FlowLayout.Footer
-        label={meta.ctaLabel}
-        disabled={ctaDisabled}
-        onClick={onNext}
-        aboveSlot={
-          step === "profile"
-            ? "개인정보 수집 및 이용에 동의하시면\n아래 버튼을 눌러주세요."
-            : undefined
-        }
-      />
+      {!isWelcome && (
+        <FlowLayout.Footer
+          label={meta.ctaLabel}
+          disabled={ctaDisabled}
+          onClick={onNext}
+          aboveSlot={
+            step === "profile"
+              ? "개인정보 수집 및 이용에 동의하시면\n아래 버튼을 눌러주세요."
+              : undefined
+          }
+        />
+      )}
     </FlowLayout>
   );
 }

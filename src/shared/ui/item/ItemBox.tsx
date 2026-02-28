@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { IcSvgWishBtn } from "@/shared/icons"
 import Tag1Btn from "@/shared/ui/Tag1Btn"
 import Image from "next/image"
@@ -21,11 +21,14 @@ export function ItemBox({
     isWished = false,
     onWishClick
 }: ItemBoxProps) {
-    const [localLiked, setLocalLiked] = useState(isWished);
+    const currentLikedProp = !!(isWished || item.isItemInWishList || item.liked);
+    const [localLiked, setLocalLiked] = useState(currentLikedProp);
+    const [prevLikedProp, setPrevLikedProp] = useState(currentLikedProp);
 
-    useEffect(() => {
-        setLocalLiked(isWished);
-    }, [isWished]);
+    if (currentLikedProp !== prevLikedProp) {
+        setPrevLikedProp(currentLikedProp);
+        setLocalLiked(currentLikedProp);
+    }
 
     const displayTags = buildDisplayTags(item.satisfaction, item.usePeriod);
     const satisfactionTag = displayTags.find(t => t.variant === "black")?.label;
@@ -64,7 +67,13 @@ export function ItemBox({
 
             <div className="w-full overflow-x-auto mt-4 no-scrollbar">
                 <div className="flex gap-[10px] w-max">
-                    {item.reviewImagePaths?.map((src, idx) => (
+                    {item.reviewImagePaths?.filter(src => {
+                        if (!src || typeof src !== 'string') return false;
+                        const trimmed = src.trim();
+                        if (trimmed === '' || trimmed === 'null' || trimmed === 'undefined') return false;
+                        // http://, https:// 또는 /로 시작하는 유효한 경로만 허용
+                        return /^https?:\/\//.test(trimmed) || trimmed.startsWith('/');
+                    }).map((src, idx) => (
                         <div key={`${src}-${idx}`} className="w-[100px] h-[100px] flex-shrink-0 overflow-hidden rounded-[8px] bg-neutral-95 relative">
                             <Image src={src} alt={`${item.productName} 이미지 ${idx + 1}`} fill className="object-cover" />
                         </div>

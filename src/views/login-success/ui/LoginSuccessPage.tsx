@@ -4,6 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { setAccessToken } from "@/shared/lib/auth";
 import { useUserStore } from "@/entities/user/model/useUserStore";
+import Loading from "@/shared/ui/Loading";
 
 export const LoginSuccessPage = () => {
   const searchParams = useSearchParams();
@@ -42,10 +43,5 @@ export const LoginSuccessPage = () => {
     );
   }
 
-  return (
-    <div className="flex min-h-[50vh] flex-col items-center justify-center px-6">
-      <div className="h-8 w-8 animate-spin rounded-full border-2 border-blue-600 border-t-transparent" />
-      <p className="mt-4 text-gray-600">로그인 처리 중...</p>
-    </div>
-  );
+  return <Loading />;
 };

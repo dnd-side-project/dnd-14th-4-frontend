@@ -7,6 +7,7 @@ import { ProgressBar } from "@/views/onboarding/ui/components/ProgressBar";
 import SelectedItemsSection from "@/views/pack-create/widgets/SelectedItemsSection/ui/SelectedItemsSection";
 import { usePackCreateItemsStore } from "@/views/pack-create/features/select-pack-items/model/store";
 import { ItemAdd } from "@/views/my-pack/ui/components/ItemAdd";
+import { FixedBottomButton } from "@/shared/ui/FixedBottomButton";
 
 export default function Step1SelectItemsPage() {
   const router = useRouter();
@@ -59,13 +60,12 @@ export default function Step1SelectItemsPage() {
       <FlowLayout.Content className="pt-6">
         <SelectedItemsSection onAddClick={openItemAdd} />
       </FlowLayout.Content>
-
-      <FlowLayout.Footer
-        label="다음"
-        disabled={!canGoNext}
-        onClick={() => router.push("/pack/create/step-2")}
-        className="px-5 pb-6"
-      />
+       <FixedBottomButton
+                    onClick={() => router.push("/pack/create/step-2")}
+                    disabled={!canGoNext}
+                >
+                    다음
+                </FixedBottomButton>
     </FlowLayout>
   );
 }

@@ -4,14 +4,18 @@ import { useEffect, useRef } from 'react';
 import { IcSvgCloseBig } from '@/shared/icons';
 import { Tag2Btn } from '@/shared/ui/Tag2Btn';
 import { motion, AnimatePresence } from 'framer-motion';
+import { isProfileDefaultColor } from '@/entities/user/model';
+import { PROFILE_COLOR_CLASS } from '@/views/my-page/ui/MyPage';
 
 interface ProfileModalProps {
     isOpen: boolean;
     onClose: () => void;
     authorName: string;
+    tag?: string;
+    profileImageUrl?: string;
 }
 
-export function ProfileModal({ isOpen, onClose, authorName }: ProfileModalProps) {
+export function ProfileModal({ isOpen, onClose, authorName, tag, profileImageUrl }: ProfileModalProps) {
 
     const closeButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -22,6 +26,8 @@ export function ProfileModal({ isOpen, onClose, authorName }: ProfileModalProps)
     const handleKeyDown = (e: React.KeyboardEvent) => {
         if (e.key === 'Escape') onClose();
     };
+
+    const profileInitial = authorName.charAt(0).toUpperCase();
 
     return (
         <AnimatePresence>
@@ -57,7 +63,12 @@ export function ProfileModal({ isOpen, onClose, authorName }: ProfileModalProps)
                             </button>
                         </div>
 
-                        <div className="w-[115px] h-[115px] bg-common-100 rounded-full" />
+                        <div
+                            className={`w-[115px] h-[115px] rounded-full flex items-center justify-center text-white text-xl font-bold overflow-hidden ${profileImageUrl && isProfileDefaultColor(profileImageUrl) ? PROFILE_COLOR_CLASS[profileImageUrl] ?? 'bg-neutral-300' : 'bg-neutral-300'}`}
+                            style={profileImageUrl && !isProfileDefaultColor(profileImageUrl) ? { backgroundImage: `url(${profileImageUrl})`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined}
+                        >
+                            {(!profileImageUrl || isProfileDefaultColor(profileImageUrl)) && profileInitial}
+                        </div>
 
                         <div className="text-center">
                             <h2 id='profile-modal-title' className="type-heading2 text-label-default">{authorName}</h2>
@@ -65,8 +76,7 @@ export function ProfileModal({ isOpen, onClose, authorName }: ProfileModalProps)
 
 
                         <div className='flex gap-2'>
-                            <Tag2Btn status>공부/시험</Tag2Btn>
-                            <Tag2Btn status>면접/취준</Tag2Btn>
+                            {tag && <Tag2Btn status>{tag}</Tag2Btn>}
                         </div>
                     </motion.div>
                 </div >

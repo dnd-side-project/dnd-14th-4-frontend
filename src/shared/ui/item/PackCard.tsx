@@ -16,7 +16,9 @@ export interface PackCardData {
   author: string
   description?: string;
   liked?: boolean
+  isPackInWishList?: boolean
   date?: string
+  profile?: string
 }
 
 interface PackCardProps extends Omit<PackCardData, "id"> {
@@ -34,16 +36,24 @@ export function PackCard({
   itemCount,
   title,
   author,
-  liked = false,
+  liked,
+  isPackInWishList,
   onMoreClick,
   showLikeBtn = true,
   isSelectMode = false,
   isChecked = false,
   onSelect,
 }: PackCardProps) {
-  const [isLiked, setIsLiked] = useState(liked)
-  const router = useRouter()
+  const currentLikedProp = !!(liked || isPackInWishList);
+  const [isLiked, setIsLiked] = useState(currentLikedProp);
+  const [prevLikedProp, setPrevLikedProp] = useState(currentLikedProp);
 
+  if (currentLikedProp !== prevLikedProp) {
+    setPrevLikedProp(currentLikedProp);
+    setIsLiked(currentLikedProp);
+  }
+
+  const router = useRouter()
   const { mutate: toggleWish } = useTogglePackWish();
 
   const handleCardClick = () => {
@@ -57,10 +67,19 @@ export function PackCard({
   const handleLikeClick = (e: React.MouseEvent) => {
     e.stopPropagation();
 
-    toggleWish({ packId: id, isWished: isLiked });
+    const nextLikedStatus = !isLiked;
 
-    setIsLiked((prev) => !prev);
-  }
+    setIsLiked(nextLikedStatus);
+
+    toggleWish(
+      { packId: id, isWished: !!isLiked },
+      {
+        onError: () => {
+          setIsLiked(isLiked); // Revert on error
+        }
+      }
+    );
+  };
 
   return (
     <div

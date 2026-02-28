@@ -2,9 +2,8 @@
 
 import * as React from "react";
 import { Suspense } from "react";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { useSearchPageTransition } from "@/features/search/transition";
-import { RECENT_SEARCHES } from "@/features/search/model/mock";
 import {
   categoriesToQuery,
   labelToSlug,
@@ -17,18 +16,22 @@ import { SearchLandingSection } from "@/widgets/search/ui/SearchLandingSection";
 import { CategoryChip } from "@/shared/ui/CategoryChip";
 import { useUserStore } from "@/entities/user/model/useUserStore";
 import { usePopularKeywords } from "@/features/search/model/usePopularKeywords";
+import { useRecentSearches } from "@/features/search/model/useRecentSearches";
 
 function SearchPageContent() {
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const searchKey = React.useMemo(() => searchParams.toString(), [searchParams]);
   const { handleBack, inputRef } = useSearchPageTransition(router);
 
   const [query, setQuery] = React.useState("");
-  const [recents, setRecents] = React.useState(RECENT_SEARCHES);
   const [selectedPopularId, setSelectedPopularId] =
     React.useState<string | null>(null);
   const user = useUserStore((state) => state.user);
   const { data: popularKeywords = [] } = usePopularKeywords();
+  const { recents, add: addRecent, remove: removeRecent, clear: clearRecents } =
+    useRecentSearches();
   const {
     categorySlugs,
     selectedLabels,
@@ -38,9 +41,19 @@ function SearchPageContent() {
     recommendedPacks,
   } = useSearchState(query);
 
-  const clearAll = () => setRecents([]);
-  const removeOne = (id: string) =>
-    setRecents((prev) => prev.filter((x) => x.id !== id));
+  React.useEffect(() => {
+    // /search 진입(또는 쿼리 변경) 시 항상 맨 위에서 시작
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [pathname, searchKey]);
+
+  const commitRecent = React.useCallback(
+    (value: string) => {
+      const v = value.trim();
+      if (!v) return;
+      addRecent(v);
+    },
+    [addRecent]
+  );
 
   const removeCategory = (slug: string) => {
     const nextSlugs = categorySlugs.filter((s) => s !== slug);
@@ -53,6 +66,7 @@ function SearchPageContent() {
       <SearchHeader
         query={query}
         onChange={setQuery}
+        onCommit={commitRecent}
         onBack={handleBack}
         onFilter={() => router.push("/filter-search")}
         inputRef={inputRef as React.RefObject<HTMLInputElement>}
@@ -86,20 +100,34 @@ function SearchPageContent() {
       ) : (
         <SearchLandingSection
           recents={recents}
-          onClear={clearAll}
-          onRemove={removeOne}
-          popular={popularKeywords}
-          selectedId={selectedPopularId}
-          onSelectPopular={(value, id) => {
-            setSelectedPopularId(id);
-            const categorySlug = labelToSlug(value) ?? value;
+          onClear={clearRecents}
+          onRemove={removeRecent}
+          onSelectRecent={(value) => {
+            setSelectedPopularId(null);
+            addRecent(value);
 
+            const categorySlug = labelToSlug(value) ?? value;
             if (labelToSlug(value) || slugToLabel(categorySlug)) {
               router.push(`/search?categories=${categorySlug}`);
               return;
             }
 
             setQuery(value);
+          }}
+          popular={popularKeywords}
+          selectedId={selectedPopularId}
+          onSelectPopular={(value, id) => {
+            setSelectedPopularId(id);
+            const label = popularKeywords.find((x) => x.id === id)?.label ?? value;
+            addRecent(label);
+            const categorySlug = labelToSlug(label) ?? value;
+
+            if (labelToSlug(label) || slugToLabel(categorySlug)) {
+              router.push(`/search?categories=${categorySlug}`);
+              return;
+            }
+
+            setQuery(label);
           }}
         />
       )}
@@ -108,9 +136,29 @@ function SearchPageContent() {
 }
 
 function SearchPageFallback() {
+  const [skip] = React.useState(() => {
+    if (typeof window === "undefined") return false;
+    try {
+      return sessionStorage.getItem("__skip_search_fallback_once__") === "1";
+    } catch {
+      return false;
+    }
+  });
+
+  React.useEffect(() => {
+    if (!skip) return;
+    try {
+      sessionStorage.removeItem("__skip_search_fallback_once__");
+    } catch {
+      // ignore storage errors
+    }
+  }, [skip]);
+
   return (
     <main className="min-h-dvh bg-white pb-24 flex items-center justify-center">
-      <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-neutral-80 border-r-transparent" />
+      {skip ? null : (
+        <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-neutral-80 border-r-transparent" />
+      )}
     </main>
   );
 }

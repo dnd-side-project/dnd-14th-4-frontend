@@ -8,6 +8,7 @@ export interface Item {
     usePeriod?: string;
     purchaseLocation?: string;
     liked?: boolean;
+    isItemInWishList?: boolean;
     tags?: string[];
 }
 
