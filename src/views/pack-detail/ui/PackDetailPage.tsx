@@ -9,6 +9,7 @@ import PackDetailContent from "@/views/pack-detail/ui/components/packDetail";
 import { usePackDetail } from "@/views/pack-detail/model/usePackDetail";
 import { useGetItems } from "@/entities/item/model/useGetItems";
 import { useTogglePackWish } from "@/entities/wishlist/model/useTogglePackWish";
+import Loading from "@/shared/ui/Loading";
 
 function PackDetailPageInner() {
     const params = useParams();
@@ -101,7 +102,7 @@ function PackDetailPageInner() {
     }
 
     if (isLoading) {
-        return <div>팩 정보를 불러오는 중...</div>;
+        return <Loading />;
     }
 
     if (isError) {
@@ -143,7 +144,7 @@ function PackDetailPageInner() {
 
 export default function PackDetailPage() {
     return (
-        <Suspense fallback={<div>로딩 중...</div>}>
+        <Suspense fallback={<Loading />}>
             <PackDetailPageInner />
         </Suspense>
     );

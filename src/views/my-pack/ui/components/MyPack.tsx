@@ -47,7 +47,7 @@ export const MyPack = ({ onGoToItemAdd }: MyPackProps) => {
 
     return (
         <div className="px-4 pb-24">
-            <div className="flex items-start justify-between mt-5 mb-5 px-1">
+            <div className="flex items-start justify-between mt-5 mb-5 px-1 background-color: #F8F8F8;">
                 <div>
                     <h1 className="type-heading1 text-label-default">
                         <span className="text-primary-normal">{nickname}</span>님의
