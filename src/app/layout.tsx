@@ -24,13 +24,15 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body
-        className={`${pretendard.variable} antialiased flex justify-center bg-gray-50 dark:bg-gray-50`}
+        className={`${pretendard.variable} antialiased flex justify-center bg-gray-50 dark:bg-gray-50 h-dvh overflow-hidden`}
       >
         <QueryProvider>
           <AuthHydrate>
             <SearchTransitionProvider>
-              <div className="w-full max-w-mobile min-h-dvh bg-white shadow-xl relative overflow-x-hidden">
-                {children}
+              <div className="w-full max-w-mobile h-dvh bg-white shadow-xl relative overflow-hidden">
+                <div className="h-full overflow-y-auto overflow-x-hidden pb-[var(--bottom-nav-space,0px)]">
+                  {children}
+                </div>
                 <BottomNav />
                 <ToastProvider />
               </div>

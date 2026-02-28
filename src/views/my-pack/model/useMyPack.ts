@@ -131,9 +131,17 @@ export const useMyPack = () => {
         }
     };
 
-    const handleCreatePack = () => {
+    const handleCreatePack = (items?: Item[]) => {
         if (state.selectedIds.length === 0) return;
-        router.push(`/pack-create?ids=${state.selectedIds.join(",")}`);
+        // Step1SelectItemsPage는 스토어(selected)를 그대로 사용하므로, 이동 전에 미리 채워준다.
+        resetPackCreateStore();
+        if (Array.isArray(items) && items.length > 0) {
+            state.selectedIds.forEach((id) => {
+                const found = items.find((x) => String(x.id) === String(id));
+                if (found) addPackCreateItem(mapApiItemToPackCreateItem(found));
+            });
+        }
+        router.push(`/pack-create/step-1?ids=${state.selectedIds.join(",")}`);
     };
 
     const handleCreatePackBySelected = (item: Item) => {

@@ -186,7 +186,7 @@ export const MyPack = ({ onGoToItemAdd }: MyPackProps) => {
             </div>
 
             {state.activeTab === "item" && state.isSelectMode && state.selectedIds.length > 0 && (
-                <FixedBottomButton onClick={actions.handleCreatePack}>
+                <FixedBottomButton onClick={() => actions.handleCreatePack(itemData)}>
                     팩 만들기
                 </FixedBottomButton>
             )}
