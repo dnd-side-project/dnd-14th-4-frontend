@@ -148,7 +148,7 @@ export function HomePage() {
         initial="hidden"
         animate={titleVisible ? "show" : "hidden"}
         variants={headerContainer}
-        className="mb-10 flex items-start justify-between gap-4"
+        className="mb-8 flex items-start justify-between gap-4"
       >
         <motion.div variants={headerItem}>
           <h1 className="type-heading1 text-label-default">
@@ -213,7 +213,7 @@ export function HomePage() {
         </section>
       )}
 
-      <section className="mt-8">
+      <section className="mt-5">
         <div className="flex items-center justify-between">
           <h2 className="text-[18px] font-bold text-neutral-900">
             지금 등록된 따끈따끈한 신상 팩
