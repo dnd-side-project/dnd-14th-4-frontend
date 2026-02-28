@@ -11,6 +11,7 @@ export interface PackDetailItemApiDto {
   purchase: string;
   imageUrls: string[];
   tags: string[];
+  isItemInWishlist: boolean;
 }
 
 export interface PackDetailResponse {
@@ -21,6 +22,7 @@ export interface PackDetailResponse {
   profileImage: string;
   introduction: string;
   contextCategory: string;
+  isPackInWishList: boolean;
   itemList: PackDetailItemApiDto[];
 }
 

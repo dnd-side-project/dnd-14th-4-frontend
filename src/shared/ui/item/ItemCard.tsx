@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { IcSvgCheckCircle, IcSvgMore, IcSvgWishBtn } from "@/shared/icons"
 import { ItemFolderBg } from "./itemfolder-bg"
 import Tag1Btn from "../Tag1Btn"
@@ -42,6 +42,7 @@ export function ItemCard({
   brandName,
   productName,
   liked = false,
+  isItemInWishList,
   onMoreClick,
   onDetailClick,
   showLike,
@@ -49,13 +50,17 @@ export function ItemCard({
   isChecked = false,
   onSelect,
 }: ItemCardProps) {
-  const [isLiked, setIsLiked] = useState(liked);
+  const currentLikedProp = !!(liked || isItemInWishList);
+  const [isLiked, setIsLiked] = useState(currentLikedProp);
+  const [prevLikedProp, setPrevLikedProp] = useState(currentLikedProp);
+
+  if (currentLikedProp !== prevLikedProp) {
+    setPrevLikedProp(currentLikedProp);
+    setIsLiked(currentLikedProp);
+  }
+
   const { mutate: toggleWish } = useToggleWish();
   const displayTags = buildDisplayTags(satisfaction, usePeriod);
-
-  useEffect(() => {
-    setIsLiked(liked);
-  }, [liked]);
 
   const handleLikeClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -65,7 +70,7 @@ export function ItemCard({
     setIsLiked(nextLikedStatus);
 
     toggleWish(
-      { itemId: id, isWished: isLiked },
+      { itemId: id, isWished: !!isLiked },
       {
         onError: () => {
           setIsLiked(isLiked);

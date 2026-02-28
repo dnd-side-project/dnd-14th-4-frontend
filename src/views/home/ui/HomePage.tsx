@@ -126,9 +126,11 @@ export function HomePage() {
           author: pack.nickname,
           imageSrc: pack.imageUrl,
           imageAlt: `${pack.title} 이미지`,
+          liked: pack.isPackInWishList,
+          showLikeBtn: pack.nickname !== nickname,
         })),
       }));
-  }, [recommendationData]);
+  }, [recommendationData, nickname]);
 
   const showRecommendationSections =
     !isRecommendationLoading &&
@@ -222,7 +224,7 @@ export function HomePage() {
         <div className="mt-6 -mx-5 px-5 overflow-x-auto">
           <LayoutGroup>
             <div className="relative flex gap-2 w-max pb-2">
-    
+
 
               {!isLoading &&
                 !isError &&
