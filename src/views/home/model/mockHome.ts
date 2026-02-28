@@ -6,6 +6,7 @@ export type HomePackApiDto = {
   items: number; // itemCount
   imageUrl?: string;
   isPackInWishList: boolean;
+  path?: string;
 };
 
 /**
