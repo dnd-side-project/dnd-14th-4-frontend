@@ -4,7 +4,7 @@ import { PackCard, type PackCardData } from "@/shared/ui/item/PackCard";
 
 interface Props {
   packs: PackCardData[];
-  isEmpty: boolean; 
+  isEmpty: boolean;
   nickname: string;
   recommended: PackCardData[];
 }
@@ -22,7 +22,7 @@ export function SearchResultSection({
         <ul className="flex flex-col gap-4">
           {packs.map((card) => (
             <li key={card.id}>
-              <PackCard {...card} />
+              <PackCard {...card} showLikeBtn={card.author !== nickname} />
             </li>
           ))}
         </ul>
@@ -49,7 +49,7 @@ export function SearchResultSection({
           <ul className="mt-6 flex flex-col gap-4">
             {recommended.map((card) => (
               <li key={card.id}>
-                <PackCard {...card} />
+                <PackCard {...card} showLikeBtn={card.author !== nickname} />
               </li>
             ))}
           </ul>

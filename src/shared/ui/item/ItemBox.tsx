@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { IcSvgWishBtn } from "@/shared/icons"
 import Tag1Btn from "@/shared/ui/Tag1Btn"
 import Image from "next/image"
@@ -21,11 +21,14 @@ export function ItemBox({
     isWished = false,
     onWishClick
 }: ItemBoxProps) {
-    const [localLiked, setLocalLiked] = useState(isWished);
+    const currentLikedProp = !!(isWished || item.isItemInWishList || item.liked);
+    const [localLiked, setLocalLiked] = useState(currentLikedProp);
+    const [prevLikedProp, setPrevLikedProp] = useState(currentLikedProp);
 
-    useEffect(() => {
-        setLocalLiked(isWished);
-    }, [isWished]);
+    if (currentLikedProp !== prevLikedProp) {
+        setPrevLikedProp(currentLikedProp);
+        setLocalLiked(currentLikedProp);
+    }
 
     const displayTags = buildDisplayTags(item.satisfaction, item.usePeriod);
     const satisfactionTag = displayTags.find(t => t.variant === "black")?.label;

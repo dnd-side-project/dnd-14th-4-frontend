@@ -29,7 +29,7 @@ export const useCreatePack = () => {
     setError(null);
     try {
       const { data } = await apiClient.post<CreatePackResponseDTO>(
-        "/api/v1/pack-create",
+        "/api/v1/packs",
         request
       );
       return data;

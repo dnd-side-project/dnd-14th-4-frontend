@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useState, Suspense } from 'react';
 import type { Item } from '@/entities/item/model/types';
 import { BackHeader } from '@/shared/ui/BackHeader';
 import { ItemBox } from '@/shared/ui/item/ItemBox';
@@ -12,9 +12,11 @@ import { Modal } from '@/shared/ui/Modal';
 import { ItemAddButton } from '@/shared/ui/ItemAddButton';
 import { PackCardData } from '@/shared/ui/item/PackCard';
 import { ProfileModal } from '@/views/pack-detail/ui/components/profileModal';
-import { useUserStore } from "@/entities/user/model";
+import { useUserStore, isProfileDefaultColor } from "@/entities/user/model";
 import { useToggleWish } from '@/entities/wishlist/model/useToggleWish';
 import { useUpdatePack } from '@/entities/pack/model/useUpdatePack';
+import { PROFILE_COLOR_CLASS } from '@/views/my-page/ui/MyPage';
+import { IcSvgWishBtn } from '@/shared/icons';
 
 type PageMode = 'view' | 'edit' | 'add';
 
@@ -23,9 +25,18 @@ interface PackDetailContentProps {
     items: Item[];
     onAddItem: () => void;
     newlyAddedIds?: number[];
+    isLiked: boolean;
+    onTogglePackWish: () => void;
 }
 
-function PackDetailInner({ packData, items, onAddItem, newlyAddedIds = [] }: PackDetailContentProps) {
+function PackDetailInner({
+    packData,
+    items,
+    onAddItem,
+    newlyAddedIds = [],
+    isLiked,
+    onTogglePackWish
+}: PackDetailContentProps) {
     const router = useRouter()
     const { user } = useUserStore();
     const searchParams = useSearchParams();
@@ -38,12 +49,13 @@ function PackDetailInner({ packData, items, onAddItem, newlyAddedIds = [] }: Pac
     const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
 
     const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
-    const { title, author, tag, date } = packData;
+    const { title, author, tag, date, profile } = packData;
+    const profileInitial = author.charAt(0).toUpperCase();
     const isMyPack = user?.name === author;
     const shouldShowWish = pageMode === 'view' && !isMyPack;
+
     const { mutate: toggleItemWish } = useToggleWish();
     const { mutate: updatePack } = useUpdatePack(packData.id);
-
 
     const handleComplete = () => {
         updatePack({
@@ -72,22 +84,43 @@ function PackDetailInner({ packData, items, onAddItem, newlyAddedIds = [] }: Pac
         router.back();
     };
 
-
-
     return (
         <>
             <BackHeader onBack={handleBackClick} />
             <div className="px-6 pb-[100px] py-5">
-                <h1 className="type-heading1 text-label-default mb-[10px]">{title}</h1>
+                <div className="flex items-center gap-2 mb-[10px]">
+                    <h1 className="type-heading1 text-label-default">{title}</h1>
+                    {shouldShowWish && (
+                        <button
+                            type="button"
+                            aria-label="팩 좋아요"
+                            className="p-1 transition-colors"
+                            onClick={onTogglePackWish}
+                        >
+                            <IcSvgWishBtn
+                                className="w-7 h-7"
+                                fill={isLiked ? "var(--color-primary-subtler)" : "var(--alpha-5)"}
+                                strokeColor={isLiked ? "var(--color-primary-subtle)" : "var(--alpha-22)"}
+                            />
+                        </button>
+                    )}
+                </div>
                 <Tag2Btn status>{tag}</Tag2Btn>
 
                 <div className='flex mt-6 items-center gap-2 mb-6'>
                     <button
                         type="button"
                         aria-label={`${author} 프로필 보기`}
-                        className="w-12 h-12 bg-common-100 rounded-full cursor-pointer hover:opacity-80 transition-opacity"
+                        className={`w-12 h-12 rounded-full cursor-pointer hover:opacity-80 transition-opacity flex items-center justify-center text-white font-bold overflow-hidden
+                            ${profile && isProfileDefaultColor(profile)
+                                ? (PROFILE_COLOR_CLASS[profile] ?? "bg-neutral-300")
+                                : "bg-neutral-300"
+                            }`}
+                        style={profile && !isProfileDefaultColor(profile) ? { backgroundImage: `url(${profile})`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined}
                         onClick={() => setIsProfileModalOpen(true)}
-                    />
+                    >
+                        {(!profile || isProfileDefaultColor(profile)) && profileInitial}
+                    </button>
                     <div className='flex flex-col gap-0.5'>
                         <p className='type-label1'>{author}</p>
                         <p className='type-caption1 text-gray-300'>{date}</p>
@@ -148,6 +181,7 @@ function PackDetailInner({ packData, items, onAddItem, newlyAddedIds = [] }: Pac
                 onClose={() => setIsProfileModalOpen(false)}
                 authorName={author}
                 tag={tag}
+                profileImageUrl={profile}
             />
         </>
     );

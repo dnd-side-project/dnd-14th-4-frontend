@@ -47,18 +47,25 @@ export const MyPack = ({ onGoToItemAdd }: MyPackProps) => {
 
     return (
         <div className="px-4 pb-24">
-            <header className={`px-1 flex items-center justify-between mt-5 ${state.isFilterOpen ? 'mb-5' : 'mb-10'}`}>
-                <div className="flex-1 flex justify-start">
+            <div className="flex items-start justify-between mt-5 mb-5 px-1">
+                <div>
+                    <h1 className="type-heading1 text-label-default">
+                        <span className="text-primary-normal">{nickname}</span>님의
+                        <br />
+                        아이템과 팩
+                    </h1>
+                </div>
+                <div className="shrink-0">
                     {profileImageUrl && !isProfileDefaultColor(profileImageUrl) ? (
                         <div
-                            className="w-12 h-12 rounded-full bg-neutral-300 bg-cover bg-center"
+                            className="w-14 h-14 rounded-full bg-neutral-300 bg-cover bg-center"
                             style={{ backgroundImage: `url(${profileImageUrl})` }}
                             aria-label={`${nickname} 프로필 이미지`}
                             role="img"
                         />
                     ) : (
                         <div
-                            className={`w-12 h-12 rounded-full flex items-center justify-center text-white font-bold ${profileImageUrl && isProfileDefaultColor(profileImageUrl)
+                            className={`w-14 h-14 rounded-full flex items-center justify-center text-white font-bold ${profileImageUrl && isProfileDefaultColor(profileImageUrl)
                                 ? PROFILE_COLOR_CLASS[profileImageUrl] ?? "bg-neutral-300"
                                 : "bg-common-100"
                                 }`}
@@ -67,7 +74,10 @@ export const MyPack = ({ onGoToItemAdd }: MyPackProps) => {
                         </div>
                     )}
                 </div>
+            </div>
 
+            <header className={`px-1 flex items-center justify-between ${state.isFilterOpen ? 'mb-5' : 'mb-10'}`}>
+                <div className="flex-1" />
                 <div role="tablist" className="flex gap-7 w-37 items-center justify-center">
                     <TabItem isActive={state.activeTab === "item"} onClick={() => actions.handleTabChange("item")}>
                         아이템

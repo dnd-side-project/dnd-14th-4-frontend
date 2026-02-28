@@ -23,6 +23,7 @@ export interface PackImageCardData {
 
 interface PackImageCardProps extends PackImageCardData {
   onMore?: () => void;
+  showLikeBtn?: boolean;
 }
 
 export function PackImageCard({
@@ -36,6 +37,7 @@ export function PackImageCard({
   imageAlt = "",
   onMore,
   href,
+  showLikeBtn = true,
 }: PackImageCardProps) {
   const [isLiked, setIsLiked] = useState(liked);
   const router = useRouter();
@@ -98,22 +100,23 @@ export function PackImageCard({
               <h3 className="truncate text-base font-bold text-neutral-900 sm:text-lg">
                 {title}
               </h3>
-
-              <button
-                type="button"
-                aria-label="좋아요"
-                className="shrink-0 p-1 transition-colors"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleLike();
-                }}
-              >
-                <IcSvgWishBtn
-                  className="h-5 w-5 sm:h-6 sm:w-6"
-                  fill={isLiked ? "var(--color-primary-subtler)" : "var(--alpha-5)"}
-                  strokeColor={isLiked ? "var(--color-primary-subtle)" : "var(--alpha-22)"}
-                />
-              </button>
+              {showLikeBtn && (
+                <button
+                  type="button"
+                  aria-label="좋아요"
+                  className="shrink-0 p-1 transition-colors"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleLike();
+                  }}
+                >
+                  <IcSvgWishBtn
+                    className="h-5 w-5 sm:h-6 sm:w-6"
+                    fill={isLiked ? "var(--color-primary-subtler)" : "var(--alpha-5)"}
+                    strokeColor={isLiked ? "var(--color-primary-subtle)" : "var(--alpha-22)"}
+                  />
+                </button>
+              )}
             </div>
 
             <p className="mt-0.5 truncate text-xs text-neutral-400 sm:mt-1 sm:text-sm">

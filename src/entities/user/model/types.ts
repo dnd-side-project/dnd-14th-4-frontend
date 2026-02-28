@@ -1,5 +1,5 @@
 export interface MypageResponse {
-  /** 프로필 이미지 URL 또는 기본 색상: yellow | red | blue | green | purple */
+  /** 프로필 이미지 URL 또는 기본 색상: yellow | red | blue | green | purple | butter | skyblue | lime | lilac | pink */
   name: string;
   profileImageUrl: string;
   contextCategoryNames: string[];
@@ -23,6 +23,11 @@ export const PROFILE_DEFAULT_COLORS = [
   "blue",
   "green",
   "purple",
+  "butter",
+  "skyblue",
+  "lime",
+  "lilac",
+  "pink",
 ] as const;
 
 export type ProfileDefaultColor = (typeof PROFILE_DEFAULT_COLORS)[number];

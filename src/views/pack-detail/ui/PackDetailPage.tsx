@@ -8,6 +8,7 @@ import type { PackCardData } from "@/shared/ui/item/PackCard";
 import PackDetailContent from "@/views/pack-detail/ui/components/packDetail";
 import { usePackDetail } from "@/views/pack-detail/model/usePackDetail";
 import { useGetItems } from "@/entities/item/model/useGetItems";
+import { useTogglePackWish } from "@/entities/wishlist/model/useTogglePackWish";
 
 function PackDetailPageInner() {
     const params = useParams();
@@ -21,6 +22,30 @@ function PackDetailPageInner() {
         Number.isFinite(packId) ? packId : undefined
     );
     const { data: allItems } = useGetItems();
+    const { mutate: togglePackWish } = useTogglePackWish();
+
+    const propLiked = !!data?.isPackInWishList;
+    const [isLiked, setIsLiked] = useState<boolean>(propLiked);
+    const [prevPropLiked, setPrevPropLiked] = useState<boolean>(propLiked);
+
+    if (propLiked !== prevPropLiked) {
+        setPrevPropLiked(propLiked);
+        setIsLiked(propLiked);
+    }
+
+    const handleTogglePackWish = () => {
+        if (!data) return;
+        const currentLiked = isLiked;
+        setIsLiked(!currentLiked);
+        togglePackWish({
+            packId: data.id,
+            isWished: currentLiked
+        }, {
+            onError: () => {
+                setIsLiked(currentLiked);
+            }
+        });
+    };
 
     const packData = useMemo<PackCardData | undefined>(() => {
         if (!data) return undefined;
@@ -33,6 +58,8 @@ function PackDetailPageInner() {
             author: data.user,
             description: data.introduction,
             date: data.date,
+            profile: data.profileImage,
+            liked: data.isPackInWishList,
         };
     }, [data]);
 
@@ -53,6 +80,7 @@ function PackDetailPageInner() {
             usePeriod: item.usePeriod,
             purchaseLocation: item.purchase,
             tags: item.tags,
+            liked: item.isItemInWishlist,
         }));
 
         if (newlyAddedIds.length > 0) {
@@ -87,7 +115,7 @@ function PackDetailPageInner() {
                 addMode="item"
                 initialSelectedItemIds={newlyAddedIds}
                 onAddItems={(selectedItems) => {
-                    const ids = selectedItems.map(item => item.id);
+                    const ids = selectedItems.map(item => String(item.id));
                     setNewlyAddedIds(ids);
                     setIsAddingItem(false);
                 }}
@@ -97,18 +125,18 @@ function PackDetailPageInner() {
 
     return (
         <>
-            {
-                packData ? (
-                    <PackDetailContent
-                        packData={packData}
-                        items={items}
-                        onAddItem={() => setIsAddingItem(true)}
-                        newlyAddedIds={newlyAddedIds.map(Number)}
-                    />
-
-                ) :
-                    <div>해당 팩을 찾을 수 없습니다.</div>
-            }
+            {packData ? (
+                <PackDetailContent
+                    packData={packData}
+                    items={items}
+                    onAddItem={() => setIsAddingItem(true)}
+                    newlyAddedIds={newlyAddedIds.map(Number)}
+                    isLiked={isLiked}
+                    onTogglePackWish={handleTogglePackWish}
+                />
+            ) : (
+                <div>해당 팩을 찾을 수 없습니다.</div>
+            )}
         </>
     );
 }

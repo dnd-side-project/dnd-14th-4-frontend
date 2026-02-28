@@ -15,6 +15,11 @@ export const PROFILE_COLOR_CLASS: Record<string, string> = {
     blue: 'bg-[#86BEFF]',
     green: 'bg-[#D7D467]',
     purple: 'bg-[#C1B7F7]',
+    butter: 'bg-[#FFD37C]',
+    pink: 'bg-[#FF7BAC]',
+    skyblue: 'bg-[#86BEFF]',
+    lime: 'bg-[#D7D467]',
+    lilac: 'bg-[#C1B7F7]',
 };
 
 export const MyPage = () => {
