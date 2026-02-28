@@ -17,6 +17,7 @@ export interface PackCardData {
   description?: string;
   liked?: boolean
   date?: string
+  profile?: string
 }
 
 interface PackCardProps extends Omit<PackCardData, "id"> {

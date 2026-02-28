@@ -12,9 +12,10 @@ import { Modal } from '@/shared/ui/Modal';
 import { ItemAddButton } from '@/shared/ui/ItemAddButton';
 import { PackCardData } from '@/shared/ui/item/PackCard';
 import { ProfileModal } from '@/views/pack-detail/ui/components/profileModal';
-import { useUserStore } from "@/entities/user/model";
+import { useUserStore, isProfileDefaultColor } from "@/entities/user/model";
 import { useToggleWish } from '@/entities/wishlist/model/useToggleWish';
 import { useUpdatePack } from '@/entities/pack/model/useUpdatePack';
+import { PROFILE_COLOR_CLASS } from '@/views/my-page/ui/MyPage';
 
 type PageMode = 'view' | 'edit' | 'add';
 
@@ -38,7 +39,8 @@ function PackDetailInner({ packData, items, onAddItem, newlyAddedIds = [] }: Pac
     const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
 
     const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
-    const { title, author, tag, date } = packData;
+    const { title, author, tag, date, profile } = packData;
+    const profileInitial = author.charAt(0).toUpperCase();
     const isMyPack = user?.name === author;
     const shouldShowWish = pageMode === 'view' && !isMyPack;
     const { mutate: toggleItemWish } = useToggleWish();
@@ -85,9 +87,16 @@ function PackDetailInner({ packData, items, onAddItem, newlyAddedIds = [] }: Pac
                     <button
                         type="button"
                         aria-label={`${author} 프로필 보기`}
-                        className="w-12 h-12 bg-common-100 rounded-full cursor-pointer hover:opacity-80 transition-opacity"
+                        className={`w-12 h-12 rounded-full cursor-pointer hover:opacity-80 transition-opacity flex items-center justify-center text-white font-bold overflow-hidden
+                            ${profile && isProfileDefaultColor(profile)
+                                ? (PROFILE_COLOR_CLASS[profile] ?? "bg-neutral-300")
+                                : "bg-neutral-300"
+                            }`}
+                        style={profile && !isProfileDefaultColor(profile) ? { backgroundImage: `url(${profile})`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined}
                         onClick={() => setIsProfileModalOpen(true)}
-                    />
+                    >
+                        {(!profile || isProfileDefaultColor(profile)) && profileInitial}
+                    </button>
                     <div className='flex flex-col gap-0.5'>
                         <p className='type-label1'>{author}</p>
                         <p className='type-caption1 text-gray-300'>{date}</p>
@@ -148,6 +157,7 @@ function PackDetailInner({ packData, items, onAddItem, newlyAddedIds = [] }: Pac
                 onClose={() => setIsProfileModalOpen(false)}
                 authorName={author}
                 tag={tag}
+                profileImageUrl={profile}
             />
         </>
     );

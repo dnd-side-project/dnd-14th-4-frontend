@@ -52,7 +52,7 @@ export const MyPack = ({ onGoToItemAdd }: MyPackProps) => {
                     <h1 className="type-heading1 text-label-default">
                         <span className="text-primary-normal">{nickname}</span>님의
                         <br />
-                        아이템과 백
+                        아이템과 팩
                     </h1>
                 </div>
                 <div className="shrink-0">

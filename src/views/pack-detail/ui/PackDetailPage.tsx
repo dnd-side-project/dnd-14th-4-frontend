@@ -33,8 +33,10 @@ function PackDetailPageInner() {
             author: data.user,
             description: data.introduction,
             date: data.date,
+            profile: data.profileImage,
         };
     }, [data]);
+
 
     const [newlyAddedIds, setNewlyAddedIds] = useState<string[]>(
         itemIdsParam ? itemIdsParam.split(",") : []
