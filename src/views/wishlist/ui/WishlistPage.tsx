@@ -96,19 +96,17 @@ export default function WishListPage() {
         </div>
       </div>
 
-      <header className="mt-6 mb-6 flex items-center justify-center">
-        <div role="tablist" className="flex gap-7 w-37">
-          <div className="flex-1">
-            <TabItem isActive={activeTab === "item"} onClick={() => setActiveTab("item")}>
-              아이템
-            </TabItem>
-          </div>
-          <div className="flex-1">
-            <TabItem isActive={activeTab === "pack"} onClick={() => setActiveTab("pack")}>
-              팩
-            </TabItem>
-          </div>
+      <header className="mt-5 mb-6 px-1 flex items-center justify-between">
+        <div className="flex-1" />
+        <div role="tablist" className="flex gap-7 w-37 items-center justify-center">
+          <TabItem isActive={activeTab === "item"} onClick={() => setActiveTab("item")}>
+            아이템
+          </TabItem>
+          <TabItem isActive={activeTab === "pack"} onClick={() => setActiveTab("pack")}>
+            팩
+          </TabItem>
         </div>
+        <div className="flex-1" />
       </header>
 
       <section className="space-y-6">

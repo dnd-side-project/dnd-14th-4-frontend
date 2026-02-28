@@ -137,7 +137,7 @@ export function PackImageCard({
           </button>
         </div>
 
-        <div className="relative mt-4 aspect-[307/138] w-full overflow-hidden rounded-xl bg-neutral-100 sm:mt-5">
+        <div className="relative mt-4 aspect-[307/175] w-full overflow-hidden rounded-xl bg-neutral-100 sm:mt-5 sm:aspect-[307/170]">
           {safeImageSrc ? (
             <Image
               src={safeImageSrc}
