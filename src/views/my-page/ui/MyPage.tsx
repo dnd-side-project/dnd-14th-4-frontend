@@ -8,6 +8,7 @@ import { IcSvgInstagram, IcSvgKakaoTalk } from '@/shared/icons';
 import Link from 'next/link';
 import { LogoutModal } from './components/LogoutModal';
 import { useUserStore, isProfileDefaultColor } from '@/entities/user/model';
+import Loading from '@/shared/ui/Loading';
 
 export const PROFILE_COLOR_CLASS: Record<string, string> = {
     yellow: 'bg-[#FFD37C]',
@@ -36,9 +37,7 @@ export const MyPage = () => {
 
     if (!isLoaded) {
         return (
-            <div className="flex min-h-[50vh] items-center justify-center">
-                <div className="h-8 w-8 animate-spin rounded-full border-2 border-blue-600 border-t-transparent" />
-            </div>
+          <Loading  />
         );
     }
 
@@ -57,7 +56,7 @@ export const MyPage = () => {
                         (user.name || '?').charAt(0).toUpperCase()
                     ) : null}
                 </div>
-                <h2 className="type-heading2 p-[10px]">마이페이지</h2>
+                <h2 className="type-heading2 text-neutral-10 p-[8px]">{user.name}</h2>
                 <div className="flex gap-2 p-[10px] flex-wrap justify-center">
                     {user.contextCategoryNames.length > 0 ? (
                         user.contextCategoryNames.map((name) => (
