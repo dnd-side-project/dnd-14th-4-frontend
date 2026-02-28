@@ -46,7 +46,12 @@ export default function Step2Page() {
       <FlowLayout.Footer
         label="다음"
         disabled={!canNext}
-        onClick={() => router.push("/pack-create/step-3")}
+        onClick={() => {
+          const { setCategory, setReviewText } = usePackCreateDraftStore.getState();
+          setCategory(null);
+          setReviewText("");
+          router.push("/pack-create/step-3");
+        }}
       />
     </FlowLayout>
   );
