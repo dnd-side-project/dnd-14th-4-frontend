@@ -9,6 +9,9 @@ import { useUserStore, isProfileDefaultColor } from "@/entities/user/model";
 import { PROFILE_COLOR_CLASS } from "@/views/my-page/ui/MyPage";
 import { useGetWishlistPacks } from "@/entities/pack/model/useGetWishlistPacks";
 import Loading from "@/shared/ui/Loading";
+import { BottomSheet } from "@/shared/ui/BottomSheet";
+import { ItemBox } from "@/shared/ui/item/ItemBox";
+import type { Item } from "@/entities/item/model/types";
 
 type ActiveTab = "item" | "pack";
 
@@ -24,6 +27,7 @@ export default function WishListPage() {
   const [activeTab, setActiveTab] = React.useState<ActiveTab>("item");
   const isSelectMode = false;
   const [checkedIds, setCheckedIds] = React.useState<Set<string>>(new Set());
+  const [selectedItem, setSelectedItem] = React.useState<Item | null>(null);
 
   const items = React.useMemo(() => {
     if (!wishlist) return [];
@@ -66,8 +70,8 @@ export default function WishListPage() {
   if (isLoading) return <Loading />;
 
   return (
-    <main className="min-h-dvh bg-background-normal px-5 pt-5 pb-28">
-      <div className="flex items-start justify-between">
+    <main className="min-h-dvh bg-background-normal px-4 pt-5 pb-28">
+      <div className="flex items-start justify-between px-1">
         <div>
           <h1 className="type-heading1 text-label-default">
             <span className="text-primary-normal">{nickname}</span>님의
@@ -122,12 +126,12 @@ export default function WishListPage() {
                     isChecked={checkedIds.has(String(it.id))}
                     onSelect={onSelect}
                     onMoreClick={() => { }}
-                    onDetailClick={() => { }}
+                    onDetailClick={() => setSelectedItem(it)}
                   />
                 </li>
               ))
             ) : (
-              <div className="py-20 text-center py-10 text-neutral-400">
+              <div className="py-20 text-center text-neutral-400">
                 위시리스트에 담긴 아이템이 없어요.
               </div>
             )}
@@ -141,13 +145,19 @@ export default function WishListPage() {
                 </li>
               ))
             ) : (
-              <div className="py-20 text-center py-10 text-neutral-400">
+              <div className="py-20 text-center text-neutral-400">
                 위시리스트에 담긴 팩이 없어요.
               </div>
             )}
           </ul>
         )}
       </section>
+
+      <BottomSheet isOpen={!!selectedItem} onClose={() => setSelectedItem(null)}>
+        <div className="mb-6">
+          {selectedItem && <ItemBox item={selectedItem} />}
+        </div>
+      </BottomSheet>
     </main>
   );
 }

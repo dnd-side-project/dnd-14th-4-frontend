@@ -291,7 +291,12 @@ export function HomePage() {
                 className="w-full text-left px-4 py-4 flex items-center gap-4 border-b border-neutral-200 last:border-b-0"
                 onClick={() => router.push(`/pack/${item.id}`)}
               >
-                <div className="h-12 w-12 rounded-xl bg-neutral-900 shrink-0" />
+                <div
+                  className="h-12 w-12 rounded-xl bg-neutral-100 shrink-0 bg-cover bg-center"
+                  style={{
+                    backgroundImage: `url(${!item.path || item.path === "이미지 경로가 없습니다" || item.path === "" ? "/favicon.svg" : item.path})`
+                  }}
+                />
                 <div className="min-w-0 flex-1">
                   <p className="type-headline2 text-neutral-900 truncate">
                     {item.title}
