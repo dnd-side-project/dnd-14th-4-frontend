@@ -1,13 +1,16 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { setAccessToken } from "@/shared/lib/auth";
+import { useUserStore } from "@/entities/user/model/useUserStore";
 import Loading from "@/shared/ui/Loading";
 
 export const LoginSuccessPage = () => {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const didHandle = useRef(false);
+  const fetchMyInfo = useUserStore((s) => s.fetchMyInfo);
 
   const accessToken = searchParams.get("access_token");
 
@@ -16,9 +19,15 @@ export const LoginSuccessPage = () => {
     if (accessToken) {
       didHandle.current = true;
       setAccessToken(accessToken);
-      window.location.replace("/");
+      (async () => {
+        await fetchMyInfo();
+        const { needsOnboarding } = useUserStore.getState();
+        router.replace(needsOnboarding ? "/onboarding" : "/");
+      })().catch(() => {
+        router.replace("/");
+      });
     }
-  }, [accessToken]);
+  }, [accessToken, fetchMyInfo, router]);
 
   if (!accessToken) {
     return (
