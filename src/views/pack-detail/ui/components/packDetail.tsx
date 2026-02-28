@@ -122,7 +122,7 @@ function PackDetailInner({
                         {(!profile || isProfileDefaultColor(profile)) && profileInitial}
                     </button>
                     <div className='flex flex-col gap-0.5'>
-                        <p className='type-label1'>{author}</p>
+                        <p className='type-label1 text-neutral-10'>{author}</p>
                         <p className='type-caption1 text-gray-300'>{date}</p>
                     </div>
                 </div>
@@ -135,7 +135,7 @@ function PackDetailInner({
                     placeholder="팩에 대한 설명을 입력해주세요."
                 />
 
-                <div className="type-heading2 mt-[50px] flex gap-1">
+                <div className="type-heading2 mt-[50px] flex gap-1 text-neutral-10">
                     아이템 <span className="text-primary-normal">{items.length}</span>
                 </div>
 
