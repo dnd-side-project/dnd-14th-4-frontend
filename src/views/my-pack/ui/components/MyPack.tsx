@@ -30,8 +30,16 @@ export const MyPack = ({ onGoToItemAdd }: MyPackProps) => {
 
     const sortedPackData = useMemo(() => {
         if (!packData) return [];
-        return [...packData].reverse();
-    }, [packData]);
+        let filteredPacks = [...packData].reverse();
+
+        if (state.selectedFilter && state.selectedFilter.length > 0) {
+            filteredPacks = filteredPacks.filter(pack =>
+                state.selectedFilter.includes(pack.contextCategory)
+            );
+        }
+
+        return filteredPacks;
+    }, [packData, state.selectedFilter]);
 
     const nickname = user?.name ?? "사용자";
     const profileImageUrl = user?.profileImageUrl;
@@ -43,7 +51,7 @@ export const MyPack = ({ onGoToItemAdd }: MyPackProps) => {
     const isItemEmpty =
         !isItemLoading && !isItemError && Array.isArray(itemData) && itemData.length === 0;
     const isPackEmpty =
-        !isPackLoading && !isPackError && Array.isArray(packData) && packData.length === 0;
+        !isPackLoading && !isPackError && Array.isArray(sortedPackData) && sortedPackData.length === 0;
 
     return (
         <div className="px-4 pb-24">
@@ -76,7 +84,7 @@ export const MyPack = ({ onGoToItemAdd }: MyPackProps) => {
                 </div>
             </div>
 
-            <header className={`px-1 flex items-center justify-between ${state.isFilterOpen ? 'mb-5' : 'mb-10'}`}>
+            <header className={`px-1 flex items-center justify-between ${state.isFilterOpen ? 'mb-5' : 'mb-6'}`}>
                 <div className="flex-1" />
                 <div role="tablist" className="flex gap-7 w-37 items-center justify-center">
                     <TabItem isActive={state.activeTab === "item"} onClick={() => actions.handleTabChange("item")}>
@@ -88,12 +96,14 @@ export const MyPack = ({ onGoToItemAdd }: MyPackProps) => {
                 </div>
 
                 <div className="flex-1 flex items-center justify-end gap-3">
-                    <button onClick={actions.toggleFilter}>
-                        <IcSvgFilter
-                            width={24} height={24}
-                            className={state.isFilterOpen ? "text-primary-normal" : "text-label-subtle"}
-                        />
-                    </button>
+                    {state.activeTab === "pack" && (
+                        <button onClick={actions.toggleFilter}>
+                            <IcSvgFilter
+                                width={24} height={24}
+                                className={state.isFilterOpen ? "text-primary-normal" : "text-label-subtle"}
+                            />
+                        </button>
+                    )}
                     {state.activeTab === "item" && (
                         <button
                             onClick={actions.toggleSelectMode}
@@ -105,7 +115,7 @@ export const MyPack = ({ onGoToItemAdd }: MyPackProps) => {
                 </div>
             </header>
 
-            {state.isFilterOpen && (
+            {state.activeTab === "pack" && state.isFilterOpen && (
                 <div className="flex gap-1 overflow-x-auto mb-5 ">
                     {MOMENT_OPTIONS.map((moment) => (
                         <Tag1Btn

@@ -18,7 +18,7 @@ export const BottomNav = () => {
     });
   }
 
-  if (shouldHideBottomNav(pathname)) return null;
+  if (shouldHideBottomNav(pathname)) return <div className="h-[72px] w-full bg-white" aria-hidden="true" />;
 
   const navItems = [
     { href: "/", label: "홈", icon: IcSvgHome },
@@ -52,6 +52,8 @@ export const BottomNav = () => {
           );
         })}
       </nav>
+      {/* 바텀 바 뒤에서 공간을 확보해줄 placeholder (페이지 스크롤 시 바텀 바가 컨텐츠를 가리지 않게 함) */}
+      <div className="h-[72px] w-full shrink-0" aria-hidden="true" />
     </>
   );
 };
