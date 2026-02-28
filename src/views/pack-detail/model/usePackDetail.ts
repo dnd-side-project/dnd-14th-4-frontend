@@ -11,7 +11,7 @@ export interface PackDetailItemApiDto {
   purchase: string;
   imageUrls: string[];
   tags: string[];
-  isItemInWishlist: boolean;
+  isItemInWishList: boolean;
 }
 
 export interface PackDetailResponse {
