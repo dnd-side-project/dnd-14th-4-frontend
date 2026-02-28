@@ -73,11 +73,11 @@ export const MyPack = ({ onGoToItemAdd }: MyPackProps) => {
                         />
                     ) : (
                         <div
-                            className={`h-14 w-14 rounded-full flex items-center justify-center text-white font-bold ${profileImageUrl && isProfileDefaultColor(profileImageUrl)
-                                ? PROFILE_COLOR_CLASS[profileImageUrl] ?? "bg-neutral-300"
-                                : "bg-neutral-900"
-                                }`}
-                        >
+                        className={`h-14 w-14 rounded-full flex items-center justify-center text-white font-bold ${profileImageUrl && isProfileDefaultColor(profileImageUrl)
+                          ? PROFILE_COLOR_CLASS[profileImageUrl] ?? "bg-neutral-300"
+                          : "bg-neutral-900"
+                          }`}
+                      >
                             {profileInitial || "?"}
                         </div>
                     )}

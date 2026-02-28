@@ -46,8 +46,6 @@ export const useItemForm = (initialData?: Partial<Item>, isEdit = false) => {
                 },
                 reviewImages: newFileImages.length > 0 ? newFileImages : undefined,
             });
-
-            appToast.success(`아이템이 성공적으로 ${isEdit ? '수정' : '등록'}되었습니다.`);
             router.back();
         } catch (error) {
             console.error("제출 실패:", error);
