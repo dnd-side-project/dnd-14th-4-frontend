@@ -49,7 +49,7 @@ export const useItemForm = (initialData?: Partial<Item>, isEdit = false) => {
             router.back();
         } catch (error) {
             console.error("제출 실패:", error);
-            appToast.error("저장에 실패했습니다.");
+    
         }
     };
 

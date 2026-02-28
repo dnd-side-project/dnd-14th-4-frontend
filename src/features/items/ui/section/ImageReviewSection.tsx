@@ -20,7 +20,7 @@ export function ImageReviewSection({ images, onImagesChange, tags, onTagsChange 
         images,
         onImagesChange
     );
-    const { inputValue, onKeyDown, removeTag, isError, errorMessage, setInputValue } = useTagInput(tags, onTagsChange);
+    const { inputValue, onKeyDown, onBeforeInput, removeTag, isError, errorMessage, setInputValue } = useTagInput(tags, onTagsChange);
 
     const currentHelperText = isError ? errorMessage : "*태그 당 최대 10자";
 
@@ -77,6 +77,8 @@ export function ImageReviewSection({ images, onImagesChange, tags, onTagsChange 
                 value={inputValue}
                 onChange={(e) => setInputValue(e.currentTarget.value)}
                 onKeyDown={onKeyDown}
+                onBeforeInput={onBeforeInput}
+                enterKeyHint="done"
             >
                 {tags.map((tag, index) => (
                     <Tag2Btn
