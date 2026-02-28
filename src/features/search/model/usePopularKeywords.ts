@@ -8,6 +8,8 @@ export type PopularKeywordItem = {
   value: string;
 };
 
+export const POPULAR_KEYWORDS_QUERY_KEY = ["search", "popular-keywords"] as const;
+
 const normalizeKeyword = (item: unknown): string | null => {
   if (typeof item === "string") {
     const trimmed = item.trim();
@@ -49,15 +51,17 @@ const normalizeResponse = (data: unknown): PopularKeywordItem[] => {
     });
 };
 
+export const fetchPopularKeywords = async (): Promise<PopularKeywordItem[]> => {
+  const { data } = await apiClient.get<unknown>(
+    "/api/v1/packs/search/popular-keywords"
+  );
+  return normalizeResponse(data);
+};
+
 export const usePopularKeywords = () => {
   return useQuery({
-    queryKey: ["search", "popular-keywords"],
-    queryFn: async () => {
-      const { data } = await apiClient.get<unknown>(
-        "/api/v1/packs/search/popular-keywords"
-      );
-      return normalizeResponse(data);
-    },
+    queryKey: POPULAR_KEYWORDS_QUERY_KEY,
+    queryFn: fetchPopularKeywords,
     staleTime: 1000 * 60 * 5,
   });
 };

@@ -3,6 +3,7 @@
 import React from "react";
 import { LayoutGroup, motion } from "framer-motion";
 import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 
 import {
   SearchBarOverlay,
@@ -25,6 +26,7 @@ import { useTrendingTags } from "../model/useTrendingTags";
 import type { HomePackApiDto } from "../model/mockHome";
 import { RECOMMENDATION_TITLE_BY_CATEGORY_ID, useRecommendedPacks } from "../model/useRecommendedPacks";
 import { PackCarousel } from "./PackCarousel";
+import { fetchPopularKeywords, POPULAR_KEYWORDS_QUERY_KEY } from "@/features/search/model/usePopularKeywords";
 
 const EASE_OUT: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
@@ -61,6 +63,7 @@ const sectionReveal = {
 
 export function HomePage() {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const user = useUserStore((state) => state.user);
   const {
     searchBarRef,
@@ -83,6 +86,17 @@ export function HomePage() {
   React.useEffect(() => {
     setGreeting(pickRandomGreeting());
   }, []);
+
+  React.useEffect(() => {
+    // /search 첫 진입 체감속도 개선: 라우트/데이터 미리 로드
+    router.prefetch?.("/search");
+    router.prefetch?.("/filter-search");
+    queryClient.prefetchQuery({
+      queryKey: POPULAR_KEYWORDS_QUERY_KEY,
+      queryFn: fetchPopularKeywords,
+      staleTime: 1000 * 60 * 5,
+    });
+  }, [queryClient, router]);
 
   const { data, isLoading, isError } = useTrendingTags();
   const {

@@ -7,6 +7,7 @@ import { useImageUpload } from "../../model/useImageUpload";
 import { useTagInput } from "../../model/useTagInput";
 import Image from "next/image";
 import { IcSvgCloseBig } from "@/shared/icons";
+import { useEffect, useRef, useState } from "react";
 
 interface ImageReviewSectionProps {
     images: (File | string)[];
@@ -23,6 +24,47 @@ export function ImageReviewSection({ images, onImagesChange, tags, onTagsChange 
     const { inputValue, onKeyDown, onBeforeInput, removeTag, isError, errorMessage, setInputValue } = useTagInput(tags, onTagsChange);
 
     const currentHelperText = isError ? errorMessage : "*태그 당 최대 10자";
+    const objectUrlMapRef = useRef<Map<File, string>>(new Map());
+    const [previewSrcs, setPreviewSrcs] = useState<string[]>([]);
+
+    useEffect(() => {
+        // 렌더 중 ref 접근 금지 규칙 대응: src 계산/캐싱은 effect에서만 처리
+        const map = objectUrlMapRef.current;
+        const currentFiles = new Set(images.filter((x): x is File => x instanceof File));
+
+        // 삭제된 파일 objectURL 정리
+        for (const [file, url] of map.entries()) {
+            if (!currentFiles.has(file)) {
+                URL.revokeObjectURL(url);
+                map.delete(file);
+            }
+        }
+
+        // 현재 images 순서대로 preview src 생성
+        const nextSrcs = images.map((img) => {
+            if (typeof img === "string") return encodeURI(img);
+
+            const existing = map.get(img);
+            if (existing) return existing;
+
+            const url = URL.createObjectURL(img);
+            map.set(img, url);
+            return url;
+        });
+
+        setPreviewSrcs(nextSrcs);
+    }, [images]);
+
+    useEffect(() => {
+        const map = objectUrlMapRef.current;
+        return () => {
+            // 언마운트 시 전체 정리
+            for (const url of map.values()) {
+                URL.revokeObjectURL(url);
+            }
+            map.clear();
+        };
+    }, []);
 
     return (
         <div className="flex flex-col gap-6">
@@ -44,9 +86,7 @@ export function ImageReviewSection({ images, onImagesChange, tags, onTagsChange 
                     />
                 </div>
                 {images.map((img, index) => {
-                    const imgSrc = typeof img === "string"
-                        ? encodeURI(img)
-                        : URL.createObjectURL(img);
+                    const imgSrc = previewSrcs[index] ?? (typeof img === "string" ? encodeURI(img) : "");
 
                     return (
                         <div key={`image-${index}`} className="relative flex-shrink-0 w-[100px] h-[100px]">
