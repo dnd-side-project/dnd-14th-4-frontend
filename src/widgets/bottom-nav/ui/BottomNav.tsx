@@ -3,6 +3,7 @@
 import { BOTTOM_NAV_HIDE_RULES } from "@/shared/constants/nav.constants";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect } from "react";
 import { IcSvgHome, IcSvgFolder, IcSvgWish, IcSvgMypage } from "@/shared/icons";
 import FabMenu from "@/shared/ui/FabMenu";
 
@@ -18,7 +19,20 @@ export const BottomNav = () => {
     });
   }
 
-  if (shouldHideBottomNav(pathname)) return <div className="h-[72px] w-full bg-white" aria-hidden="true" />;
+  const isHidden = shouldHideBottomNav(pathname);
+
+  useEffect(() => {
+    // RootLayout의 스크롤 영역 padding-bottom을 동적으로 제어
+    document.documentElement.style.setProperty(
+      "--bottom-nav-space",
+      isHidden ? "0px" : "80px"
+    );
+    return () => {
+      document.documentElement.style.removeProperty("--bottom-nav-space");
+    };
+  }, [isHidden]);
+
+  if (isHidden) return null;
 
   const navItems = [
     { href: "/", label: "홈", icon: IcSvgHome },
@@ -52,8 +66,6 @@ export const BottomNav = () => {
           );
         })}
       </nav>
-      {/* 바텀 바 뒤에서 공간을 확보해줄 placeholder (페이지 스크롤 시 바텀 바가 컨텐츠를 가리지 않게 함) */}
-      <div className="h-[72px] w-full shrink-0" aria-hidden="true" />
     </>
   );
 };
