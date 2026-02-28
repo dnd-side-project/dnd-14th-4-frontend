@@ -66,8 +66,8 @@ export default function WishListPage() {
   if (isLoading) return <Loading />;
 
   return (
-    <main className="min-h-dvh bg-background-normal px-5 pt-5 pb-28">
-      <div className="flex items-start justify-between">
+    <main className="min-h-dvh bg-background-normal px-4 pt-5 pb-28">
+      <div className="flex items-start justify-between px-1">
         <div>
           <h1 className="type-heading1 text-label-default">
             <span className="text-primary-normal">{nickname}</span>님의

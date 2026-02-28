@@ -33,10 +33,12 @@ export function middleware(req: NextRequest) {
 
   const tokenCookie = req.cookies.get("access_token")?.value;
   if (!tokenCookie) {
-    const url = req.nextUrl.clone();
-    url.pathname = "/login";
-    url.search = "";
-    return NextResponse.redirect(url);
+    // 잠시 풀어두기 위해 리다이렉트 로직을 주석 처리합니다.
+    // const url = req.nextUrl.clone();
+    // url.pathname = "/login";
+    // url.search = "";
+    // return NextResponse.redirect(url);
+    return NextResponse.next();
   }
 
   return NextResponse.next();
@@ -45,4 +47,3 @@ export function middleware(req: NextRequest) {
 export const config = {
   matcher: ["/((?!api/).*)"],
 };
-
