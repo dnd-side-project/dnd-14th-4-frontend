@@ -11,6 +11,7 @@ import { useGetWishlistPacks } from "@/entities/pack/model/useGetWishlistPacks";
 import Loading from "@/shared/ui/Loading";
 import { BottomSheet } from "@/shared/ui/BottomSheet";
 import { ItemBox } from "@/shared/ui/item/ItemBox";
+import type { Item } from "@/entities/item/model/types";
 
 type ActiveTab = "item" | "pack";
 
@@ -26,7 +27,7 @@ export default function WishListPage() {
   const [activeTab, setActiveTab] = React.useState<ActiveTab>("item");
   const isSelectMode = false;
   const [checkedIds, setCheckedIds] = React.useState<Set<string>>(new Set());
-  const [selectedItem, setSelectedItem] = React.useState<any>(null);
+  const [selectedItem, setSelectedItem] = React.useState<Item | null>(null);
 
   const items = React.useMemo(() => {
     if (!wishlist) return [];
