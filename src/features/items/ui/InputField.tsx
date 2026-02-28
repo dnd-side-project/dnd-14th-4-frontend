@@ -15,7 +15,7 @@ export default function InputField({ placeholder = "입력하세요", className,
                 type="text"
                 value={value}
                 onChange={onChange}
-                className="w-full text-center bg-transparent py-3 text-label-default dark:text-label-default focus:outline-none placeholder:text-label-subtle dark:placeholder:text-label-subtle"
+                className="w-full text-center bg-transparent py-3 text-label-default dark:text-label-default focus:outline-none placeholder:text-neutral-500 dark:placeholder:text-neutral-500"
                 placeholder={placeholder}
             />
         </div>
