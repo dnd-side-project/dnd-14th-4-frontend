@@ -48,7 +48,7 @@ export function SearchHeader({
                 }
               }}
               placeholder="다양한 팩을 검색해보세요."
-              className="w-full bg-transparent outline-none text-sm"
+              className="w-full bg-transparent outline-none text-base placeholder:text-sm"
             />
           </div>
         </div>
