@@ -50,7 +50,7 @@ export default function ReviewInputSection({
           value={reviewText}
           onChange={(e) => onChange(e.target.value.slice(0, 100))}
           placeholder="리뷰를 작성해주세요."
-          className="h-28 w-full resize-none rounded-xl border border-neutral-200 px-4 py-3 text-neutral-900 placeholder:text-neutral-300 focus:outline-none"
+          className="h-28 w-full resize-none rounded-xl border border-neutral-200 px-4 py-3 text-neutral-900 dark:text-neutral-900 placeholder:text-neutral-300 dark:placeholder:text-neutral-300 focus:outline-none"
         />
         <p className="mt-2 text-right type-caption1 text-label-subtle">
           {reviewText.length}/100자
