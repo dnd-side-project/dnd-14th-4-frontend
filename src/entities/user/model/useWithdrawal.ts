@@ -16,7 +16,7 @@ export const useWithdrawal = () => {
 
             alert('탈퇴가 완료되었습니다. 그동안 이용해 주셔서 감사합니다.');
 
-            router.replace('/');
+            router.replace('/login');
         } catch (error) {
             console.error('회원탈퇴 실패:', error);
             alert('탈퇴 처리 중 오류가 발생했습니다. 다시 시도해 주세요.');

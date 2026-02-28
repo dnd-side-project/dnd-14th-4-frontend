@@ -16,13 +16,13 @@ export function SplashPage() {
   }, [router]);
 
   return (
-    <div className="w-full flex justify-center">
+    <div className="w-full h-dvh overflow-hidden flex justify-center">
       <div
         className="
           relative
           w-full
           max-w-mobile
-          min-h-dvh
+          h-full
           flex items-center justify-center
           bg-cover bg-center bg-no-repeat
           bg-splash

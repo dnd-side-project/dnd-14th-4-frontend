@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 import { FlowLayout } from "@/shared/ui/layouts/flow-chart";
 import { ProgressBar } from "@/views/onboarding/ui/components/ProgressBar";
 import { appToast } from "@/shared/utils/toast";
@@ -16,6 +17,7 @@ import { useUserStore } from "@/entities/user/model/useUserStore";
 
 export default function Step4Page() {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const user = useUserStore((s) => s.user);
   const isUserLoaded = useUserStore((s) => s.isLoaded);
   const fetchMyInfo = useUserStore((s) => s.fetchMyInfo);
@@ -54,6 +56,7 @@ export default function Step4Page() {
         selectedItems,
       });
       await createPack(request);
+      await queryClient.invalidateQueries({ queryKey: ["my-packs"] });
 
       appToast.success("팩이 저장되었어요.");
       resetSelectedItems();

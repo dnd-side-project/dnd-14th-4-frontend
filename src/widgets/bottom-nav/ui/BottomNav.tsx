@@ -38,7 +38,7 @@ export const BottomNav = () => {
         </div>
       </div>
 
-      <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-mobile bg-white border-t border-gray-100 h-[78px] flex justify-between px-5 z-30 pt-3 pb-[46px]">
+      <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-mobile bg-white border-t border-gray-100 h-[80px] flex justify-between px-5 z-30 pt-3 pb-[48px]">
         {navItems.map(({ href, label, icon: Icon }) => {
           const isActive = pathname === href;
 
