@@ -10,12 +10,19 @@ const PUBLIC_PATHS = new Set([
 
 function isPublicPath(pathname: string) {
   if (PUBLIC_PATHS.has(pathname)) return true;
-  // 정적 파일/서비스워커 등
-  if (pathname.startsWith("/_next/")) return true;
-  if (pathname.startsWith("/favicon")) return true;
-  if (pathname === "/sw.js") return true;
-  if (pathname === "/manifest.webmanifest") return true;
-  if (pathname.startsWith("/icons/")) return true;
+
+  // 정적 파일 (확장자가 있는 파일), 서비스워커 등
+  const isStaticFile = pathname.includes(".");
+  const isNextInternal = pathname.startsWith("/_next/");
+  const isPublicAsset =
+    pathname.startsWith("/icons/") ||
+    pathname.startsWith("/background/") ||
+    pathname.startsWith("/images/");
+
+  if (isStaticFile || isNextInternal || isPublicAsset) return true;
+
+  if (pathname === "/sw.js" || pathname === "/manifest.webmanifest") return true;
+
   return false;
 }
 

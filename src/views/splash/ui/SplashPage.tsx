@@ -25,7 +25,7 @@ export function SplashPage() {
           min-h-dvh
           flex items-center justify-center
           bg-cover bg-center bg-no-repeat
-          bg-[url('/background/bg-splash.png')]
+          bg-splash
         "
       >
         <IcSvgLogo className="w-30 h-30" />

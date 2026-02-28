@@ -19,7 +19,7 @@ export const LoginPage = () => {
           relative w-full max-w-mobile min-h-dvh
           flex flex-col justify-end
           bg-cover bg-center bg-no-repeat
-          bg-[url('/background/bg-intro.png')]
+          bg-intro
         "
       >
         <section className="px-6 pb-[clamp(20px,16vh,80px)]">

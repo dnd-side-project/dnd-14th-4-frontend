@@ -49,7 +49,7 @@ export function OnboardingPage() {
     <FlowLayout
       className={
         isWelcome
-          ? "h-dvh overflow-hidden bg-cover bg-center bg-no-repeat bg-[url('/background/bg-splash.png')]"
+          ? "h-dvh overflow-hidden bg-cover bg-center bg-no-repeat bg-splash"
           : undefined
       }
     >
