@@ -81,7 +81,7 @@ function PackDetailPageInner() {
             usePeriod: item.usePeriod,
             purchaseLocation: item.purchase,
             tags: item.tags,
-            liked: item.isItemInWishlist,
+            liked: item.isItemInWishList,
         }));
 
         if (newlyAddedIds.length > 0) {
