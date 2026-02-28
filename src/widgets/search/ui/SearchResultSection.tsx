@@ -33,7 +33,7 @@ export function SearchResultSection({
   return (
     <section className="px-4 pt-6">
       <div className="pt-24 text-center">
-        <p className="type-headline1">
+        <p className="type-headline1 text-label-default dark:text-label-default">
           검색 결과가 없습니다. <br />
           직접 첫 번째 팩의 주인공이 되어보세요!
         </p>
@@ -41,7 +41,7 @@ export function SearchResultSection({
 
       {recommended.length > 0 && (
         <div className="mt-24">
-          <h2 className="type-heading1">
+          <h2 className="type-heading1 text-label-default dark:text-label-default">
             <span className="text-primary-normal">{nickname}</span>님을 위한 맞춤 팩
             어때요?
           </h2>

@@ -6,6 +6,7 @@ import { FlowLayout } from "@/shared/ui/layouts/flow-chart";
 import { ProgressBar } from "@/views/onboarding/ui/components/ProgressBar";
 import SelectedItemsSection from "@/views/pack-create/widgets/SelectedItemsSection/ui/SelectedItemsSection";
 import { usePackCreateItemsStore } from "@/views/pack-create/features/select-pack-items/model/store";
+import { usePackCreateDraftStore } from "@/views/pack-create/features/create-pack/model/store";
 import { ItemAdd } from "@/views/my-pack/ui/components/ItemAdd";
 import { FixedBottomButton } from "@/shared/ui/FixedBottomButton";
 
@@ -60,12 +61,18 @@ export default function Step1SelectItemsPage() {
       <FlowLayout.Content className="pt-6">
         <SelectedItemsSection onAddClick={openItemAdd} />
       </FlowLayout.Content>
-       <FixedBottomButton
-                    onClick={() => router.push("/pack/create/step-2")}
-                    disabled={!canGoNext}
-                >
-                    다음
-                </FixedBottomButton>
+      <FixedBottomButton
+        onClick={() => {
+          const { setPackName, setCategory, setReviewText } = usePackCreateDraftStore.getState();
+          setPackName("");
+          setCategory(null);
+          setReviewText("");
+          router.push("/pack-create/step-2");
+        }}
+        disabled={!canGoNext}
+      >
+        다음
+      </FixedBottomButton>
     </FlowLayout>
   );
 }
